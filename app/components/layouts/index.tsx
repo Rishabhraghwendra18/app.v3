@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { initContractsAndUserStake, useWeb3 } from "../../context/web3Context";
+import { initContractsAndUserStake, useWeb3 } from "app/context/web3Context";
 import { useMoralis } from "react-moralis";
-import { Navbar } from "../templates/navbar/navbar";
-import { Footer } from "../templates/footer/footer";
+import { Navbar } from "app/components/modules/navbar/navbar";
+import { Footer } from "app/components/modules/footer/footer";
 
 interface Props {
   children: React.ReactNode;

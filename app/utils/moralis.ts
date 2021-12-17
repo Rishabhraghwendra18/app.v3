@@ -107,10 +107,10 @@ export async function filterMyBounties(status, sortBy, sortOrder) {
 }
 
 export async function filterBounties() {
-//   tags,
-//   lockedStakeFilter,
-//   sortBy,
-//   sortOrder
+  //   tags,
+  //   lockedStakeFilter,
+  //   sortBy,
+  //   sortOrder
   const params = {
     tags: [],
     lockedStake: [0, 99999],
