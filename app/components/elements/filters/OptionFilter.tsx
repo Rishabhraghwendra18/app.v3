@@ -23,6 +23,7 @@ const OptionFilter: React.FC<Props> = ({
   const {
     filterGigs,
     setGigs,
+    skills,
     minDeadline,
     maxDeadline,
     minCollateral,
@@ -52,7 +53,7 @@ const OptionFilter: React.FC<Props> = ({
                         setGigs(filterByDate(res, [minDeadline, maxDeadline]));
                     },
                     params: {
-                      tags: [],
+                      tags: skills,
                       lockedStake: [minFilter, maxFilter],
                       sortBy: "reward",
                       sortOrder: "asc",

@@ -1,13 +1,14 @@
 import { Layout } from "app/components/layouts";
 import Explore from "app/components/templates/Explore";
+import { Gig } from "app/types";
 import { filterByDate } from "app/utils/utils";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useMoralisCloudFunction } from "react-moralis";
+import { useMoralis, useMoralisCloudFunction } from "react-moralis";
 
 type fetchResponse = {
-  result: Array<object>;
+  result: Array<Gig>;
 };
 
 interface Props {
@@ -16,7 +17,7 @@ interface Props {
 
 interface ExploreContextType {
   filterGigs?: Function;
-  data: Array<object> | unknown;
+  data: Array<Gig> | unknown;
   isFetching: boolean;
   minDeadline: number;
   setMinDeadline?: Function;
@@ -26,33 +27,50 @@ interface ExploreContextType {
   setMinCollateral?: Function;
   maxCollateral: number;
   setMaxCollateral?: Function;
-  gigs: Array<object> | undefined;
+  gigs: Array<Gig> | undefined;
   setGigs?: Function;
+  skills: Array<object>;
+  setSkills?: Function;
 }
 
 export const ExploreContext = createContext<ExploreContextType>({
-  data: [],
-  gigs: [],
+  data: undefined,
+  gigs: undefined,
   isFetching: false,
   minDeadline: 0,
   maxDeadline: 365,
   minCollateral: 0,
   maxCollateral: Number.MAX_SAFE_INTEGER,
+  skills: [],
 });
 
 const Home: NextPage<Props> = ({ bounties }) => {
   const value = useProvideExplore();
+  const { isInitialized, Moralis, web3 } = useMoralis();
   useEffect(() => {
-    console.log(filterByDate(bounties.result, [0, 365]));
-  }, []);
-  // console.log(value.gigs);
+    if (isInitialized) {
+      value.filterGigs({
+        onSuccess: (res: Array<Gig>) => {
+          value.setGigs(
+            filterByDate(res, [value.minDeadline, value.maxDeadline])
+          );
+        },
+        params: {
+          tags: [],
+          lockedStake: [value.minCollateral, value.maxCollateral],
+          sortBy: "reward",
+          sortOrder: "asc",
+        },
+      });
+    }
+  }, [isInitialized]);
 
   return (
     <div>
       <Head>
         <title>Spect.Network</title>
         <meta name="description" content="Decentralized gig economy" />
-        {/* <link rel="icon" href="/favicon.ico" /> */}
+        <link rel="icon" href="/logo2.svg" />
       </Head>
       <Layout>
         <div className="grid gap-1 grid-cols-6 mt-4 md:mt-8">
@@ -87,7 +105,8 @@ export function useProvideExplore() {
   const [maxDeadline, setMaxDeadline] = useState(365);
   const [minCollateral, setMinCollateral] = useState(0);
   const [maxCollateral, setMaxCollateral] = useState(Number.MAX_SAFE_INTEGER);
-  const [gigs, setGigs] = useState<object[] | undefined>([]);
+  const [skills, setSkills] = useState([]);
+  const [gigs, setGigs] = useState<Gig[] | undefined>([]);
   const {
     fetch: filterGigs,
     data,
@@ -113,6 +132,8 @@ export function useProvideExplore() {
     setMinCollateral,
     maxCollateral,
     setMaxCollateral,
+    skills,
+    setSkills,
     gigs,
     setGigs,
   };
@@ -120,25 +141,25 @@ export function useProvideExplore() {
 
 export const useExplore = () => useContext(ExploreContext);
 
-Home.getInitialProps = async (ctx) => {
-  const params = {
-    lockedStake: [0, 1000],
-    sortBy: "reward",
-    sortOrder: "asc",
-    tags: [],
-  };
-  const res = await fetch(
-    `https://fuifmbcsvi18.usemoralis.com:2053/server/functions/filterBounties?_ApplicationId=${process.env.MORALIS_APPLICATION_ID}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(params),
-    }
-  );
-  const bounties = await res.json();
-  return { bounties };
-};
+// Home.getInitialProps = async (ctx) => {
+//   const params = {
+//     lockedStake: [0, Number.MAX_SAFE_INTEGER],
+//     sortBy: "reward",
+//     sortOrder: "asc",
+//     tags: [],
+//   };
+//   const res = await fetch(
+//     `${process.env.MORALIS_SERVER_ID}/functions/filterBounties?_ApplicationId=${process.env.MORALIS_APPLICATION_ID}`,
+//     {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(params),
+//     }
+//   );
+//   const bounties = await res.json();
+//   return { bounties };
+// };
 
 export default Home;

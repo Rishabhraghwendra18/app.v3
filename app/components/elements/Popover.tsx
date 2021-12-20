@@ -74,6 +74,7 @@ const NavbarPopover: React.FC<Props> = ({
                                 break;
                               case 3:
                                 logout();
+                                break;
                               default:
                             }
                           }

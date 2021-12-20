@@ -1,17 +1,25 @@
 import OptionFilter from "app/components/elements/filters/OptionFilter";
-import { useExplore } from "pages";
-import { useEffect, useState } from "react";
+import TextFilter from "app/components/elements/filters/TextFilter";
+import { useState } from "react";
 
 interface Props {}
 
 const ExploreFilter: React.FC<Props> = (props: Props) => {
-  const { filterGigs, setGigs } = useExplore();
   const [collateralOptionSelected, setCollateralOptionSelected] = useState(0);
   const [deadlineOptionSelected, setDeadlineOptionSelected] = useState(0);
 
   return (
     <div>
       <div>
+        <div>
+          <div className="m-8 mb-2 flex flex-row">
+            <span className="font-semibold text-sm text-blue-light">
+              Required Skills
+            </span>
+          </div>
+          <TextFilter />
+        </div>
+
         <div className="m-8 mb-2 flex flex-row">
           <span className="font-semibold text-sm text-blue-light">
             Collateral required

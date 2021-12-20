@@ -1,3 +1,5 @@
+import { Gig } from "app/types";
+
 export const smartTrim = (string: string, maxLength: number) => {
   if (maxLength < 1) return string;
   if (string.length <= maxLength) return string;
@@ -13,7 +15,7 @@ export const smartTrim = (string: string, maxLength: number) => {
 };
 
 export const filterByDate = (
-  gigs: Array<object> | undefined,
+  gigs: Array<Gig> | undefined,
   deadlineFilter: Array<number>
 ) => {
   function filterDate(item) {
