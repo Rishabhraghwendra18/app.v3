@@ -141,25 +141,4 @@ export function useProvideExplore() {
 
 export const useExplore = () => useContext(ExploreContext);
 
-// Home.getInitialProps = async (ctx) => {
-//   const params = {
-//     lockedStake: [0, Number.MAX_SAFE_INTEGER],
-//     sortBy: "reward",
-//     sortOrder: "asc",
-//     tags: [],
-//   };
-//   const res = await fetch(
-//     `${process.env.MORALIS_SERVER_ID}/functions/filterBounties?_ApplicationId=${process.env.MORALIS_APPLICATION_ID}`,
-//     {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(params),
-//     }
-//   );
-//   const bounties = await res.json();
-//   return { bounties };
-// };
-
 export default Home;

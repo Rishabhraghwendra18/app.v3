@@ -24,15 +24,15 @@ module.exports = {
           darkbg: "#000f29",
         },
         purple: {
-          normal: "#e70aab",
+          bright: "#e70aab",
         },
         red: {
-          normal: "#f45151",
+          bright: "#f45151",
           light: "#ffdcdc",
           lighter: "#ffebeb",
         },
         green: {
-          normal: "#5fe086",
+          bright: "#5fe086",
           light: "#d9ffe2",
           lighter: "#eefff2",
         },

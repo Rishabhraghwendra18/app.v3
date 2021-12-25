@@ -18,7 +18,7 @@ export const Navbar = (props: Props) => {
         className="flex flex-row justify-between items-center text-black bg-clip-padding bg-opacity-0 mt-4 fadeIn-1 backdrop-filter backdrop-blur-lg sticky top-0 z-10 mb-3 px-12"
         role="navigation"
       >
-        <div className="grid grid-cols-6 w-full">
+        <div className="grid gap-1 grid-cols-6 w-full">
           <div className="flex flex-shrink-0 col-span-1">
             <Image src={Logo} alt="logo" height="48" width="140" />
           </div>

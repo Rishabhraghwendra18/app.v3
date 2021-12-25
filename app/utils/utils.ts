@@ -1,4 +1,5 @@
 import { Gig } from "app/types";
+const ethers = require("ethers");
 
 export const smartTrim = (string: string, maxLength: number) => {
   if (maxLength < 1) return string;
@@ -34,3 +35,14 @@ export const filterByDate = (
   }
   return gigs && gigs.filter(filterDate);
 };
+
+export function toEther(val) {
+  return ethers.utils.parseEther(val);
+}
+
+export function fromWei(val) {
+  if (!val) {
+    return val;
+  }
+  return ethers.utils.formatEther(val);
+}

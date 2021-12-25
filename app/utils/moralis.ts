@@ -261,7 +261,15 @@ export async function getVerifiableSubmission(dealId) {
   return Moralis.Cloud.run("getVerifiableSubmission", { dealId: dealId });
 }
 
-export function toIPFS(sourceType, source) {
+interface IGigMoralisInput {
+  name: string;
+  skills: Array<{ value: string }>;
+  description: any; // fix
+  minStake: number;
+  deadline: Date;
+}
+
+export function toIPFS(sourceType: string, source: IGigMoralisInput) {
   const params = {
     sourceType: sourceType,
     source: source,

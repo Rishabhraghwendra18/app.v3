@@ -28,3 +28,25 @@ input[type="radio"]:checked + *::before {
   );
   border-color: #5fe086;
 }
+
+.ql-editor {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  min-height: 200px;
+}
+
+.ql-toolbar {
+  background-color: #99ccff;
+}
+
+.ql-editor a {
+  color: #0061ff;
+}
+
+.quill > .ql-container > .ql-editor.ql-blank::before {
+  font-size: 20px;
+  color: #99ccff;
+  font-style: normal;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}

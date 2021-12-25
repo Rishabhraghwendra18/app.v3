@@ -66,33 +66,33 @@ export const wallets = [
 ];
 
 export const skillOptions = [
-  { value: "Accounting", label: "Accounting" },
-  { value: "Animation", label: "Animation" },
-  { value: "Blockchain", label: "Blockchain" },
-  { value: "Coding", label: "Coding" },
-  { value: "Content Writing", label: "Content Writing" },
-  { value: "Email Marketing", label: "Email Marketing" },
-  { value: "Financial Modeling", label: "Financial Modeling" },
-  { value: "Gaming", label: "Gaming" },
-  { value: "Go", label: "Go" },
-  { value: "Graphic Design", label: "Graphic Design" },
-  { value: "Javascript", label: "Javascript" },
-  { value: "Marketing", label: "Marketing" },
-  { value: "Market Research", label: "Market Research" },
-  { value: "Memes", label: "Memes" },
-  { value: "Music", label: "Music" },
-  { value: "NFT", label: "NFT" },
-  { value: "Other", label: "Other" },
-  { value: "Photoshop", label: "Photoshop" },
-  { value: "Python", label: "Python" },
-  { value: "Rust", label: "Rust" },
-  { value: "SEO", label: "SEO" },
-  { value: "Solidity", label: "Solidity" },
-  { value: "Technicl Writing", label: "Technical Writing" },
-  { value: "Testing", label: "Testing" },
-  { value: "UI/UX Design", label: "UI/UX Design" },
-  { value: "Unity", label: "Unity" },
-  { value: "Video Editing", label: "Video Editing" },
+  { label: "Accounting" },
+  { label: "Animation" },
+  { label: "Blockchain" },
+  { label: "Coding" },
+  { label: "Content Writing" },
+  { label: "Email Marketing" },
+  { label: "Financial Modeling" },
+  { label: "Gaming" },
+  { label: "Go" },
+  { label: "Graphic Design" },
+  { label: "Javascript" },
+  { label: "Marketing" },
+  { label: "Market Research" },
+  { label: "Memes" },
+  { label: "Music" },
+  { label: "NFT" },
+  { label: "Other" },
+  { label: "Photoshop" },
+  { label: "Python" },
+  { label: "Rust" },
+  { label: "SEO" },
+  { label: "Solidity" },
+  { label: "Technical Writing" },
+  { label: "Testing" },
+  { label: "UI/UX Design" },
+  { label: "Unity" },
+  { label: "Video Editing" },
 ];
 
 export const selectStyleDark = {
@@ -122,4 +122,34 @@ export const selectStyleDark = {
     boxShadow: "none",
     border: "1px solid #0061ff",
   }),
+};
+
+export const toolbarOptions = [
+  [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+  ["bold", "italic", "underline"], // toggled buttons
+  ["blockquote", "code-block", "link", "image", "video"],
+  [{ list: "ordered" }, { list: "bullet" }],
+  [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+  [{ align: [] }],
+  ["clean"], // remove formatting button
+];
+
+export const modules = {
+  toolbar: toolbarOptions,
+};
+
+export const gigHelperTexts = {
+  name: "The gig name (duh!)",
+  reward:
+    "Reward will be escrowed while the gig is listed and paid to freelancer on completion..",
+  minStake:
+    "Collateral is locked by freelancer to ensure high quality of work. You will be compensated from this amount in case the gig is failed.",
+  deadline:
+    "The tentative date by which you want the submission. This deadline is finalized after you accept a proposal.",
+  acceptanceDays:
+    "The number of days after the submission deadline you need to review the work.",
+  tags: "Skills the freelancer would need to have to complete the gig successfully.",
+  description:
+    "Describe the gig thoroughly. You can use images, embed videos etc. Make it as clear as possible.",
 };
