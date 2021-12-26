@@ -142,7 +142,7 @@ export const modules = {
 export const gigHelperTexts = {
   name: "The gig name (duh!)",
   reward:
-    "Reward will be escrowed while the gig is listed and paid to freelancer on completion..",
+    "Reward will be escrowed while the gig is listed and paid to freelancer on completion.",
   minStake:
     "Collateral is locked by freelancer to ensure high quality of work. You will be compensated from this amount in case the gig is failed.",
   deadline:
@@ -152,4 +152,6 @@ export const gigHelperTexts = {
   tags: "Skills the freelancer would need to have to complete the gig successfully.",
   description:
     "Describe the gig thoroughly. You can use images, embed videos etc. Make it as clear as possible.",
+  skills:
+    "Skills the freelancer would need to have to complete the gig successfully.",
 };

@@ -263,10 +263,10 @@ export async function getVerifiableSubmission(dealId) {
 
 interface IGigMoralisInput {
   name: string;
-  skills: Array<{ value: string }>;
+  tags: Array<string>;
   description: any; // fix
-  minStake: number;
-  deadline: Date;
+  desiredCollateral: number;
+  desiredSubmissionDeadline: Date;
 }
 
 export function toIPFS(sourceType: string, source: IGigMoralisInput) {

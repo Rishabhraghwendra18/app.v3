@@ -135,7 +135,7 @@ const updateUserStake = async (
 
     dispatch({
       type: "SET_ALLOWANCE",
-      value: parseFloat(ethers.utils.formatEther(collateral)) !== 0,
+      value: parseFloat(ethers.utils.formatEther(allowance)) !== 0,
     });
     dispatch({ type: "END_ASYNC" });
   } catch (error) {

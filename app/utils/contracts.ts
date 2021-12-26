@@ -3,8 +3,9 @@ const ethers = require("ethers");
 
 export async function listBounty(contract, reward, timeToAcceptInDays, gigCid) {
   const timeToAcceptInMinutes = timeToAcceptInDays * 24 * 60;
+  console.log(toEther(reward.toString()));
   const tx = await contract.listGig(
-    toEther(reward),
+    toEther(reward.toString()),
     timeToAcceptInMinutes,
     gigCid
   );
@@ -76,6 +77,7 @@ export async function removeStake(contract, stake) {
 }
 
 export async function wrapMatic(contract, value) {
+  console.log(value);
   const tx = await contract.deposit({ value: toEther(value.toString()) });
   return tx.wait();
 }
