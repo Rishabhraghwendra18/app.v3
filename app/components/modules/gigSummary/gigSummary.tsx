@@ -2,14 +2,20 @@ import {
   Avatar,
   Button,
   Chip,
-  ListItem,
-  Paper,
+  Fade,
+  Grid,
   styled,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
+import { gigHelperTexts, monthMap } from "app/constants/constants";
 import { Gig } from "app/types";
 import React from "react";
+import PersonIcon from "@mui/icons-material/Person";
+import { useGlobal } from "app/context/web3Context";
+import { formatTimeAgo } from "app/utils/utils";
+import Link from "next/link";
+import { useExplore } from "pages";
 
 interface Props {
   gig: Gig;
@@ -30,86 +36,160 @@ const GigAvatar = styled(Avatar)(({ theme }) => ({
 }));
 
 const GigSummary = ({ gig }: Props) => {
+  const {
+    state: { conversionRate },
+  } = useGlobal();
+  const { isFetching } = useExplore();
   return (
-    <ImageButton variant="outlined" sx={{ my: 1 }}>
-      <Box sx={{ display: "flex", flexDirection: "row", mt: 1 }}>
-        <GigAvatar alt="Remy Sharp" src={gig.user[0].profilePicture} />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            textAlign: "left",
-            // justifyContent: "center",
-            // alignItems: "center",
-            mx: 6,
-            my: 0.5,
-          }}
-        >
-          <Typography
-            sx={{
-              color: "#eaeaea",
-              textTransform: "none",
-              fontWeight: "bold",
-              fontSize: "1.1rem",
-            }}
-          >
-            {gig.name}
-          </Typography>
-          <Typography
-            sx={{
-              color: "#979797",
-              textTransform: "none",
-              fontSize: "0.9rem",
-            }}
-          >
-            @{gig.clientUsername}
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-            }}
-          >
-            {gig.tags.map((data, idx) => {
-              return (
-                <Chip
-                  label={data}
-                  key={idx}
-                  size="small"
-                  sx={{ mt: 1, mr: 0.8, textTransform: "none" }}
-                />
-              );
-            })}
-            <Typography
-              sx={{
-                color: "#979797",
-                textTransform: "none",
-                fontSize: "0.9rem",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "end",
-                mx: 1,
-              }}
+    <Fade in={!isFetching} timeout={1000}>
+      <div>
+        <Link href={`/gig/${gig.dealId}`} passHref>
+          <ImageButton variant="outlined" sx={{ pt: 1, mb: 1 }}>
+            <Grid
+              container
+              spacing={2}
+              columns={7}
+              sx={{ textTransform: "none" }}
             >
-              Posted 5 min ago
-            </Typography>
-            <Typography
-              sx={{
-                color: "#979797",
-                textTransform: "none",
-                fontSize: "0.9rem",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "end",
-                mx: 1,
-              }}
-            >
-              3 Applicants
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
-    </ImageButton>
+              <Grid item xs={4}>
+                <Box sx={{ display: "flex", flexDirection: "row" }}>
+                  <GigAvatar alt="Username" src={gig.user[0].profilePicture} />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      textAlign: "left",
+                      ml: 4,
+                      mr: 2,
+                      width: "100%",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#eaeaea",
+                        textTransform: "none",
+                        fontWeight: "bold",
+                        fontSize: "1.1rem",
+                      }}
+                    >
+                      {gig.name}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: "#979797",
+                        textTransform: "none",
+                        fontSize: "0.9rem",
+                      }}
+                    >
+                      @{gig.clientUsername}
+                    </Typography>
+
+                    <div className="grid grid-cols-5">
+                      <div className="col-span-3">
+                        <div className="grid grid-cols-3">
+                          {gig.tags.map((data, idx) => {
+                            return (
+                              <Chip
+                                label={data}
+                                key={idx}
+                                size="small"
+                                sx={{
+                                  mt: 1,
+                                  mr: 0.8,
+                                  textTransform: "none",
+                                  color: "#99ccff",
+                                  fontSize: "0.7rem",
+                                }}
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>
+                      <Typography
+                        sx={{
+                          color: "#979797",
+                          fontSize: "0.7rem",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "end",
+                          mx: 1,
+                          mb: 0.5,
+                        }}
+                      >
+                        Posted {formatTimeAgo(Date.parse(gig.createdAt))} ago
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: "#979797",
+                          textTransform: "none",
+                          fontSize: "0.7rem",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "end",
+                          mx: 1,
+                          mb: 0.5,
+                        }}
+                      >
+                        <PersonIcon sx={{ fontSize: "1rem" }} />
+                        {gig.numApplicants} Applicants
+                      </Typography>
+                    </div>
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid item xs={1}>
+                <div className="flex flex-col">
+                  <div className="flex flex-row items-baseline">
+                    <div className="text-grey-light font-bold text-xl mr-2">
+                      {gig.reward.toFixed(2)}
+                    </div>
+                    <div className="text-grey-normal">Wmatic</div>
+                  </div>
+                  <div className="flex flex-col items-left w-1/2">
+                    <Chip
+                      label={`${((conversionRate || 0) * gig.reward).toFixed(
+                        2
+                      )} USD`}
+                      size="small"
+                      sx={{
+                        mt: 1,
+                        mr: 0.8,
+                        bgcolor: "#99ccff",
+                        color: "#0061ff",
+                        fontSize: "0.7rem",
+                      }}
+                    />
+                  </div>
+                </div>
+              </Grid>
+              <Grid item xs={1}>
+                <div className="flex flex-col">
+                  <div className="flex flex-row items-baseline">
+                    <div className="text-grey-light font-bold text-xl mr-2">
+                      {gig.deadline.getDate()}
+                    </div>
+                    <div className="text-grey-normal">
+                      {monthMap[gig.deadline?.getMonth()]}{" "}
+                      {gig.deadline?.getFullYear()}
+                    </div>
+                  </div>
+                </div>
+              </Grid>
+              <Grid item xs={1}>
+                <div className="flex flex-col">
+                  <div className="flex flex-row items-baseline">
+                    <div className="text-grey-light font-bold text-xl mr-2">
+                      {gig.minStake.toFixed(2)}
+                    </div>
+                    <div className="text-grey-normal">Wmatic</div>
+                  </div>
+                </div>
+              </Grid>
+            </Grid>
+          </ImageButton>
+        </Link>
+      </div>
+    </Fade>
   );
 };
 

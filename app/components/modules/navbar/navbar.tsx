@@ -6,12 +6,17 @@ import Link from "next/link";
 import React from "react";
 import { useMoralis } from "react-moralis";
 import Logo from "app/images/logo.png";
+import { useGlobal } from "app/context/web3Context";
+import { NavbarAvatar } from "app/components/elements/styledComponents";
 
 interface Props {}
 
 export const Navbar = (props: Props) => {
-  const { isAuthenticated, authenticate, isAuthenticating, user, logout } =
+  const { isAuthenticated, authenticate, isAuthenticating, user } =
     useMoralis();
+  const {
+    state: { userInfo },
+  } = useGlobal();
   return (
     <div>
       <nav
@@ -110,7 +115,7 @@ export const Navbar = (props: Props) => {
                 documentation={false}
                 PopoverButton={() => {
                   return (
-                    <button className="hidden md:flex flex-row rounded-full bg-blue-100 hover:text-white hover:bg-blue-spectbright font-bold transform transition-colors ease-in-out duration-1000">
+                    <button className="hidden md:flex flex-row rounded-full bg-blue-100 hover:text-white hover:bg-blue-bright font-bold transform transition-colors ease-in-out duration-1000">
                       <div className="flex flex-col justify-center items-center mt-2 text-sm block justify-end px-4 my-2 text-black-normal">
                         <span>
                           {!isAuthenticating
@@ -130,7 +135,8 @@ export const Navbar = (props: Props) => {
                 small={true}
                 PopoverButton={() => {
                   return (
-                    <button className="hidden md:flex flex-row rounded-full bg-blue-100 hover:text-white hover:bg-blue-spectbright font-bold transform transition-colors ease-in-out duration-1000">
+                    <button className="hidden md:flex flex-row rounded-full bg-blue-100 hover:text-white hover:bg-blue-bright font-bold transform transition-colors ease-in-out duration-1000">
+                      <NavbarAvatar src={userInfo?.get("profilePicture")} />
                       <div className="flex flex-col justify-center items-center mt-2 text-sm block justify-end px-4 mb-1 text-black-normal">
                         {smartTrim(user?.get("ethAddress"), 10)}
                       </div>

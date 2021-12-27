@@ -17,7 +17,7 @@ const TextFilter: React.FC<Props> = ({}) => {
     maxCollateral,
   } = useExplore();
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row w-full">
       <Select
         isMulti
         autoFocus

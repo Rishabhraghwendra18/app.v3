@@ -9,7 +9,7 @@ const INFURA_ID = "INVALID_INFURA_KEY";
 
 const NETWORK = "mainnet";
 
-function useWeb3Modal(config: any = {}) {
+function useGlobalModal(config: any = {}) {
   const [provider, setProvider] = useState<any>();
   const [autoLoaded, setAutoLoaded] = useState(false);
   const { autoLoad = true, infuraId = INFURA_ID, network = NETWORK } = config;
@@ -65,4 +65,4 @@ function useWeb3Modal(config: any = {}) {
   return [provider, loadWeb3Modal, logoutOfWeb3Modal];
 }
 
-export default useWeb3Modal;
+export default useGlobalModal;

@@ -12,7 +12,7 @@ const ExploreFilter: React.FC<Props> = (props: Props) => {
     <div>
       <div>
         <div>
-          <div className="m-8 mb-2 flex flex-row">
+          <div className="m-8 mb-2 flex flex-row" style={{ width: "100%" }}>
             <span className="font-semibold text-sm text-blue-light">
               Required Skills
             </span>

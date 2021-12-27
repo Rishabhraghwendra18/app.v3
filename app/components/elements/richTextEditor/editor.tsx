@@ -8,9 +8,10 @@ import dynamic from "next/dynamic";
 interface Props {
   value: Delta;
   onChange: any;
+  placeholder: string;
 }
 
-const Editor = ({ value, onChange }: Props) => {
+const Editor = ({ value, onChange, placeholder }: Props) => {
   return (
     <div>
       <ReactQuill
@@ -20,7 +21,7 @@ const Editor = ({ value, onChange }: Props) => {
           onChange(editor.getContents());
         }}
         defaultValue={value}
-        placeholder={"Write a thorough description of the gig"}
+        placeholder={placeholder}
       />
     </div>
   );

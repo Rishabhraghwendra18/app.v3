@@ -46,6 +46,10 @@ export type Action =
       value: State["conversionRate"];
     }
   | {
+      type: "SET_USERINFO";
+      value: State["userInfo"];
+    }
+  | {
       type: "END_ASYNC";
     };
 
@@ -146,6 +150,12 @@ export const reducer = (state: State, action: Action) => {
           ...state.userStake,
           allowance: action.value,
         },
+      };
+    }
+    case "SET_USERINFO": {
+      return {
+        ...state,
+        userInfo: action.value,
       };
     }
     default:

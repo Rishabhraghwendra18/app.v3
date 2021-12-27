@@ -19,6 +19,7 @@ import oracleABI from "../../constants/contracts/mumbai/Oracle.json";
 import wmaticABI from "../../constants/contracts/mumbai/Wmatic.json";
 import Moralis from "moralis/types";
 import { Contracts } from "app/types";
+import { getUser } from "app/utils/moralis";
 
 declare global {
   interface Window {
@@ -26,7 +27,7 @@ declare global {
   }
 }
 
-const Web3Context = createContext<{
+const GlobalContext = createContext<{
   state: State;
   dispatch: React.Dispatch<Action>;
 }>({ state: initialState, dispatch: () => null });
@@ -68,6 +69,11 @@ const initContractsAndUserStake = async (
       user?.get("ethAddress"),
       userContract.address
     );
+    const userInfo = await getUser();
+    dispatch({
+      type: "SET_USERINFO",
+      value: userInfo,
+    });
     dispatch({
       type: "SET_BALANCE",
       value: parseFloat(ethers.utils.formatEther(balance)),
@@ -120,6 +126,7 @@ const updateUserStake = async (
       user?.get("ethAddress"),
       contracts.userContract.address
     );
+
     dispatch({
       type: "SET_BALANCE",
       value: parseFloat(ethers.utils.formatEther(balance)),
@@ -160,13 +167,15 @@ const updateConversionRate = async (
   }
 };
 
-const Web3ContextProvider = ({ children }: { children: React.ReactNode }) => {
+const GlobalContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const value = { state, dispatch };
-  return <Web3Context.Provider value={value}>{children}</Web3Context.Provider>;
+  return (
+    <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>
+  );
 };
 
-const useWeb3 = () => useContext(Web3Context);
+const useGlobal = () => useContext(GlobalContext);
 
-export default Web3ContextProvider;
-export { useWeb3, initContractsAndUserStake, updateUserStake };
+export default GlobalContextProvider;
+export { useGlobal, initContractsAndUserStake, updateUserStake };

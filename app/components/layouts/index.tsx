@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { initContractsAndUserStake, useWeb3 } from "app/context/web3Context";
+import { initContractsAndUserStake, useGlobal } from "app/context/web3Context";
 import { useMoralis } from "react-moralis";
 import { Navbar } from "app/components/modules/navbar/navbar";
 import { Footer } from "app/components/modules/footer/footer";
@@ -10,10 +10,7 @@ interface Props {
 
 export const Layout = ({ children }: Props) => {
   const { isAuthenticated, user } = useMoralis();
-  const {
-    state: { error, contracts, userStake },
-    dispatch,
-  } = useWeb3();
+  const { dispatch } = useGlobal();
 
   useEffect(() => {
     if (isAuthenticated) {

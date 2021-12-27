@@ -21,8 +21,10 @@ import {
   TooltipProps,
   tooltipClasses,
   styled,
+  Typography,
+  Box,
 } from "@mui/material";
-import { gigHelperTexts, skillOptions } from "app/constants/constants";
+import { proposalHelperTexts, skillOptions } from "app/constants/constants";
 import { DateTimePicker, LocalizationProvider } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterDayjs";
 import dayjs from "dayjs";
@@ -32,6 +34,8 @@ import { useState } from "react";
 import ModalContainer from "react-modal-promise";
 import { useGlobal } from "app/context/web3Context";
 import { CreateModal } from "app/components/elements/modals/createModal";
+import { useGig } from "pages/gig/[id]";
+import { createProposal } from "app/utils/moralis";
 
 interface Props {}
 
@@ -50,58 +54,66 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-export interface IGigFormInput {
-  name: string;
-  skills: Array<{ label: string }>;
+export interface IProposalFormInput {
+  title: string;
   description: any; // fix
-  reward: number;
   minStake: number;
   deadline: any;
-  acceptanceDays: number;
 }
-export const GigForm: React.FC<Props> = (props: Props) => {
+export const ProposalForm: React.FC<Props> = (props: Props) => {
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<IGigFormInput>();
+  } = useForm<IProposalFormInput>();
 
-  const onError: SubmitErrorHandler<IGigFormInput> = () => handleClickOpen();
+  const { gig } = useGig();
+
+  //   const onError: SubmitErrorHandler<IProposalFormInput> = () =>
+  //     handleClickOpen();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [values, setValues] = useState<IProposalFormInput>();
 
-  const onSubmit: SubmitHandler<IGigFormInput> = async (values) => {
-    const confirmed = await CreateModal({
-      values: values,
-      createGig: true,
-    });
-  };
-
-  const handleClickOpen = () => {
+  const onSubmit: SubmitHandler<IProposalFormInput> = async (values) => {
     setOpen(true);
+    setValues(values);
   };
+
+  //   const handleClickOpen = () => {
+  //     setOpen(true);
+  //   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
   return (
-    <div className="flex flex-col col-span-5 border-grey-normal border-l px-12">
+    <div className="mt-4 p-1">
       <ModalContainer />
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}
       >
-        <CircularProgress color="inherit" />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress color="inherit" />
+          <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
+            Submitting proposal please wait
+          </Typography>
+        </Box>
       </Backdrop>
-      <form
-        onSubmit={handleSubmit(onSubmit, onError)}
-        className="flex flex-col"
-      >
-        <div className="flex flex-col border-b-1 border-blue-lighter pb-4 mb-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+        <div className="flex flex-col pb-4">
           <div className="w-1/3 mb-4">
             <Controller
-              name="name"
+              name="title"
               control={control}
               defaultValue=""
               rules={{ minLength: 5 }}
@@ -109,15 +121,15 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                 <LightTooltip
                   arrow
                   placement="right"
-                  title={gigHelperTexts["name"]}
+                  title={proposalHelperTexts["title"]}
                 >
                   <TextField
                     {...field}
-                    label="Gig Name"
+                    label="Proposal Title"
                     variant="standard"
                     helperText={
                       fieldState.error?.type === "minLength" &&
-                      "Gig title too short. Please make it more understandable."
+                      "Proposal title too short. Please make it more understandable."
                     }
                     fullWidth
                     required
@@ -135,87 +147,24 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                 <Editor
                   value={field.value}
                   onChange={field.onChange}
-                  placeholder={"Write a thorough description of the gig"}
+                  placeholder={"Write a thorough description of your proposal"}
                 />
               )}
             />
           </div>
-          <div className="w-1/3 mb-4">
-            <Controller
-              name="skills"
-              control={control}
-              render={({ field }) => (
-                <LightTooltip
-                  arrow
-                  placement="right"
-                  title={gigHelperTexts["skills"]}
-                >
-                  <Autocomplete
-                    multiple
-                    id="tags-standard"
-                    options={skillOptions}
-                    getOptionLabel={(option) => option.label}
-                    onChange={(e, data) => field.onChange(data)}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        variant="standard"
-                        label="Required Skills"
-                        // helperText="Skills the freelancer would need to have to complete the
-                        //     gig successfully."
-                      />
-                    )}
-                  />
-                </LightTooltip>
-              )}
-            />
-          </div>
         </div>
-        <div className="flex flex-col border-b-1 border-blue-lighter pb-4 mb-4">
-          <div className="w-1/3 mb-4">
-            <Controller
-              name="reward"
-              control={control}
-              rules={{ min: 0.01 }}
-              render={({ field, fieldState }) => (
-                <LightTooltip
-                  arrow
-                  placement="right"
-                  title={gigHelperTexts["reward"]}
-                >
-                  <TextField
-                    {...field}
-                    label="Reward"
-                    variant="standard"
-                    helperText={
-                      fieldState.error?.type === "min" &&
-                      "Gig reward shoudl atleast be 1 WMatic"
-                    }
-                    type="number"
-                    required
-                    error={fieldState.error ? true : false}
-                    inputProps={{ min: 0, step: 0.01 }}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="start">WMatic</InputAdornment>
-                      ),
-                    }}
-                    fullWidth
-                  />
-                </LightTooltip>
-              )}
-            />
-          </div>
+        <div className="flex flex-col pb-4">
           <div className="w-1/3 mb-4">
             <Controller
               name="minStake"
               control={control}
-              rules={{ min: 0.01 }}
+              rules={{ min: gig.minStake }}
+              defaultValue={gig.minStake}
               render={({ field, fieldState }) => (
                 <LightTooltip
                   arrow
                   placement="right"
-                  title={gigHelperTexts["minStake"]}
+                  title={proposalHelperTexts["minStake"]}
                 >
                   <TextField
                     {...field}
@@ -228,7 +177,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                     type="number"
                     required
                     error={fieldState.error ? true : false}
-                    inputProps={{ min: 0, step: 0.01 }}
+                    inputProps={{ min: gig.minStake, step: 0.01 }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="start">WMatic</InputAdornment>
@@ -241,12 +190,13 @@ export const GigForm: React.FC<Props> = (props: Props) => {
             />
           </div>
         </div>
-        <div className="flex flex-col border-b-1 border-blue-lighter pb-4 mb-4">
+        <div className="flex flex-col mb-4">
           <LocalizationProvider dateAdapter={DateAdapter}>
             <div className="w-1/3 mb-4">
               <Controller
                 name="deadline"
                 control={control}
+                defaultValue={dayjs(gig.deadline)}
                 render={({ field }) => (
                   <DateTimePicker
                     {...field}
@@ -257,7 +207,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                       <LightTooltip
                         arrow
                         placement="right"
-                        title={gigHelperTexts["deadline"]}
+                        title={proposalHelperTexts["deadline"]}
                       >
                         <TextField
                           {...params}
@@ -273,41 +223,6 @@ export const GigForm: React.FC<Props> = (props: Props) => {
               />
             </div>
           </LocalizationProvider>
-
-          <div className="w-1/3 mb-4">
-            <Controller
-              name="acceptanceDays"
-              control={control}
-              rules={{ min: 1 }}
-              render={({ field, fieldState }) => (
-                <LightTooltip
-                  arrow
-                  placement="right"
-                  title={gigHelperTexts["acceptanceDays"]}
-                >
-                  <TextField
-                    {...field}
-                    label="Time to Accept Work"
-                    variant="standard"
-                    helperText={
-                      fieldState.error?.type === "min" &&
-                      "Time to accept days should atleast be 1 day"
-                    }
-                    type="number"
-                    required
-                    error={fieldState.error ? true : false}
-                    fullWidth
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="start">Days</InputAdornment>
-                      ),
-                    }}
-                    inputProps={{ min: 0 }}
-                  />
-                </LightTooltip>
-              )}
-            />
-          </div>
         </div>
 
         <div className="w-1/3 my-4">
@@ -318,7 +233,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
             type="submit"
             endIcon={<AssignmentTurnedInIcon />}
           >
-            Create Gig
+            Send Proposal
           </PrimaryButton>
         </div>
       </form>
@@ -328,17 +243,41 @@ export const GigForm: React.FC<Props> = (props: Props) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Form validation errors"}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">Confirm</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Please fix the form validation errors and submit again
+            Are you sure you want to send this proposal?
+          </DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+            Proposals cannot be edited or deleted.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} autoFocus>
-            Okay!
+          <Button
+            color="inherit"
+            onClick={handleClose}
+            sx={{ mr: 1, color: "#f45151", textTransform: "none" }}
+          >
+            Nevermind
+          </Button>
+          <Button
+            onClick={() => {
+              handleClose();
+              setLoading(true);
+              createProposal(
+                gig.dealId,
+                values?.title,
+                values?.description,
+                values?.minStake,
+                new Date(values?.deadline).toUTCString()
+              ).then((res) => {
+                setLoading(false);
+              });
+            }}
+            autoFocus
+            sx={{ mr: 1, textTransform: "none" }}
+          >
+            Hell Yeah!
           </Button>
         </DialogActions>
       </Dialog>

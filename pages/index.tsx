@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import { Layout } from "app/components/layouts";
 import Explore from "app/components/templates/Explore";
 import { Gig } from "app/types";
@@ -6,6 +7,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useMoralis, useMoralisCloudFunction } from "react-moralis";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 type fetchResponse = {
   result: Array<Gig>;
@@ -45,8 +47,8 @@ export const ExploreContext = createContext<ExploreContextType>({
 });
 
 const Home: NextPage<Props> = ({ bounties }) => {
-  const value = useProvideExplore();
-  const { isInitialized, Moralis, web3 } = useMoralis();
+  const value = useProviderExplore();
+  const { isInitialized } = useMoralis();
   useEffect(() => {
     if (isInitialized) {
       value.filterGigs({
@@ -84,13 +86,17 @@ const Home: NextPage<Props> = ({ bounties }) => {
               <div className="flex flex-row ml-8 justify-center">
                 <div className="text-base md:text-2xl lg:text-3xl mt-1 text-blue-light">
                   {" "}
-                  {1}
+                  {value.gigs?.length}
                 </div>
                 <div className="hidden md:flex text-sm flex flex-col justify-end items-end ml-1 mb-1 text-blue-light">
                   Matching Gigs
                 </div>
               </div>
             </div>
+            <Button sx={{ textTransform: "none", color: "#eaeaea" }}>
+              Track my gigs
+              <ArrowRightIcon />
+            </Button>
           </div>
         </div>
         <ExploreContext.Provider value={value}>
@@ -101,7 +107,7 @@ const Home: NextPage<Props> = ({ bounties }) => {
   );
 };
 
-export function useProvideExplore() {
+export function useProviderExplore() {
   const [minDeadline, setMinDeadline] = useState(0);
   const [maxDeadline, setMaxDeadline] = useState(365);
   const [minCollateral, setMinCollateral] = useState(0);

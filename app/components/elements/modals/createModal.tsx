@@ -14,50 +14,73 @@ import {
 } from "@mui/material";
 import { create } from "react-modal-promise";
 import { approve, listBounty, wrapMatic } from "app/utils/contracts";
-import { updateUserStake, useWeb3 } from "app/context/web3Context";
+import { updateUserStake, useGlobal } from "app/context/web3Context";
 import { IGigFormInput } from "app/components/modules/gigForm/gigForm";
 import { toIPFS } from "app/utils/moralis";
 import { useMoralis } from "react-moralis";
 import { ethers } from "ethers";
 import { ToastContainer, toast } from "material-react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
+import Link from "next/link";
 
 interface props {
   isOpen: any;
   onResolve: any;
   onReject: any;
   values: IGigFormInput;
+  createGig: Boolean;
 }
 
 const gigSteps = ["Approve", "Wrap enough Matic", "Confirm Gig"];
+const proposalSteps = [
+  "Approve",
+  "Wrap enough Matic",
+  "Deposit WMatic for collateral",
+  "Confirm Gig",
+];
 
-const FormModal = ({ isOpen, onResolve, onReject, values }: props) => {
+const FormModal = ({
+  isOpen,
+  onResolve,
+  onReject,
+  values,
+  createGig,
+}: props) => {
   const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState(0);
   const [required, setRequired] = useState(0);
   const [balance, setBalance] = useState(0);
   const [loaderText, setLoaderText] = useState("");
-  const { state, dispatch } = useWeb3();
+  const {
+    state: { contracts, userStake },
+    dispatch,
+  } = useGlobal();
+  const [hash, setHash] = useState("");
+  const [dealId, setDealId] = useState(0);
+  const [steps, setSteps] = useState<Array<string>>([]);
   const { Moralis, user } = useMoralis();
 
   useEffect(() => {
-    updateUserStake(dispatch, user, state.contracts);
-    values.reward =
-      parseFloat(values.reward.toString()) +
-      parseFloat((0.02 * values.reward).toString());
+    updateUserStake(dispatch, user, contracts);
+    createGig ? setSteps(gigSteps) : setSteps(proposalSteps);
+    if (createGig) {
+      values.reward =
+        parseFloat(values.reward.toString()) +
+        parseFloat((0.02 * values.reward).toString());
 
-    if (state.userStake?.balance !== undefined) {
-      if (!state.userStake.allowance) {
-        setActiveStep(0);
+      if (userStake?.balance !== undefined) {
+        if (!userStake.allowance) {
+          setActiveStep(0);
+        }
+        if (values.reward > userStake?.balance) {
+          setActiveStep(1);
+        } else {
+          setActiveStep(2);
+        }
+        setRequired(values.reward - userStake?.balance);
+        setAmount(values.reward - userStake?.balance);
       }
-      if (values.reward > state.userStake?.balance) {
-        setActiveStep(1);
-      } else {
-        setActiveStep(2);
-      }
-      setRequired(values.reward - state.userStake?.balance);
-      setAmount(values.reward - state.userStake?.balance);
     }
     Moralis.Web3API.account
       .getNativeBalance({
@@ -74,7 +97,7 @@ const FormModal = ({ isOpen, onResolve, onReject, values }: props) => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: "40rem",
+    width: "48rem",
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
@@ -84,7 +107,7 @@ const FormModal = ({ isOpen, onResolve, onReject, values }: props) => {
     <Modal open={isOpen} onClose={onReject}>
       <Box sx={style}>
         <Stepper activeStep={activeStep}>
-          {gigSteps.map((label, index) => {
+          {steps.map((label, index) => {
             const stepProps: { completed?: boolean } = {};
             const labelProps: {
               optional?: React.ReactNode;
@@ -115,7 +138,7 @@ const FormModal = ({ isOpen, onResolve, onReject, values }: props) => {
           </Box>
         </Backdrop>
         <ToastContainer />
-        {activeStep === gigSteps.length && (
+        {activeStep === steps.length && (
           <React.Fragment>
             <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
               Gig created succesfully! You cannot edit it now, delist it if you
@@ -123,8 +146,16 @@ const FormModal = ({ isOpen, onResolve, onReject, values }: props) => {
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Box sx={{ flex: "1 1 auto" }} />
-              <Button>View transaction</Button>
-              <Button>Go to gig!</Button>
+              <a
+                href={`https://mumbai.polygonscan.com/tx/${hash}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Button sx={{ textTransform: "none" }}>View transaction</Button>
+              </a>
+              <Link href={`/gig/${dealId}`} passHref>
+                <Button sx={{ textTransform: "none" }}>Go to gig!</Button>
+              </Link>
             </Box>
           </React.Fragment>
         )}
@@ -135,11 +166,9 @@ const FormModal = ({ isOpen, onResolve, onReject, values }: props) => {
                 display: "flex",
                 flexDirection: "column",
                 textAlign: "center",
-                // justifyContent: "center",
-                // alignItems: "center",
               }}
             >
-              <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
+              <Typography sx={{ my: 4, color: "#eaeaea" }}>
                 You need to approve our contract to spend your Wrapped Matic
                 (WMatic) to proceed.
               </Typography>
@@ -148,8 +177,8 @@ const FormModal = ({ isOpen, onResolve, onReject, values }: props) => {
                   setLoaderText("Waiting for the transaction to complete");
                   setLoading(true);
                   approve(
-                    state.contracts?.tokenContract,
-                    state.contracts?.userContract.address
+                    contracts?.tokenContract,
+                    contracts?.userContract.address
                   )
                     .then((res) => {
                       dispatch({
@@ -157,12 +186,10 @@ const FormModal = ({ isOpen, onResolve, onReject, values }: props) => {
                         value: true,
                       });
                       setLoading(false);
-
                       setActiveStep(1);
                     })
                     .catch((err) => {
                       setLoading(false);
-
                       alert(err.message);
                     });
                 }}
@@ -181,8 +208,6 @@ const FormModal = ({ isOpen, onResolve, onReject, values }: props) => {
                 display: "flex",
                 flexDirection: "column",
                 textAlign: "center",
-                // justifyContent: "center",
-                // alignItems: "center",
               }}
             >
               <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
@@ -243,9 +268,9 @@ const FormModal = ({ isOpen, onResolve, onReject, values }: props) => {
                 onClick={() => {
                   setLoaderText("Waiting for the transaction to complete");
                   setLoading(true);
-                  wrapMatic(state.contracts?.tokenContract, amount)
+                  wrapMatic(contracts?.tokenContract, amount)
                     .then((res) => {
-                      state.contracts?.tokenContract
+                      contracts?.tokenContract
                         .balanceOf(user?.get("ethAddress"))
                         .then((res) => {
                           dispatch({
@@ -280,6 +305,109 @@ const FormModal = ({ isOpen, onResolve, onReject, values }: props) => {
           </React.Fragment>
         )}
         {activeStep === 2 && (
+          <React.Fragment>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                textAlign: "center",
+              }}
+            >
+              <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
+                You need to desposit {required} more Wrapped Matic(WMatic) to
+                proceed.
+              </Typography>
+              <TextField
+                autoFocus
+                value={amount}
+                onChange={(evt) => setAmount(parseFloat(evt.target.value))}
+                margin="dense"
+                id="name"
+                label="Amount"
+                type="number"
+                fullWidth
+                variant="standard"
+                error={amount > balance}
+                helperText={
+                  amount > balance
+                    ? "Not enough Matic available"
+                    : "You need to wrap matic so it can be used in our platform"
+                }
+                inputProps={{ step: 0.1 }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">WMatic</InputAdornment>
+                  ),
+                }}
+              />
+              <div className="w-1/3 my-2">
+                <TextField
+                  value={userStake?.balance}
+                  margin="dense"
+                  id="name"
+                  label="Available Balance"
+                  type="number"
+                  fullWidth
+                  variant="standard"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">WMatic</InputAdornment>
+                    ),
+                    readOnly: true,
+                  }}
+                />
+              </div>
+            </Box>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Button
+                color="inherit"
+                onClick={onReject}
+                sx={{ mr: 1, color: "#f45151" }}
+              >
+                Cancel
+              </Button>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button
+                onClick={() => {
+                  setLoaderText("Waiting for the transaction to complete");
+                  setLoading(true);
+                  wrapMatic(contracts?.tokenContract, amount)
+                    .then((res) => {
+                      contracts?.tokenContract
+                        .balanceOf(user?.get("ethAddress"))
+                        .then((res) => {
+                          dispatch({
+                            type: "SET_BALANCE",
+                            value: parseFloat(ethers.utils.formatEther(res)),
+                          });
+                        });
+
+                      setLoading(false);
+                      setActiveStep(3);
+                    })
+                    .catch((err) => {
+                      setLoading(false);
+                      toast.error(err.message, {
+                        position: "bottom-center",
+                        autoClose: 3000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                      });
+                      console.log(err);
+                    });
+                }}
+                variant="outlined"
+                disabled={amount > balance}
+              >
+                Next
+              </Button>
+            </Box>
+          </React.Fragment>
+        )}
+        {activeStep === steps.length - 1 && (
           <React.Fragment>
             <Box
               sx={{
@@ -322,7 +450,7 @@ const FormModal = ({ isOpen, onResolve, onReject, values }: props) => {
                     const ipfsUrlArray = res.path.split("/");
                     setLoaderText("Waiting for the transaction to complete");
                     listBounty(
-                      state.contracts?.dealContract,
+                      contracts?.dealContract,
                       values.reward,
                       values.acceptanceDays,
                       ipfsUrlArray[ipfsUrlArray.length - 1]
@@ -335,6 +463,8 @@ const FormModal = ({ isOpen, onResolve, onReject, values }: props) => {
                             dealId = event.args[1];
                           }
                         }
+                        setHash(hash);
+                        setDealId(dealId);
                         setLoading(false);
                         setActiveStep(3);
                       })

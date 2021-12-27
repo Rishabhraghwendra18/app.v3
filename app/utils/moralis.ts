@@ -46,7 +46,7 @@ export function createProposal(
   return Moralis.Cloud.run("createProposal", params);
 }
 
-export function getUser(username) {
+export function getUser(username?: string) {
   const params = {
     username: username,
   };
@@ -142,7 +142,7 @@ export function getIfUsernameValid(username) {
   return Moralis.Cloud.run("getIfUsernameValid", params);
 }
 
-export function getBounty(id) {
+export function getGig(id) {
   const params = {
     id: id,
   };

@@ -155,3 +155,45 @@ export const gigHelperTexts = {
   skills:
     "Skills the freelancer would need to have to complete the gig successfully.",
 };
+
+export const proposalHelperTexts = {
+  title: "The proposal title, make it brief",
+  minStake:
+    "Collateral is locked by you to ensure high quality of work. Client will be compensated from this amount in case the gig is failed.",
+  deadline:
+    "The date by which you can submit the work. This deadline can be earlier or later than client preferred deadline.",
+};
+
+export const monthMap = {
+  0: "Jan",
+  1: "Feb",
+  2: "Mar",
+  3: "Apr",
+  4: "May",
+  5: "June",
+  6: "July",
+  7: "Aug",
+  8: "Sep",
+  9: "Oct",
+  10: "Nov",
+  11: "Dec",
+};
+
+export const gigStatusMapping = {
+  101: "Open",
+  102: "Awaiting freelancer confirmation",
+  201: "Work Started",
+  202: "In review",
+  203: "Completed",
+  204: "Revision requested",
+  401: "Delist",
+  402: "Submission Violation",
+  403: "Dispute",
+};
+
+export const proposalStatusMapping = {
+  101: "Open",
+  102: "Shortlisted",
+  103: "Selected",
+  401: "Rejected",
+};
