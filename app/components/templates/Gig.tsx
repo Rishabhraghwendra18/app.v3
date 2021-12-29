@@ -1,5 +1,4 @@
 import { Box, Grow, styled, Tab, Tabs } from "@mui/material";
-import { useGlobal } from "app/context/web3Context";
 import { useGig } from "pages/gig/[id]";
 import React from "react";
 import { useMoralis } from "react-moralis";
@@ -8,6 +7,8 @@ import ClientBriefSkeleton from "../modules/clientBrief/skeleton";
 import { GigHeading } from "../modules/gigHeading";
 import GigHeadingSkeleton from "../modules/gigHeading/skeleton";
 import { ProposalForm } from "../modules/proposalForm";
+import SingleProposal from "../modules/singleProposal";
+import ViewProposals from "../modules/viewProposals";
 
 interface Props {}
 
@@ -48,7 +49,6 @@ function a11yProps(index: number) {
 
 const GigTemplate = (props: Props) => {
   const { fetching, gig, tab, setTab } = useGig();
-  const { user } = useMoralis();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
@@ -60,10 +60,16 @@ const GigTemplate = (props: Props) => {
         {fetching ? <ClientBriefSkeleton /> : <ClientBrief />}
       </TabPanel>
       <TabPanel value={tab} index={1}>
-        Item Two
+        <ViewProposals />
       </TabPanel>
       <TabPanel value={tab} index={2}>
         <ProposalForm />
+      </TabPanel>
+      <TabPanel value={tab} index={3}>
+        {gig.proposal?.length && <SingleProposal />}
+      </TabPanel>
+      <TabPanel value={tab} index={4}>
+        {gig.proposal?.length && <SingleProposal />}
       </TabPanel>
     </div>
   );

@@ -189,6 +189,7 @@ export const gigStatusMapping = {
   401: "Delist",
   402: "Submission Violation",
   403: "Dispute",
+  404: "Expired",
 };
 
 export const proposalStatusMapping = {

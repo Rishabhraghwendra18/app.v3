@@ -1,3 +1,4 @@
+import { BigNumber } from "ethers";
 import Moralis from "moralis/types";
 
 export interface Contracts {
@@ -31,6 +32,7 @@ export interface User {
   _createdAt: object;
   _id: string;
   _updatedAt: object;
+  _created_at: any;
 }
 
 type GigStatus = 101 | 102 | 201 | 202 | 203 | 204 | 401 | 402 | 403;
@@ -54,7 +56,7 @@ export interface Gig {
   updatedAt: string;
   evidence?: string;
   user: Array<User>;
-  verifiablegig?: Moralis.Object;
+  verifiableBounty?: Moralis.Object;
   submissionTransaction?: Moralis.Object;
   proposal: Array<Proposal>;
 }
@@ -77,4 +79,30 @@ export interface Proposal {
   title: string;
   updatedAt: string;
   user: Array<User>;
+}
+
+export interface ContractGig {
+  active: Boolean;
+  client: string;
+  collateral: BigNumber;
+  confirmationDeadlineViolation: Boolean;
+  confirmed: Boolean;
+  deadline: Array<object | string>;
+  freelancer: string;
+  gigCid: string;
+  inDispute: false;
+  numRevisionsRemaining: false;
+  reward: BigNumber;
+  submission: string;
+  timeToAcceptInMinuted: number;
+  timeToReviseInMinutes: number;
+}
+
+export interface VerifiedGig {
+  description: object;
+  name: string;
+  proposal: object;
+  proposalTitle: string;
+  revisions?: number;
+  tags: Array<string>;
 }

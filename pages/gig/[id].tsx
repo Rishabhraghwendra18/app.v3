@@ -1,7 +1,7 @@
 import { Layout } from "app/components/layouts";
 import GigTemplate from "app/components/templates/Gig";
 import { useGlobal } from "app/context/web3Context";
-import { Gig, Proposal } from "app/types";
+import { ContractGig, Gig, Proposal, VerifiedGig } from "app/types";
 import { getDealMetadata } from "app/utils/contracts";
 import { fetchFromIPFS, getGig, getMyProposals } from "app/utils/moralis";
 import { NextPage } from "next";
@@ -15,13 +15,13 @@ interface Props {}
 interface GigContextType {
   gig: Gig;
   setGig: Function;
-  contractGig: object;
+  contractGig: ContractGig;
   setContractGig: Function;
-  verifiedGig: object;
+  verifiedGig: VerifiedGig;
   setVerifiedGig: Function;
   submission?: object;
   setSubmission: Function;
-  proposals: Array<object>;
+  proposals: Array<Proposal>;
   setProposals: Function;
   evidence?: object;
   setEvidence: Function;
@@ -53,10 +53,9 @@ const GigPage: NextPage<Props> = (props: Props) => {
             getDealMetadata(res[0].dealId, contracts?.dealContract).then(
               (deal) => {
                 context.setContractGig(deal);
-                console.log(deal);
-                fetchFromIPFS(deal.gigCid).then((res) => {
-                  context.setVerifiedGig(res);
-                });
+                // fetchFromIPFS(deal.gigCid).then((res) => {
+                //   context.setVerifiedGig(res);
+                // });
                 if ([202, 203, 204, 403].includes(status)) {
                   fetchFromIPFS(deal.submission).then((res) => {
                     context.setSubmission(res);
@@ -69,7 +68,6 @@ const GigPage: NextPage<Props> = (props: Props) => {
         if (status === 101) {
           promises.push(
             getMyProposals(id, 0, "desc", "createdAt").then((res) => {
-              console.log(res);
               context.setProposals(res.reverse());
             })
           );
@@ -110,8 +108,12 @@ const GigPage: NextPage<Props> = (props: Props) => {
 
 export function useProviderGig() {
   const [gig, setGig] = useState<Gig>({} as Gig);
-  const [contractGig, setContractGig] = useState({});
-  const [verifiedGig, setVerifiedGig] = useState({});
+  const [contractGig, setContractGig] = useState<ContractGig>(
+    {} as ContractGig
+  );
+  const [verifiedGig, setVerifiedGig] = useState<VerifiedGig>(
+    {} as VerifiedGig
+  );
   const [submission, setSubmission] = useState();
   const [proposals, setProposals] = useState<Array<Proposal>>([]);
   const [evidence, setEvidence] = useState();

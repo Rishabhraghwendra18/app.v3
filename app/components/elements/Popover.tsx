@@ -59,7 +59,7 @@ const NavbarPopover: React.FC<Props> = ({
               <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                 <div className="relative grid gap-8 p-6 bg-blue-darkbg">
                   {items.map((item, idx) => (
-                    <Link key={idx} href={item.href} passHref>
+                    <Link key={idx} href={"/gig/159"} passHref>
                       <div
                         className="flex items-center p-2 -m-3 transition duration-1000 ease-in-out rounded-lg hover:bg-grey-bluish focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 cursor-pointer"
                         onClick={() => {

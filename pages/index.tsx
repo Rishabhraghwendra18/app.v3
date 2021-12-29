@@ -53,7 +53,6 @@ const Home: NextPage<Props> = ({ bounties }) => {
     if (isInitialized) {
       value.filterGigs({
         onSuccess: (res: Array<Gig>) => {
-          console.log(res);
           value.setGigs(
             filterByDate(res, [value.minDeadline, value.maxDeadline])
           );

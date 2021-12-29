@@ -21,7 +21,7 @@ interface Props {
   gig: Gig;
 }
 
-const ImageButton = styled(Button)(({ theme }) => ({
+const GigSummaryButton = styled(Button)(({ theme }) => ({
   width: "100%",
   borderColor: "#99ccff",
   borderRadius: "2rem",
@@ -29,7 +29,7 @@ const ImageButton = styled(Button)(({ theme }) => ({
   justifyContent: "flex-start",
 }));
 
-const GigAvatar = styled(Avatar)(({ theme }) => ({
+export const GigAvatar = styled(Avatar)(({ theme }) => ({
   width: "5rem",
   height: "5rem",
   objectFit: "cover",
@@ -44,7 +44,7 @@ const GigSummary = ({ gig }: Props) => {
     <Fade in={!isFetching} timeout={1000}>
       <div>
         <Link href={`/gig/${gig.dealId}`} passHref>
-          <ImageButton variant="outlined" sx={{ pt: 1, mb: 1 }}>
+          <GigSummaryButton variant="outlined" sx={{ pt: 1, mb: 1 }}>
             <Grid
               container
               spacing={2}
@@ -186,7 +186,7 @@ const GigSummary = ({ gig }: Props) => {
                 </div>
               </Grid>
             </Grid>
-          </ImageButton>
+          </GigSummaryButton>
         </Link>
       </div>
     </Fade>

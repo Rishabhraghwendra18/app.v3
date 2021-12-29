@@ -129,7 +129,7 @@ export const GigHeading = (props: Props) => {
                     <div className="flex flex-col ">
                       <a
                         className="text-center text-xs "
-                        href={`https://polygonscan.com/tx/${gig.verifiablegig?.get(
+                        href={`https://polygonscan.com/tx/${gig.verifiableBounty?.get(
                           "transaction_hash"
                         )}`}
                         target="_blank"
@@ -210,7 +210,7 @@ export const GigHeading = (props: Props) => {
                   value={2}
                 />
               )}
-            {[101].includes(gig.status) &&
+            {[101, 102, 201, 202, 203].includes(gig.status) &&
               gig.proposal.length &&
               gig.proposal[0].freelancer === userInfo?.get("spectUsername") && (
                 <StyledTab

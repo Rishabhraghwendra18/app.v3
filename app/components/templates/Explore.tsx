@@ -52,7 +52,6 @@ const Explore: React.FC<Props> = (props: Props) => {
           <button
             className="flex flex-row ml-1 hover:text-blue-bright transform transition-color duration-500 ease-in-out"
             onClick={() => {
-              console.log(sort("reward", "desc"));
               setSortedGigs(sort("reward", "desc"));
             }}
           >

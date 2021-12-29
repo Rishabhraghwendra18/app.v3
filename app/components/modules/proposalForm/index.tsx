@@ -237,7 +237,7 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
           </PrimaryButton>
         </div>
       </form>
-      <Dialog
+      {/* <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
@@ -280,7 +280,7 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
             Hell Yeah!
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 };

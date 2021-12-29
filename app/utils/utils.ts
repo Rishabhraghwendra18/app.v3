@@ -80,3 +80,11 @@ export function formatTime(date) {
   var strTime = hours + ":" + minutes + " " + ampm;
   return strTime;
 }
+
+export function getSuccessRate(proposal) {
+  const successRate =
+    (proposal?.completedJobs /
+      (proposal?.completedJobs + proposal?.failedJobs)) *
+    100;
+  return isNaN(successRate) ? 0 : successRate;
+}
