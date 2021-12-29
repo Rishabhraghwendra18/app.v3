@@ -1,5 +1,8 @@
+import { statusIdToStatusMap } from "app/constants/constants";
 import { filterByDate } from "app/utils/utils";
+import { useRouter } from "next/router";
 import { useExplore } from "pages";
+import { useMyGigs } from "pages/myGigs";
 import React from "react";
 
 interface Props {
@@ -8,8 +11,8 @@ interface Props {
   setOptionSelected: Function;
   groupName: string;
   option: number;
-  minFilter: number;
-  maxFilter: number;
+  minFilter?: number;
+  maxFilter?: number;
 }
 const OptionFilter: React.FC<Props> = ({
   checked,
@@ -33,6 +36,10 @@ const OptionFilter: React.FC<Props> = ({
     setMinDeadline,
     setMaxDeadline,
   } = useExplore();
+
+  // const { filterMyGigs, setMyGigs } = useMyGigs();
+  const router = useRouter();
+
   return (
     <div className="ml-8 mr-8 flex flex-row">
       <label className="text-sm inline-flex items-center mt-2">
@@ -76,6 +83,11 @@ const OptionFilter: React.FC<Props> = ({
                       sortOrder: "asc",
                     },
                   });
+                break;
+              case "status":
+                router.push({
+                  search: `?status=${statusIdToStatusMap[option]}`,
+                });
                 break;
             }
           }}

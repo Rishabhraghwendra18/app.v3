@@ -1,13 +1,19 @@
 import { Collapse, Fade, Grow } from "@mui/material";
 import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
-import { gigStatusMapping, monthMap } from "app/constants/constants";
+import {
+  animationVariant,
+  gigStatusMapping,
+  monthMap,
+} from "app/constants/constants";
 import { useGlobal } from "app/context/web3Context";
 import { formatTime, formatTimeLeft } from "app/utils/utils";
 import { useGig } from "pages/gig/[id]";
 import React, { useEffect, useState } from "react";
-import ReactQuill from "react-quill";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import DeleteIcon from "@mui/icons-material/Delete";
+import { motion } from "framer-motion";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import dynamic from "next/dynamic";
 
 interface Props {}
 
@@ -24,8 +30,13 @@ const ClientBrief = (props: Props) => {
   }, []);
 
   return (
-    <Fade in={!fetching} timeout={1000}>
-      <div>
+    <motion.main
+      initial="hidden"
+      animate="enter"
+      exit="exit"
+      variants={animationVariant}
+    >
+      <div className="">
         <div className="flex flex-row">
           <div className="grid grid-cols-5 w-3/4">
             <div className="flex flex-col my-8">
@@ -147,7 +158,7 @@ const ClientBrief = (props: Props) => {
             )}
         </div>
       </div>
-    </Fade>
+    </motion.main>
   );
 };
 

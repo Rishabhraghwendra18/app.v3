@@ -3,34 +3,26 @@ import {
   Box,
   Button,
   CircularProgress,
-  Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Fade,
-  Grow,
   Modal,
   Typography,
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
-import React, { useEffect, useState } from "react";
-import { Proposal } from "app/types";
+import React, { useState } from "react";
 import { useGig } from "pages/gig/[id]";
-import { toIPFS } from "app/utils/moralis";
-import { firstConfirmation } from "app/utils/contracts";
+import { createProposal } from "app/utils/moralis";
 import { useGlobal } from "app/context/web3Context";
 import Link from "next/link";
-import AssignmentIcon from "@mui/icons-material/Assignment";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
-
-import { toast, ToastContainer } from "material-react-toastify";
+import { IProposalFormInput } from ".";
 
 interface props {
   isOpen: boolean;
   setIsOpen: Function;
-  proposal: Proposal;
+  values: IProposalFormInput;
 }
 
 const style = {
@@ -45,21 +37,15 @@ const style = {
   p: 1,
 };
 
-export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
+export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
   const handleClose = () => setIsOpen(false);
   const [loading, setLoading] = useState(false);
-  const [loaderText, setLoaderText] = useState("");
   const [finished, setFinished] = useState(false);
-  const [hash, setHash] = useState("");
   const { gig } = useGig();
-  const {
-    state: { contracts },
-  } = useGlobal();
+
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <Box sx={style}>
-        <ToastContainer />
-
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={loading}
@@ -74,7 +60,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
           >
             <CircularProgress color="inherit" />
             <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
-              {loaderText}
+              {"Sending your proposal"}
             </Typography>
           </Box>
         </Backdrop>
@@ -84,26 +70,13 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
             <DialogTitle color="primary">Success</DialogTitle>
             <DialogContent>
               <DialogContentText color="#eaeaea">
-                Proposal accepted succesfully!
+                Proposal sent succesfully!
               </DialogContentText>
               <DialogContentText color="#eaeaea">
-                Freelancer will start work within a day from now.
+                Client will review your proposal now
               </DialogContentText>
             </DialogContent>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2, px: 1 }}>
-              <a
-                href={`https://mumbai.polygonscan.com/tx/${hash}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Button
-                  sx={{ color: "#99ccff" }}
-                  color="inherit"
-                  endIcon={<AssignmentIcon />}
-                >
-                  View transaction
-                </Button>
-              </a>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Box sx={{ flex: "1 1 auto" }} />
               <Link href={`/gig/${gig.dealId}`} passHref>
                 <Button variant="outlined" endIcon={<ArrowCircleRightIcon />}>
@@ -117,11 +90,10 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
             <DialogTitle color="primary">Confirm?</DialogTitle>
             <DialogContent>
               <DialogContentText color="#eaeaea">
-                Are you sure you want to accept this proposal? It cannot be
-                undone.
+                Are you sure you want to send this proposal?
               </DialogContentText>
               <DialogContentText color="#eaeaea">
-                This will be then sent to freelancer for second confirmation
+                You cannot send another proposal!
               </DialogContentText>
             </DialogContent>
             <Box
@@ -145,45 +117,16 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
               <Button
                 endIcon={<DoneIcon />}
                 onClick={() => {
-                  setLoaderText(
-                    "Uploading proposal metadata to IPFS, please wait"
-                  );
                   setLoading(true);
-                  toIPFS("object", {
-                    name: gig.name,
-                    tags: gig.tags,
-                    description: gig.description,
-                    proposalTitle: proposal.title,
-                    proposal: proposal.proposalText,
-                    revisions: proposal.numRevisions,
-                  }).then((res) => {
-                    setLoaderText("Waiting for the transaction to complete");
-                    const ipfsUrlArray = res.path.split("/");
-                    firstConfirmation(
-                      proposal.deadline,
-                      proposal.user[0].ethAddress,
-                      proposal.lockedStake,
-                      gig.dealId,
-                      ipfsUrlArray[ipfsUrlArray.length - 1],
-                      contracts?.dealContract
-                    )
-                      .then((res) => {
-                        setHash(res.transactionHash);
-                        setLoading(false);
-                        setFinished(true);
-                      })
-                      .catch((err) => {
-                        setLoading(false);
-                        toast.error(err.message, {
-                          position: "bottom-center",
-                          autoClose: 3000,
-                          hideProgressBar: true,
-                          closeOnClick: true,
-                          pauseOnHover: true,
-                          draggable: true,
-                          progress: undefined,
-                        });
-                      });
+                  createProposal(
+                    gig.dealId,
+                    values?.title,
+                    values?.description,
+                    values?.minStake,
+                    new Date(values?.deadline).toUTCString()
+                  ).then((res) => {
+                    setLoading(false);
+                    setFinished(true);
                   });
                 }}
                 sx={{ mr: 1, textTransform: "none" }}

@@ -5,24 +5,15 @@ import { MoralisProvider } from "react-moralis";
 import GlobalProvider from "app/context/web3Context";
 import { createTheme, ThemeProvider } from "@mui/material";
 import Script from "next/script";
+import { muiTheme } from "app/constants/muiTheme";
+import { Layout } from "app/components/layouts";
+import { AnimatePresence } from "framer-motion";
+import { useRouter } from "next/router";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  let theme = createTheme({
-    palette: {
-      mode: "dark",
-      primary: {
-        main: "#0061ff",
-      },
-      background: {
-        default: "#000f29",
-      },
-      text: {
-        primary: "#eaeaea",
-        secondary: "#99ccff",
-      },
-      divider: "#5a6972",
-    },
-  });
+  let theme = createTheme(muiTheme);
+  const router = useRouter();
+  const url = `localhost:3000/${router.route}`;
   return (
     <MoralisProvider
       appId={process.env.MORALIS_APPLICATION_ID || ""}
@@ -34,8 +25,15 @@ function MyApp({ Component, pageProps }: AppProps) {
             src="https://kit.fontawesome.com/65590ff3eb.js"
             crossOrigin="anonymous"
           ></Script>
-
-          <Component {...pageProps} />
+          <Layout>
+            <AnimatePresence
+              exitBeforeEnter
+              initial={false}
+              onExitComplete={() => window.scrollTo(0, 0)}
+            >
+              <Component {...pageProps} canonical={url} key={url} />
+            </AnimatePresence>
+          </Layout>
         </ThemeProvider>
       </GlobalProvider>
     </MoralisProvider>

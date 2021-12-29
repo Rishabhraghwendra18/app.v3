@@ -8,6 +8,8 @@ import Head from "next/head";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useMoralis, useMoralisCloudFunction } from "react-moralis";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import { motion } from "framer-motion";
+import AnimatedLayout from "app/components/layouts/animatedLayout";
 
 type fetchResponse = {
   result: Array<Gig>;
@@ -74,7 +76,7 @@ const Home: NextPage<Props> = ({ bounties }) => {
         <meta name="description" content="Decentralized gig economy" />
         <link rel="icon" href="/logo2.svg" />
       </Head>
-      <Layout>
+      <AnimatedLayout>
         <div className="grid gap-1 grid-cols-6 mt-4 md:mt-8">
           <div></div>
           <div className="flex flex-row col-span-5">
@@ -101,7 +103,7 @@ const Home: NextPage<Props> = ({ bounties }) => {
         <ExploreContext.Provider value={value}>
           <Explore />
         </ExploreContext.Provider>
-      </Layout>
+      </AnimatedLayout>
     </div>
   );
 };

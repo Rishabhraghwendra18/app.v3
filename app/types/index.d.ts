@@ -82,11 +82,11 @@ export interface Proposal {
 }
 
 export interface ContractGig {
-  active: Boolean;
+  active: boolean;
   client: string;
   collateral: BigNumber;
-  confirmationDeadlineViolation: Boolean;
-  confirmed: Boolean;
+  confirmationDeadlineViolation: boolean;
+  confirmed: boolean;
   deadline: Array<object | string>;
   freelancer: string;
   gigCid: string;

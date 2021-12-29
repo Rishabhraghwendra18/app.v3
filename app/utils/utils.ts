@@ -17,14 +17,14 @@ export const smartTrim = (string: string, maxLength: number) => {
 
 export const filterByDate = (
   gigs: Array<Gig> | undefined,
-  deadlineFilter: Array<number>
+  deadlineFilter: Array<number | undefined>
 ) => {
   function filterDate(item) {
     const today = new Date();
     const min = new Date(today);
-    min.setDate(min.getDate() + deadlineFilter[0]);
+    min.setDate(min.getDate() + (deadlineFilter[0] || 0));
     const max = new Date(today);
-    max.setDate(min.getDate() + deadlineFilter[1]);
+    max.setDate(min.getDate() + (deadlineFilter[1] || 0));
     if (item.deadline.iso) {
       item.deadline = new Date(item.deadline.iso);
     }

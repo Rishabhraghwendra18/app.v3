@@ -56,7 +56,7 @@ export const GigHeading = (props: Props) => {
               <Link href={`/profile/`} passHref>
                 <HeadingAvatar
                   alt="Username"
-                  src={gig.user[0].profilePicture}
+                  src={gig?.user[0].profilePicture}
                 />
               </Link>
             </div>
@@ -109,7 +109,7 @@ export const GigHeading = (props: Props) => {
               </div>
               <div className="flex flex-row pt-4">
                 {!fetching && [201, 202, 402, 403].includes(gig.status) && (
-                  <div className="flex flex-row hover:text-blue-spectbright mr-8 transform transition-colors ease-in-out duration-1000">
+                  <div className="flex flex-row hover:text-blue-bright mr-8 transform transition-colors ease-in-out duration-1000">
                     <div className="flex flex-col mr-1">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -126,9 +126,9 @@ export const GigHeading = (props: Props) => {
                         />
                       </svg>
                     </div>
-                    <div className="flex flex-col ">
+                    <div className="flex flex-col">
                       <a
-                        className="text-center text-xs "
+                        className="text-center text-xs"
                         href={`https://polygonscan.com/tx/${gig.verifiableBounty?.get(
                           "transaction_hash"
                         )}`}
@@ -141,7 +141,7 @@ export const GigHeading = (props: Props) => {
                   </div>
                 )}
                 {!fetching && [202, 203, 402, 403].includes(gig.status) && (
-                  <div className="flex flex-row hover:text-blue-spectbright mr-8 transform transition-colors ease-in-out duration-1000">
+                  <div className="flex flex-row hover:text-blue-bright mr-8 transform transition-colors ease-in-out duration-1000">
                     <div className="flex flex-col mr-1">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -203,7 +203,8 @@ export const GigHeading = (props: Props) => {
                 <StyledTab label="Proposals" {...a11yProps(1)} value={1} />
               )}
             {[101].includes(gig.status) &&
-              gig.clientUsername !== userInfo?.get("spectUsername") && (
+              gig.clientUsername !== userInfo?.get("spectUsername") &&
+              !gig.proposal.length && (
                 <StyledTab
                   label="Submit Proposal"
                   {...a11yProps(2)}

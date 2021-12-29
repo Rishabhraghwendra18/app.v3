@@ -31,7 +31,7 @@ import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
 import { useState } from "react";
 import ModalContainer from "react-modal-promise";
 import { useGlobal } from "app/context/web3Context";
-import { CreateModal } from "app/components/elements/modals/createModal";
+import ConfirmModal from "./confirmModal";
 
 interface Props {}
 
@@ -68,13 +68,13 @@ export const GigForm: React.FC<Props> = (props: Props) => {
 
   const onError: SubmitErrorHandler<IGigFormInput> = () => handleClickOpen();
   const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [values, setValues] = useState<IGigFormInput>({} as IGigFormInput);
 
   const onSubmit: SubmitHandler<IGigFormInput> = async (values) => {
-    const confirmed = await CreateModal({
-      values: values,
-      createGig: true,
-    });
+    setValues(values);
+    setIsOpen(true);
   };
 
   const handleClickOpen = () => {
@@ -87,7 +87,9 @@ export const GigForm: React.FC<Props> = (props: Props) => {
 
   return (
     <div className="flex flex-col col-span-5 border-grey-normal border-l px-12">
-      <ModalContainer />
+      {isOpen && (
+        <ConfirmModal isOpen={isOpen} setIsOpen={setIsOpen} values={values} />
+      )}
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}

@@ -6,10 +6,11 @@ import { Proposal } from "app/types";
 import { formatTime, getSuccessRate } from "app/utils/utils";
 import Link from "next/link";
 import React, { useState } from "react";
-import ReactQuill from "react-quill";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DoneIcon from "@mui/icons-material/Done";
 import { ConfirmModal } from "./confirmModal";
+import dynamic from "next/dynamic";
 
 interface Props {
   proposal: Proposal;

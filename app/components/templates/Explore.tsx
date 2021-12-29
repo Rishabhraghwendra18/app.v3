@@ -1,13 +1,11 @@
-import { Grow } from "@mui/material";
 import { useExplore } from "pages";
 import SummarySkeleton from "../elements/skeleton/summarySkeleton";
 import ExploreFilter from "../modules/filter/ExploreFilter";
 import GigSummary from "../modules/gigSummary/gigSummary";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { useEffect, useState } from "react";
 import { Gig } from "app/types";
-import Link from "next/link";
+import { motion } from "framer-motion";
 
 interface Props {}
 
@@ -43,6 +41,20 @@ const Explore: React.FC<Props> = (props: Props) => {
       }
     }
   }
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const item = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1 },
+  };
   return (
     <div className="grid gap-1 grid-cols-6 mt-2 md:mt-8">
       <ExploreFilter />
@@ -69,11 +81,15 @@ const Explore: React.FC<Props> = (props: Props) => {
         </div>
 
         {isFetching ? (
-          <SummarySkeleton />
+          <SummarySkeleton isFetching={isFetching} />
         ) : (
-          gigs?.map((val, idx) => {
-            return <GigSummary gig={val} key={idx} />;
-          })
+          <motion.ul variants={container} initial="hidden" animate="show">
+            {gigs?.map((val, idx) => (
+              <motion.li key={idx} variants={item}>
+                <GigSummary gig={val} />
+              </motion.li>
+            ))}
+          </motion.ul>
         )}
       </div>
     </div>
@@ -81,3 +97,7 @@ const Explore: React.FC<Props> = (props: Props) => {
 };
 
 export default Explore;
+
+/* gigs?.map((val, idx) => {
+            return <GigSummary gig={val} key={idx} />;
+          }) */

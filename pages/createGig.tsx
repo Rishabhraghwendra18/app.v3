@@ -1,7 +1,9 @@
 import { Layout } from "app/components/layouts";
-import { GigForm } from "app/components/modules/gigForm/gigForm";
+import { GigForm } from "app/components/modules/gigForm";
 import { NextPage } from "next";
 import Head from "next/head";
+import { motion } from "framer-motion";
+import AnimatedLayout from "app/components/layouts/animatedLayout";
 
 interface Props {}
 
@@ -12,7 +14,7 @@ const CreateGig: NextPage<Props> = (props: Props) => {
         <title>Create gig</title>
         <meta name="description" content="Create Gig" />
       </Head>
-      <Layout>
+      <AnimatedLayout>
         <div className="px-12">
           <div className="grid gap-1 grid-cols-6 mt-8">
             <div></div>
@@ -29,7 +31,7 @@ const CreateGig: NextPage<Props> = (props: Props) => {
             <GigForm />
           </div>
         </div>
-      </Layout>
+      </AnimatedLayout>
     </div>
   );
 };

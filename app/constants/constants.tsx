@@ -198,3 +198,45 @@ export const proposalStatusMapping = {
   103: "Selected",
   401: "Rejected",
 };
+
+export const statusToStatusIdMap = {
+  myCreated: 101,
+  myActive: 201,
+  myInReview: 202,
+  myCompleted: 203,
+  myViolations: 402,
+  myDisputed: 403,
+};
+
+export const statusIdToStatusMap = {
+  101: "myCreated",
+  201: "myActive",
+  202: "myInReview",
+  203: "myCompleted",
+  402: "myViolations",
+  403: "myDisputed",
+};
+
+export const animationVariant = {
+  hidden: {
+    opacity: 0,
+    x: 0,
+    y: 100,
+  },
+  enter: {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
+  exit: {
+    opacity: 0,
+    x: 0,
+    y: 100,
+    transition: {
+      duration: 0.5,
+    },
+  },
+};

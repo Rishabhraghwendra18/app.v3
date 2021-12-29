@@ -1,4 +1,5 @@
 import { Layout } from "app/components/layouts";
+import AnimatedLayout from "app/components/layouts/animatedLayout";
 import GigTemplate from "app/components/templates/Gig";
 import { useGlobal } from "app/context/web3Context";
 import { ContractGig, Gig, Proposal, VerifiedGig } from "app/types";
@@ -97,11 +98,11 @@ const GigPage: NextPage<Props> = (props: Props) => {
         <title>Gig</title>
         <meta name="description" content="Gig" />
       </Head>
-      <Layout>
+      <AnimatedLayout>
         <GigContext.Provider value={context}>
           <GigTemplate />
         </GigContext.Provider>
-      </Layout>
+      </AnimatedLayout>
     </div>
   );
 };
