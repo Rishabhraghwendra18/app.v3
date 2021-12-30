@@ -164,6 +164,12 @@ export const proposalHelperTexts = {
     "The date by which you can submit the work. This deadline can be earlier or later than client preferred deadline.",
 };
 
+export const submissionHelperTexts = {
+  name: "The name of the link ex. Github PR, Figma wireframe etc.",
+  link: "URL of the link you want to submit",
+  file: "If required, upload a zip with all the the necessary files.",
+};
+
 export const monthMap = {
   0: "Jan",
   1: "Feb",

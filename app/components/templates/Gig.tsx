@@ -1,4 +1,3 @@
-import { styled, Tab } from "@mui/material";
 import { useGig } from "pages/gig/[id]";
 import React from "react";
 import ClientBrief from "../modules/clientBrief";
@@ -8,8 +7,8 @@ import GigHeadingSkeleton from "../modules/gigHeading/skeleton";
 import { ProposalForm } from "../modules/proposalForm";
 import SingleProposal from "../modules/singleProposal";
 import ViewProposals from "../modules/viewProposals";
-import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
+import Submission from "../modules/submission";
 
 interface Props {}
 
@@ -19,51 +18,8 @@ interface TabPanelProps {
   value: number;
 }
 
-// function TabPanel(props: TabPanelProps) {
-//   const { children, value, index, ...other } = props;
-
-//   return (
-//     <div
-//       role="tabpanel"
-//       hidden={value !== index}
-//       id={`simple-tabpanel-${index}`}
-//       aria-labelledby={`simple-tab-${index}`}
-//       {...other}
-//     >
-//       {children}
-//     </div>
-//   );
-// }
-
-const variants = {
-  hidden: {
-    opacity: 0,
-    x: -100,
-    y: 0,
-  },
-  enter: {
-    opacity: 1,
-    x: 0,
-    y: 0,
-    transition: {
-      duration: 0.5,
-    },
-  },
-  exit: {
-    opacity: 0,
-    x: 0,
-    y: -100,
-    transition: {
-      duration: 0.5,
-    },
-  },
-};
-
 const GigTemplate = (props: Props) => {
-  const { fetching, gig, tab, setTab } = useGig();
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTab(newValue);
-  };
+  const { fetching, gig, tab } = useGig();
 
   return (
     <div className="p-8 mx-12">
@@ -80,8 +36,9 @@ const GigTemplate = (props: Props) => {
         )}
         {tab === 1 && <ViewProposals key={1} />}
         {tab === 2 && <ProposalForm key={2} />}
-        {tab === 3 && gig.proposal?.length && <SingleProposal />}
-        {tab === 4 && gig.proposal?.length && <SingleProposal />}
+        {tab === 3 && gig.proposal?.length && <SingleProposal key={3} />}
+        {tab === 4 && gig.proposal?.length && <SingleProposal key={4} />}
+        {tab === 5 && <Submission key={5} />}
       </AnimatePresence>
     </div>
   );

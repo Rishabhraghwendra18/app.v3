@@ -13,7 +13,7 @@ interface Props {
 
 const Editor = ({ value, onChange, placeholder }: Props) => {
   return (
-    <div>
+    <div className="">
       <ReactQuill
         theme="snow"
         modules={modules}

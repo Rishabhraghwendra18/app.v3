@@ -17,10 +17,6 @@ import {
   Button,
   Backdrop,
   CircularProgress,
-  Tooltip,
-  TooltipProps,
-  tooltipClasses,
-  styled,
 } from "@mui/material";
 import { gigHelperTexts, skillOptions } from "app/constants/constants";
 import { DateTimePicker, LocalizationProvider } from "@mui/lab";
@@ -29,26 +25,10 @@ import dayjs from "dayjs";
 import Editor from "app/components/elements/richTextEditor/editor";
 import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
 import { useState } from "react";
-import ModalContainer from "react-modal-promise";
-import { useGlobal } from "app/context/web3Context";
 import ConfirmModal from "./confirmModal";
+import { LightTooltip } from "app/components/elements/styledComponents";
 
 interface Props {}
-
-const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: "#eaeaea",
-    color: "rgba(0, 0, 0, 0.87)",
-    boxShadow: theme.shadows[1],
-    fontSize: "0.8rem",
-    maxWidth: "22rem",
-  },
-  [`& .${tooltipClasses.arrow}`]: {
-    color: "#eaeaea",
-  },
-}));
 
 export interface IGigFormInput {
   name: string;
