@@ -1,10 +1,11 @@
-import { Paper, styled } from "@mui/material";
+import { Paper, styled, Typography } from "@mui/material";
 import { useGig } from "pages/gig/[id]";
 import React, { useEffect, useState } from "react";
 import Proposal from "./proposal";
 import ProposalCard from "./proposalCard";
 import { motion } from "framer-motion";
 import { animationVariant } from "app/constants/constants";
+import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
 
 interface Props {}
 
@@ -34,6 +35,12 @@ const ViewProposals = (props: Props) => {
                 key={idx}
               />
             ))}
+
+            {!proposals.length && (
+              <Typography sx={{ p: 1 }}>
+                No proposals received yet! <SentimentDissatisfiedIcon />
+              </Typography>
+            )}
           </div>
           <div className="col-span-2 border-l-1 border-grey-normal">
             {proposals.length > 0 && selected >= 0 ? (

@@ -220,7 +220,7 @@ export const GigHeading = (props: Props) => {
                   value={3}
                 />
               )}
-            {[102, 201, 202].includes(gig.status) &&
+            {[102, 201, 202, 203, 403, 403].includes(gig.status) &&
               gig.clientUsername === userInfo?.get("spectUsername") && (
                 <StyledTab
                   label="Selected Proposal"

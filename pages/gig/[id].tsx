@@ -2,7 +2,7 @@ import { Layout } from "app/components/layouts";
 import AnimatedLayout from "app/components/layouts/animatedLayout";
 import GigTemplate from "app/components/templates/Gig";
 import { useGlobal } from "app/context/web3Context";
-import { ContractGig, Gig, Proposal, VerifiedGig } from "app/types";
+import { ContractGig, Gig, Proposal, Submission, VerifiedGig } from "app/types";
 import { getDealMetadata } from "app/utils/contracts";
 import { fetchFromIPFS, getGig, getMyProposals } from "app/utils/moralis";
 import { NextPage } from "next";
@@ -20,7 +20,7 @@ interface GigContextType {
   setContractGig: Function;
   verifiedGig: VerifiedGig;
   setVerifiedGig: Function;
-  submission?: object;
+  submission?: Submission;
   setSubmission: Function;
   proposals: Array<Proposal>;
   setProposals: Function;
@@ -49,7 +49,7 @@ const GigPage: NextPage<Props> = (props: Props) => {
       getGig(id).then((res: Array<Gig>) => {
         context.setGig(res[0]);
         const status = res[0].status;
-        if (status === 102) {
+        if ([102, 201, 202, 203, 204, 402, 403].includes(status)) {
           promises.push(
             getDealMetadata(res[0].dealId, contracts?.dealContract).then(
               (deal) => {
@@ -115,7 +115,7 @@ export function useProviderGig() {
   const [verifiedGig, setVerifiedGig] = useState<VerifiedGig>(
     {} as VerifiedGig
   );
-  const [submission, setSubmission] = useState();
+  const [submission, setSubmission] = useState<Submission>({} as Submission);
   const [proposals, setProposals] = useState<Array<Proposal>>([]);
   const [evidence, setEvidence] = useState();
   const [fetching, setFetching] = useState(true);

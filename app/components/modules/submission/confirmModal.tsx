@@ -13,13 +13,12 @@ import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
 import React, { useState } from "react";
 import { useGig } from "pages/gig/[id]";
-import { createProposal, toIPFS, uploadFile } from "app/utils/moralis";
+import { toIPFS, uploadFile } from "app/utils/moralis";
 import { useGlobal } from "app/context/web3Context";
 import Link from "next/link";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { ISubmissionFormInput } from "./submissionForm";
-import { formatTimeLeft } from "app/utils/utils";
-import { submitContract } from "app/utils/contracts";
+import { accept, submitContract } from "app/utils/contracts";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { toast, ToastContainer } from "material-react-toastify";
 
@@ -27,6 +26,11 @@ interface props {
   isOpen: boolean;
   setIsOpen: Function;
   values: ISubmissionFormInput;
+  confirmText1: string;
+  confirmText2: string;
+  finishText1: string;
+  finishText2: string;
+  confirmType: 1 | 2 | 3;
 }
 
 const style = {
@@ -41,7 +45,16 @@ const style = {
   p: 1,
 };
 
-export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
+export const ConfirmModal = ({
+  isOpen,
+  setIsOpen,
+  values,
+  confirmText1,
+  confirmText2,
+  finishText1,
+  finishText2,
+  confirmType,
+}: props) => {
   const handleClose = () => setIsOpen(false);
   const [loading, setLoading] = useState(false);
   const [finished, setFinished] = useState(false);
@@ -80,11 +93,10 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
             <DialogTitle color="primary">Success</DialogTitle>
             <DialogContent>
               <DialogContentText color="#eaeaea">
-                Submission sent succesfully!
+                {finishText1}
               </DialogContentText>
               <DialogContentText color="#eaeaea">
-                Client will review your submission now and get back to you
-                within {gig.timeToAcceptInDays} day(s).
+                {finishText2}
               </DialogContentText>
             </DialogContent>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2, px: 1 }}>
@@ -114,10 +126,10 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
             <DialogTitle color="primary">Confirm?</DialogTitle>
             <DialogContent>
               <DialogContentText color="#eaeaea">
-                Are you sure you want to send this submission?
+                {confirmText1}
               </DialogContentText>
               <DialogContentText color="#eaeaea">
-                This submission will be considered final and you cannot edit it!
+                {confirmText2}
               </DialogContentText>
             </DialogContent>
             <Box
@@ -141,52 +153,79 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
               <Button
                 endIcon={<DoneIcon />}
                 onClick={async () => {
-                  setLoaderText("Uploading file to IPFS, please wait...");
-                  setLoading(true);
-                  let fileUploaded;
-                  if (values.file) {
-                    try {
-                      fileUploaded = await uploadFile(values.file);
-                    } catch (err) {
-                      console.log(err);
-                      setLoading(false);
-                      alert(err);
-                    }
-                  }
-                  setLoaderText(
-                    "Uploading submission metadata to IPFS, please wait"
-                  );
-                  toIPFS("object", {
-                    submissionText: values.comments,
-                    submissionFile: fileUploaded?.ipfs(),
-                    submissionFilename: values.file.name,
-                    links: values.links,
-                  }).then((res) => {
-                    setLoaderText("Waiting for the transaction to complete");
-                    const ipfsUrlArray = res.path.split("/");
-                    submitContract(
-                      gig.dealId,
-                      ipfsUrlArray[ipfsUrlArray.length - 1],
-                      contracts?.dealContract
-                    )
-                      .then((res) => {
-                        setHash(res.transactionHash);
-                        setLoading(false);
-                        setFinished(true);
-                      })
-                      .catch((err) => {
-                        setLoading(false);
-                        toast.error(err.message, {
-                          position: "bottom-center",
-                          autoClose: 3000,
-                          hideProgressBar: true,
-                          closeOnClick: true,
-                          pauseOnHover: true,
-                          draggable: true,
-                          progress: undefined,
-                        });
+                  switch (confirmType) {
+                    case 1:
+                      setLoaderText("Uploading file to IPFS, please wait...");
+                      setLoading(true);
+                      let fileUploaded;
+                      if (values.file) {
+                        try {
+                          fileUploaded = await uploadFile(values.file);
+                        } catch (err) {
+                          console.log(err);
+                          setLoading(false);
+                          alert(err);
+                        }
+                      }
+                      setLoaderText(
+                        "Uploading submission metadata to IPFS, please wait"
+                      );
+                      toIPFS("object", {
+                        submissionText: values.comments,
+                        submissionFile: fileUploaded?.ipfs(),
+                        submissionFilename: values.file.name,
+                        links: values.links,
+                      }).then((res) => {
+                        setLoaderText(
+                          "Waiting for the transaction to complete"
+                        );
+                        const ipfsUrlArray = res.path.split("/");
+                        submitContract(
+                          gig.dealId,
+                          ipfsUrlArray[ipfsUrlArray.length - 1],
+                          contracts?.dealContract
+                        )
+                          .then((res) => {
+                            setHash(res.transactionHash);
+                            setLoading(false);
+                            setFinished(true);
+                          })
+                          .catch((err) => {
+                            setLoading(false);
+                            toast.error(err.message, {
+                              position: "bottom-center",
+                              autoClose: 3000,
+                              hideProgressBar: true,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                              draggable: true,
+                              progress: undefined,
+                            });
+                          });
                       });
-                  });
+                      break;
+
+                    case 2:
+                      setLoaderText("Waiting for the transaction to complete");
+                      setLoading(true);
+                      accept(gig.dealId, contracts?.dealContract)
+                        .then((res) => {
+                          setHash(res.transactionHash);
+                          setFinished(true);
+                          setLoading(false);
+                        })
+                        .catch((err) => {
+                          toast.error(err.message, {
+                            position: "bottom-center",
+                            autoClose: 3000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                          });
+                        });
+                  }
                 }}
                 sx={{ mr: 1, textTransform: "none" }}
                 variant="outlined"

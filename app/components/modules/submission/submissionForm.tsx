@@ -15,6 +15,7 @@ import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import { useState } from "react";
 import { ConfirmModal } from "./confirmModal";
+import { useGig } from "pages/gig/[id]";
 
 interface Props {}
 export interface ISubmissionFormInput {
@@ -72,6 +73,7 @@ const SubmissionForm = (props: Props) => {
   const [values, setValues] = useState<ISubmissionFormInput>(
     {} as ISubmissionFormInput
   );
+  const { gig } = useGig();
 
   const onSubmit: SubmitHandler<ISubmissionFormInput> = async (values) => {
     console.log(values);
@@ -81,7 +83,17 @@ const SubmissionForm = (props: Props) => {
 
   return (
     <div>
-      <ConfirmModal isOpen={isOpen} setIsOpen={setIsOpen} values={values} />
+      <ConfirmModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        values={values}
+        confirmText1="Are you sure you want to send this submission?"
+        confirmText2="This submission will be considered final and you cannot edit it!"
+        finishText1="Submission sent succesfully!"
+        finishText2={`Client will review your submission now and get back to you
+                within ${gig.timeToAcceptInDays} day(s).`}
+        confirmType={1}
+      />
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
         <div className="flex flex-col my-8">
           <span className="text-blue-bright font-bold w-1/2 mb-4">

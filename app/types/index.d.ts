@@ -1,5 +1,6 @@
 import { BigNumber } from "ethers";
 import Moralis from "moralis/types";
+import { Delta } from "quill";
 
 export interface Contracts {
   dealContract?: ethers.Contract;
@@ -105,4 +106,14 @@ export interface VerifiedGig {
   proposalTitle: string;
   revisions?: number;
   tags: Array<string>;
+}
+
+export interface Submission {
+  links: {
+    name: string;
+    link: string;
+  }[];
+  submissionText?: Delta;
+  submissionFile?: string;
+  submissionFilename?: string;
 }

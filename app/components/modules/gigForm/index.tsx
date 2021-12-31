@@ -143,8 +143,6 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                         {...params}
                         variant="standard"
                         label="Required Skills"
-                        // helperText="Skills the freelancer would need to have to complete the
-                        //     gig successfully."
                       />
                     )}
                   />
