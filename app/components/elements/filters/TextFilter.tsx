@@ -29,7 +29,7 @@ const TextFilter: React.FC<Props> = ({}) => {
         onChange={(filters) => {
           let filterValues: string[] = [];
           for (let filter of filters) {
-            filterValues.push(filter.value);
+            filterValues.push(filter.label);
           }
           setSkills && setSkills(filterValues);
           filterGigs &&
