@@ -14,10 +14,11 @@ import ClearIcon from "@mui/icons-material/Clear";
 import React, { useState } from "react";
 import { useGig } from "pages/gig/[id]";
 import { createProposal } from "app/utils/moralis";
-import { useGlobal } from "app/context/web3Context";
+import { updateUserStake, useGlobal } from "app/context/web3Context";
 import Link from "next/link";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { IProposalFormInput } from ".";
+import { useMoralis } from "react-moralis";
 
 interface props {
   isOpen: boolean;
@@ -42,6 +43,11 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
   const [loading, setLoading] = useState(false);
   const [finished, setFinished] = useState(false);
   const { gig, setTab } = useGig();
+  const {
+    state: { contracts, userStake },
+    dispatch,
+  } = useGlobal();
+  const { user } = useMoralis();
 
   return (
     <Modal open={isOpen} onClose={handleClose}>
@@ -83,8 +89,6 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                   pathname: `/gig/${gig.dealId}`,
                   query: {
                     tab: 3,
-                    proposal: null,
-                    refresh: true,
                   },
                 }}
                 as={`/gig/${gig.dealId}`}

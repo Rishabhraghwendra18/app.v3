@@ -42,7 +42,6 @@ const MyGigs: NextPage<Props> = () => {
       value.filterMyGigs({
         onSuccess: (res: Array<Gig>) => {
           value.setMyGigs(res);
-          console.log(res);
         },
         params: {
           sortBy: "reward",

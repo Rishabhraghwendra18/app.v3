@@ -141,7 +141,8 @@ const ClientBrief = (props: Props) => {
               </div>
             )}
           {[101].includes(gig.status) &&
-            gig.clientUsername !== userInfo?.get("spectUsername") && (
+            gig.clientUsername !== userInfo?.get("spectUsername") &&
+            !gig.proposal.length && (
               <div className="w-1/4">
                 <PrimaryButton
                   variant="outlined"

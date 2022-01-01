@@ -73,7 +73,9 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
       variants={animationVariant}
     >
       <div className="mt-4 p-1">
-        <ConfirmModal isOpen={isOpen} setIsOpen={setIsOpen} values={values} />
+        {isOpen && (
+          <ConfirmModal isOpen={isOpen} setIsOpen={setIsOpen} values={values} />
+        )}
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
           <div className="flex flex-col pb-4">
             <div className="w-1/3 mb-4">

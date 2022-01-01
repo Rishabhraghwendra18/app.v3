@@ -150,23 +150,6 @@ const updateUserStake = async (
   }
 };
 
-const updateConversionRate = async (
-  dispatch: React.Dispatch<Action>,
-  oracleContract?: ethers.Contract
-) => {
-  dispatch({ type: "START_ASYNC" });
-  try {
-    const conversionRate = await oracleContract?.latestRoundData();
-    dispatch({
-      type: "SET_CONVERSION_RATE",
-      value: conversionRate.answer.toNumber() / 10 ** 8,
-    });
-    dispatch({ type: "END_ASYNC" });
-  } catch (error) {
-    dispatch({ type: "SET_ERROR", error });
-  }
-};
-
 const GlobalContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const value = { state, dispatch };

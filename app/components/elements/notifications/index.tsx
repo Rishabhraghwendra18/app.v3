@@ -24,7 +24,6 @@ const Notifications = (props: Props) => {
     if (isAuthenticated) {
       getMyNotifications().then((res: Notification[]) => {
         setNotifs(res.reverse());
-        console.log(res[0].actionId);
         setNumActiveNotifs(res.filter((n) => n.active === true).length);
       });
     }

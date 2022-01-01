@@ -76,24 +76,25 @@ const SubmissionForm = (props: Props) => {
   const { gig } = useGig();
 
   const onSubmit: SubmitHandler<ISubmissionFormInput> = async (values) => {
-    console.log(values);
     setValues(values);
     setIsOpen(true);
   };
 
   return (
     <div>
-      <ConfirmModal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        values={values}
-        confirmText1="Are you sure you want to send this submission?"
-        confirmText2="This submission will be considered final and you cannot edit it!"
-        finishText1="Submission sent succesfully!"
-        finishText2={`Client will review your submission now and get back to you
+      {isOpen && (
+        <ConfirmModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          values={values}
+          confirmText1="Are you sure you want to send this submission?"
+          confirmText2="This submission will be considered final and you cannot edit it!"
+          finishText1="Submission sent succesfully!"
+          finishText2={`Client will review your submission now and get back to you
                 within ${gig.timeToAcceptInDays} day(s).`}
-        confirmType={1}
-      />
+          confirmType={1}
+        />
+      )}
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
         <div className="flex flex-col my-8">
           <span className="text-blue-bright font-bold w-1/2 mb-4">
@@ -204,11 +205,11 @@ const SubmissionForm = (props: Props) => {
               )}
             />
           </div>
-          <div className="my-4 w-1/4">
+          <div className="my-4 w-1/5">
             <FileInput name="file" control={control} />
           </div>
 
-          <div className="w-1/3 my-4">
+          <div className="w-1/4 my-4">
             <PrimaryButton
               variant="outlined"
               size="large"
@@ -216,7 +217,7 @@ const SubmissionForm = (props: Props) => {
               type="submit"
               endIcon={<AssignmentTurnedInIcon />}
             >
-              Create Gig
+              Submit Work
             </PrimaryButton>
           </div>
         </div>

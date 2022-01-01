@@ -16,7 +16,6 @@ interface TabPanelProps {
   index: number;
   value: number;
 }
-
 const GigTemplate = (props: Props) => {
   const { fetching, gig, tab } = useGig();
 

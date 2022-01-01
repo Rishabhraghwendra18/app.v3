@@ -30,6 +30,7 @@ import { Proposal } from "app/types";
 import { formatTimeLeft } from "app/utils/utils";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import { useGig } from "pages/gig/[id]";
 
 interface props {
   isOpen: boolean;
@@ -62,7 +63,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
   const handleClose = () => setIsOpen(false);
 
   useEffect(() => {
-    updateUserStake(dispatch, user, contracts);
+    // updateUserStake(dispatch, user, contracts);
     if (userStake?.balance !== undefined) {
       if (!userStake.allowance) {
         setActiveStep(0);
@@ -162,8 +163,21 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
                 </Button>
               </a>
               <Box sx={{ flex: "1 1 auto" }} />
-              <Link href={`/gig/${dealId}`} passHref>
-                <Button variant="outlined" endIcon={<ArrowCircleRightIcon />}>
+              <Link
+                href={{
+                  pathname: `/gig/${proposal.dealId}`,
+                  query: {
+                    tab: 5,
+                  },
+                }}
+                as={`/gig/${proposal.dealId}`}
+                passHref
+              >
+                <Button
+                  variant="outlined"
+                  endIcon={<ArrowCircleRightIcon />}
+                  onClick={handleClose}
+                >
                   Go to gig!
                 </Button>
               </Link>

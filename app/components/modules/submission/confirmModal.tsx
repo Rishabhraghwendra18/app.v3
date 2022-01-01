@@ -114,8 +114,21 @@ export const ConfirmModal = ({
                 </Button>
               </a>
               <Box sx={{ flex: "1 1 auto" }} />
-              <Link href={`/gig/${gig.dealId}`} passHref>
-                <Button variant="outlined" endIcon={<ArrowCircleRightIcon />}>
+              <Link
+                href={{
+                  pathname: `/gig/${gig.dealId}`,
+                  query: {
+                    tab: 0,
+                  },
+                }}
+                as={`/gig/${gig.dealId}`}
+                passHref
+              >
+                <Button
+                  variant="outlined"
+                  endIcon={<ArrowCircleRightIcon />}
+                  onClick={handleClose}
+                >
                   Go to gig!
                 </Button>
               </Link>

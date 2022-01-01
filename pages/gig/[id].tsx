@@ -4,11 +4,12 @@ import { useGlobal } from "app/context/web3Context";
 import { ContractGig, Gig, Proposal, Submission, VerifiedGig } from "app/types";
 import { getDealMetadata } from "app/utils/contracts";
 import { fetchFromIPFS, getGig, getMyProposals } from "app/utils/moralis";
-import { GetStaticPaths, NextPage } from "next";
+import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useMoralis } from "react-moralis";
+import type { NextRouter } from "next/router";
 
 interface Props {
   tab: string;
@@ -46,64 +47,57 @@ const GigPage: NextPage<Props> = ({ tab, proposalId }: Props) => {
   } = useGlobal();
   const { isAuthenticated } = useMoralis();
 
-  const [reload, setReload] = useState(false);
-
-  const promises: Array<any> = [];
   useEffect(() => {
+    const promises: Array<any> = [];
     context.setFetching(true);
-    console.log(query);
     if (!loading && isAuthenticated) {
-      console.log("fetch true");
-
       getGig(id).then((res: Array<Gig>) => {
         context.setGig(res[0]);
-        console.log("gig received");
-        const status = res[0].status;
-        if ([102, 201, 202, 203, 204, 402, 403].includes(status)) {
-          promises.push(
-            getDealMetadata(res[0].dealId, contracts?.dealContract).then(
-              (deal) => {
-                context.setContractGig(deal);
-                if ([202, 203, 204, 403].includes(status)) {
-                  fetchFromIPFS(deal.submission).then((res) => {
-                    context.setSubmission(res);
-                  });
+        if (res[0]) {
+          const status = res[0].status;
+          if ([102, 201, 202, 203, 204, 402, 403].includes(status)) {
+            promises.push(
+              getDealMetadata(res[0].dealId, contracts?.dealContract).then(
+                (deal) => {
+                  context.setContractGig(deal);
+                  if ([202, 203, 204, 403].includes(status)) {
+                    fetchFromIPFS(deal.submission).then((res) => {
+                      context.setSubmission(res);
+                    });
+                  }
                 }
+              )
+            );
+          }
+          if (status === 101) {
+            promises.push(
+              getMyProposals(id, 0, "desc", "createdAt").then((res) => {
+                context.setProposals(res.reverse());
+              })
+            );
+          }
+          if (status === 403) {
+            promises.push(
+              fetchFromIPFS(res[0].evidence).then((res) => {
+                context.setEvidence(res);
+              })
+            );
+          }
+          Promise.all(promises)
+            .then(() => {
+              if (tab || router.query.tab) {
+                context.setTab(parseInt(tab || (router.query.tab as string)));
               }
-            )
-          );
-        }
-        if (status === 101) {
-          promises.push(
-            getMyProposals(id, 0, "desc", "createdAt").then((res) => {
-              context.setProposals(res.reverse());
+              context.setFetching(false);
             })
-          );
+            .catch((err) => {
+              console.log(err);
+              context.setFetching(false);
+            });
         }
-        if (status === 403) {
-          promises.push(
-            fetchFromIPFS(res[0].evidence).then((res) => {
-              context.setEvidence(res);
-            })
-          );
-        }
-        Promise.all(promises)
-          .then(() => {
-            console.log("hiii promise complete", router.query);
-            if (tab || router.query.tab) {
-              console.log("inside tavb", tab);
-              context.setTab(parseInt(tab || (router.query.tab as string)));
-            }
-            context.setFetching(false);
-            console.log("fetch false");
-          })
-          .catch((err) => {
-            console.log(err);
-            context.setFetching(false);
-          });
       });
     }
-  }, [loading, isAuthenticated, query]);
+  }, [loading, isAuthenticated, router.query.tab]);
 
   return (
     <div>
@@ -158,7 +152,6 @@ export const useGig = () => useContext(GigContext);
 
 export const getServerSideProps = async (context) => {
   // returns {tab: getLinkTab(item.actionId), proposal: item.proposalId}
-  console.log("husahduahduhad");
   return {
     props: {
       tab: context.query.tab || null,

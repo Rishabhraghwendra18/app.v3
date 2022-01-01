@@ -225,6 +225,9 @@ export const statusIdToStatusMap = {
 
 export const actionIdToTabMap = {
   0: 1,
+  1: 3,
+  2: 0,
+  3: 5,
 };
 
 export const animationVariant = {

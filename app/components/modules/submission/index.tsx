@@ -24,16 +24,18 @@ const Submission = (props: Props) => {
       exit="exit"
       variants={animationVariant}
     >
-      <ConfirmModal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        values={{} as ISubmissionFormInput}
-        confirmText1="Are you sure you want to accept this submission"
-        confirmText2="Gig will be considered complete after this!"
-        finishText1={`Work accepted and completed succesfully!`}
-        finishText2={`${gig.reward} WMatic reward has been transferred to ${gig.proposal[0].freelancer}`}
-        confirmType={2}
-      />
+      {isOpen && (
+        <ConfirmModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          values={{} as ISubmissionFormInput}
+          confirmText1="Are you sure you want to accept this submission"
+          confirmText2="Gig will be considered complete after this!"
+          finishText1={`Work accepted and completed succesfully!`}
+          finishText2={`${gig.reward} WMatic reward has been transferred to ${gig.proposal[0].freelancer}`}
+          confirmType={2}
+        />
+      )}
       {gig.proposal[0].freelancer === userInfo?.get("spectUsername") &&
         gig.status === 201 && <SubmissionForm />}
       {gig.status !== 201 && <ReadSubmission />}

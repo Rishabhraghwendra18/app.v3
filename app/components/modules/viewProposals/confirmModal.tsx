@@ -105,8 +105,21 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
                 </Button>
               </a>
               <Box sx={{ flex: "1 1 auto" }} />
-              <Link href={`/gig/${gig.dealId}`} passHref>
-                <Button variant="outlined" endIcon={<ArrowCircleRightIcon />}>
+              <Link
+                href={{
+                  pathname: `/gig/${gig.dealId}`,
+                  query: {
+                    tab: 4,
+                  },
+                }}
+                as={`/gig/${gig.dealId}`}
+                passHref
+              >
+                <Button
+                  variant="outlined"
+                  endIcon={<ArrowCircleRightIcon />}
+                  onClick={handleClose}
+                >
                   Go to gig!
                 </Button>
               </Link>
@@ -118,7 +131,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
             <DialogContent>
               <DialogContentText color="#eaeaea">
                 Are you sure you want to accept this proposal? It cannot be
-                undone.
+                undonee.
               </DialogContentText>
               <DialogContentText color="#eaeaea">
                 This will be then sent to freelancer for second confirmation

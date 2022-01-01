@@ -25,7 +25,13 @@ const Proposal = ({ proposal }: Props) => {
 
   return (
     <div className="p-4">
-      <ConfirmModal isOpen={isOpen} setIsOpen={setIsOpen} proposal={proposal} />
+      {isOpen && (
+        <ConfirmModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          proposal={proposal}
+        />
+      )}
       <div className="">
         <div className="flex flex-row mb-4">
           <div className="grid grid-cols-5 w-full">

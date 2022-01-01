@@ -46,11 +46,13 @@ const SingleProposal = (props: Props) => {
         variants={animationVariant}
       >
         <div className="">
-          <ConfirmModal
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            proposal={gig.proposal[0]}
-          />
+          {isOpen && (
+            <ConfirmModal
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              proposal={gig.proposal[0]}
+            />
+          )}
           <div className="flex flex-row">
             <div className="grid grid-cols-7 w-full">
               <div className="flex flex-col my-8">
