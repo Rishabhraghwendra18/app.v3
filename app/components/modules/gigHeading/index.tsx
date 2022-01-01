@@ -1,17 +1,6 @@
-import {
-  Avatar,
-  Chip,
-  Collapse,
-  Grow,
-  styled,
-  Tabs,
-  Tab,
-  Tooltip,
-  Fade,
-} from "@mui/material";
+import { Avatar, Chip, styled, Tabs, Tab, Tooltip, Fade } from "@mui/material";
 import Link from "next/link";
 import { useGig } from "pages/gig/[id]";
-import React, { useEffect } from "react";
 import { formatTimeAgo, formatTimeLeft } from "app/utils/utils";
 import { gigStatusMapping } from "app/constants/constants";
 import { Box } from "@mui/system";

@@ -1,10 +1,11 @@
 import { Button } from "@mui/material";
 import { useGig } from "pages/gig/[id]";
 import React from "react";
-import ReactQuill from "react-quill";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import FilePresentIcon from "@mui/icons-material/FilePresent";
 import { downloadImage } from "app/utils/moralis";
+import dynamic from "next/dynamic";
 
 interface Props {}
 

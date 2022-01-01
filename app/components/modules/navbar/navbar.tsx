@@ -8,6 +8,7 @@ import { useMoralis } from "react-moralis";
 import Logo from "app/images/logo.png";
 import { useGlobal } from "app/context/web3Context";
 import { NavbarAvatar } from "app/components/elements/styledComponents";
+import Notifications from "../../elements/notifications";
 
 interface Props {}
 
@@ -128,6 +129,7 @@ export const Navbar = (props: Props) => {
                 }}
               />
             )}
+            {isAuthenticated && <Notifications />}
             {isAuthenticated && (
               <NavbarPopover
                 items={profile}

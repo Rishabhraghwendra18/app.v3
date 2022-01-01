@@ -117,3 +117,19 @@ export interface Submission {
   submissionFile?: string;
   submissionFilename?: string;
 }
+
+export interface Notification {
+  action: string;
+  actionId: 1 | 2 | 3 | 4 | 5 | 6;
+  active: boolean;
+  actor: string;
+  cleared: boolean;
+  createdAt: string;
+  dealId: string;
+  for: string;
+  objectId: string;
+  proposalId: string;
+  title: string;
+  updatedAt: string;
+  user: User[];
+}

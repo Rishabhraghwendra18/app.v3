@@ -1,5 +1,4 @@
 import { Button } from "@mui/material";
-import { Layout } from "app/components/layouts";
 import Explore from "app/components/templates/Explore";
 import { Gig } from "app/types";
 import { filterByDate } from "app/utils/utils";
@@ -8,7 +7,6 @@ import Head from "next/head";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useMoralis, useMoralisCloudFunction } from "react-moralis";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import { motion } from "framer-motion";
 import AnimatedLayout from "app/components/layouts/animatedLayout";
 
 type fetchResponse = {

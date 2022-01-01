@@ -6,12 +6,28 @@ import ProposalCard from "./proposalCard";
 import { motion } from "framer-motion";
 import { animationVariant } from "app/constants/constants";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
+import { useRouter } from "next/router";
 
 interface Props {}
 
 const ViewProposals = (props: Props) => {
   const [selected, setSelected] = useState(0);
   const { proposals } = useGig();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.query?.proposal) {
+      const index = proposals
+        .reverse()
+        .map((e) => e.objectId)
+        .indexOf(router.query.proposal as string);
+      setSelected(index);
+      document.getElementById(`proposal${index}`)?.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  }, []);
 
   return (
     <motion.main
@@ -27,13 +43,15 @@ const ViewProposals = (props: Props) => {
             style={{ maxHeight: "30rem" }}
           >
             {proposals.map((val, idx) => (
-              <ProposalCard
-                proposal={val}
-                isSelected={selected === idx}
-                setSelected={setSelected}
-                index={idx}
-                key={idx}
-              />
+              <div id={`proposal${idx}`} key={idx}>
+                <ProposalCard
+                  proposal={val}
+                  isSelected={selected === idx}
+                  setSelected={setSelected}
+                  index={idx}
+                  key={idx}
+                />
+              </div>
             ))}
 
             {!proposals.length && (

@@ -41,7 +41,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
   const handleClose = () => setIsOpen(false);
   const [loading, setLoading] = useState(false);
   const [finished, setFinished] = useState(false);
-  const { gig } = useGig();
+  const { gig, setTab } = useGig();
 
   return (
     <Modal open={isOpen} onClose={handleClose}>
@@ -78,8 +78,23 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
             </DialogContent>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Box sx={{ flex: "1 1 auto" }} />
-              <Link href={`/gig/${gig.dealId}`} passHref>
-                <Button variant="outlined" endIcon={<ArrowCircleRightIcon />}>
+              <Link
+                href={{
+                  pathname: `/gig/${gig.dealId}`,
+                  query: {
+                    tab: 3,
+                    proposal: null,
+                    refresh: true,
+                  },
+                }}
+                as={`/gig/${gig.dealId}`}
+                passHref
+              >
+                <Button
+                  variant="outlined"
+                  endIcon={<ArrowCircleRightIcon />}
+                  onClick={handleClose}
+                >
                   Go to gig!
                 </Button>
               </Link>

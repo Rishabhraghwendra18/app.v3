@@ -1,17 +1,19 @@
-import { Layout } from "app/components/layouts";
 import AnimatedLayout from "app/components/layouts/animatedLayout";
 import GigTemplate from "app/components/templates/Gig";
 import { useGlobal } from "app/context/web3Context";
 import { ContractGig, Gig, Proposal, Submission, VerifiedGig } from "app/types";
 import { getDealMetadata } from "app/utils/contracts";
 import { fetchFromIPFS, getGig, getMyProposals } from "app/utils/moralis";
-import { NextPage } from "next";
+import { GetStaticPaths, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 
-interface Props {}
+interface Props {
+  tab: string;
+  proposalId: string;
+}
 
 interface GigContextType {
   gig: Gig;
@@ -34,8 +36,9 @@ interface GigContextType {
 
 export const GigContext = createContext<GigContextType>({} as GigContextType);
 
-const GigPage: NextPage<Props> = (props: Props) => {
+const GigPage: NextPage<Props> = ({ tab, proposalId }: Props) => {
   const context = useProviderGig();
+  const { route, query } = useRouter();
   const router = useRouter();
   const { id } = router.query;
   const {
@@ -43,20 +46,24 @@ const GigPage: NextPage<Props> = (props: Props) => {
   } = useGlobal();
   const { isAuthenticated } = useMoralis();
 
+  const [reload, setReload] = useState(false);
+
   const promises: Array<any> = [];
   useEffect(() => {
+    context.setFetching(true);
+    console.log(query);
     if (!loading && isAuthenticated) {
+      console.log("fetch true");
+
       getGig(id).then((res: Array<Gig>) => {
         context.setGig(res[0]);
+        console.log("gig received");
         const status = res[0].status;
         if ([102, 201, 202, 203, 204, 402, 403].includes(status)) {
           promises.push(
             getDealMetadata(res[0].dealId, contracts?.dealContract).then(
               (deal) => {
                 context.setContractGig(deal);
-                // fetchFromIPFS(deal.gigCid).then((res) => {
-                //   context.setVerifiedGig(res);
-                // });
                 if ([202, 203, 204, 403].includes(status)) {
                   fetchFromIPFS(deal.submission).then((res) => {
                     context.setSubmission(res);
@@ -82,7 +89,13 @@ const GigPage: NextPage<Props> = (props: Props) => {
         }
         Promise.all(promises)
           .then(() => {
+            console.log("hiii promise complete", router.query);
+            if (tab || router.query.tab) {
+              console.log("inside tavb", tab);
+              context.setTab(parseInt(tab || (router.query.tab as string)));
+            }
             context.setFetching(false);
+            console.log("fetch false");
           })
           .catch((err) => {
             console.log(err);
@@ -90,7 +103,7 @@ const GigPage: NextPage<Props> = (props: Props) => {
           });
       });
     }
-  }, [loading, isAuthenticated]);
+  }, [loading, isAuthenticated, query]);
 
   return (
     <div>
@@ -142,5 +155,16 @@ export function useProviderGig() {
 }
 
 export const useGig = () => useContext(GigContext);
+
+export const getServerSideProps = async (context) => {
+  // returns {tab: getLinkTab(item.actionId), proposal: item.proposalId}
+  console.log("husahduahduhad");
+  return {
+    props: {
+      tab: context.query.tab || null,
+      proposalId: context.query.proposal || null,
+    },
+  };
+};
 
 export default GigPage;

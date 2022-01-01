@@ -223,6 +223,10 @@ export const statusIdToStatusMap = {
   403: "myDisputed",
 };
 
+export const actionIdToTabMap = {
+  0: 1,
+};
+
 export const animationVariant = {
   hidden: {
     opacity: 0,

@@ -1,5 +1,4 @@
 import { useGig } from "pages/gig/[id]";
-import React from "react";
 import ClientBrief from "../modules/clientBrief";
 import ClientBriefSkeleton from "../modules/clientBrief/skeleton";
 import { GigHeading } from "../modules/gigHeading";
@@ -34,11 +33,15 @@ const GigTemplate = (props: Props) => {
         ) : (
           tab === 0 && <ClientBrief key={0} />
         )}
-        {tab === 1 && <ViewProposals key={1} />}
-        {tab === 2 && <ProposalForm key={2} />}
-        {tab === 3 && gig.proposal?.length && <SingleProposal key={3} />}
-        {tab === 4 && gig.proposal?.length && <SingleProposal key={4} />}
-        {tab === 5 && <Submission key={5} />}
+        {tab === 1 && !fetching && <ViewProposals key={1} />}
+        {tab === 2 && !fetching && <ProposalForm key={2} />}
+        {tab === 3 && !fetching && gig.proposal?.length && (
+          <SingleProposal key={3} />
+        )}
+        {tab === 4 && !fetching && gig.proposal?.length && (
+          <SingleProposal key={4} />
+        )}
+        {tab === 5 && !fetching && <Submission key={5} />}
       </AnimatePresence>
     </div>
   );
