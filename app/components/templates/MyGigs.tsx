@@ -1,13 +1,7 @@
-import { Grow } from "@mui/material";
-import { useExplore } from "pages";
 import SummarySkeleton from "../elements/skeleton/summarySkeleton";
-import ExploreFilter from "../modules/filter/ExploreFilter";
 import GigSummary from "../modules/gigSummary/gigSummary";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import { useEffect, useState } from "react";
-import { Gig } from "app/types";
-import Link from "next/link";
 import { useMyGigs } from "pages/myGigs";
 import MyGigsFilter from "../modules/filter/MyGigsFilter";
 

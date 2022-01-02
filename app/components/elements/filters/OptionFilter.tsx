@@ -1,8 +1,8 @@
+import { Radio } from "@mui/material";
 import { statusIdToStatusMap } from "app/constants/constants";
 import { filterByDate } from "app/utils/utils";
 import { useRouter } from "next/router";
 import { useExplore } from "pages";
-import { useMyGigs } from "pages/myGigs";
 import React from "react";
 
 interface Props {
@@ -37,61 +37,63 @@ const OptionFilter: React.FC<Props> = ({
     setMaxDeadline,
   } = useExplore();
 
-  // const { filterMyGigs, setMyGigs } = useMyGigs();
   const router = useRouter();
+
+  const controlProps = (item: string) => ({
+    checked: checked,
+    onChange: handleChange,
+    value: item,
+    name: "color-radio-button-demo",
+    inputProps: { "aria-label": item },
+  });
+
+  const handleChange = async () => {
+    setOptionSelected(option);
+    switch (groupName) {
+      case "collateral":
+        setMinCollateral && setMinCollateral(minFilter);
+        setMaxCollateral && setMaxCollateral(maxFilter);
+        filterGigs &&
+          filterGigs({
+            onSuccess: (res) => {
+              setGigs && setGigs(filterByDate(res, [minDeadline, maxDeadline]));
+            },
+            params: {
+              tags: skills,
+              lockedStake: [minFilter, maxFilter],
+              sortBy: "reward",
+              sortOrder: "asc",
+            },
+          });
+        break;
+      case "deadline":
+        setMinDeadline && (await setMinDeadline(minFilter));
+        setMaxDeadline && (await setMaxDeadline(maxFilter));
+        filterGigs &&
+          filterGigs({
+            onSuccess: (res) => {
+              setGigs && setGigs(filterByDate(res, [minFilter, maxFilter]));
+            },
+            params: {
+              tags: [],
+              lockedStake: [minCollateral, maxCollateral],
+              sortBy: "reward",
+              sortOrder: "asc",
+            },
+          });
+        break;
+      case "status":
+        router.push({
+          search: `?status=${statusIdToStatusMap[option]}`,
+        });
+        break;
+    }
+  };
 
   return (
     <div className="ml-8 mr-8 flex flex-row">
-      <label className="text-sm inline-flex items-center mt-2">
-        <input
-          type="radio"
-          name={groupName}
-          checked={checked}
-          onChange={async () => {
-            setOptionSelected(option);
-            switch (groupName) {
-              case "collateral":
-                setMinCollateral && setMinCollateral(minFilter);
-                setMaxCollateral && setMaxCollateral(maxFilter);
-                filterGigs &&
-                  filterGigs({
-                    onSuccess: (res) => {
-                      setGigs &&
-                        setGigs(filterByDate(res, [minDeadline, maxDeadline]));
-                    },
-                    params: {
-                      tags: skills,
-                      lockedStake: [minFilter, maxFilter],
-                      sortBy: "reward",
-                      sortOrder: "asc",
-                    },
-                  });
-                break;
-              case "deadline":
-                setMinDeadline && (await setMinDeadline(minFilter));
-                setMaxDeadline && (await setMaxDeadline(maxFilter));
-                filterGigs &&
-                  filterGigs({
-                    onSuccess: (res) => {
-                      setGigs &&
-                        setGigs(filterByDate(res, [minFilter, maxFilter]));
-                    },
-                    params: {
-                      tags: [],
-                      lockedStake: [minCollateral, maxCollateral],
-                      sortBy: "reward",
-                      sortOrder: "asc",
-                    },
-                  });
-                break;
-              case "status":
-                router.push({
-                  search: `?status=${statusIdToStatusMap[option]}`,
-                });
-                break;
-            }
-          }}
-        />
+      <label className="text-sm inline-flex items-center">
+        <Radio {...controlProps(text)} color="success" />
         <span className="ml-2">{text}</span>
       </label>
     </div>

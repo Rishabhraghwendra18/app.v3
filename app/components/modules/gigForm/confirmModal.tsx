@@ -146,7 +146,11 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
               </a>
               <Box sx={{ flex: "1 1 auto" }} />
               <Link href={`/gig/${dealId}`} passHref>
-                <Button variant="outlined" endIcon={<ArrowCircleRightIcon />}>
+                <Button
+                  variant="outlined"
+                  endIcon={<ArrowCircleRightIcon />}
+                  onClick={handleClose}
+                >
                   Go to gig!
                 </Button>
               </Link>

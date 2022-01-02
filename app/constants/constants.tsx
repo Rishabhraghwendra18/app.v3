@@ -95,35 +95,6 @@ export const skillOptions = [
   { label: "Video Editing" },
 ];
 
-export const selectStyleDark = {
-  control: (styles) => ({
-    ...styles,
-    backgroundColor: "transparent",
-    border: "0",
-    boxShadow: "none",
-  }),
-  placeholder: (defaultStyles) => {
-    return {
-      ...defaultStyles,
-      color: "#5a6972",
-      fontSize: "1rem",
-      lineHeight: "1.5rem",
-      margin: "0",
-      padding: "0",
-    };
-  },
-  option: (provided, state) => ({
-    ...provided,
-    color: state.isFocused ? "black" : "#99ccff",
-  }),
-  menu: (styles) => ({
-    ...styles,
-    backgroundColor: "#000f29",
-    boxShadow: "none",
-    border: "1px solid #0061ff",
-  }),
-};
-
 export const toolbarOptions = [
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
 
@@ -170,6 +141,13 @@ export const submissionHelperTexts = {
   file: "If required, upload a zip with all the the necessary files.",
 };
 
+export const exploreHelperTexts = {
+  skills: "Filter gigs based on the skills required to complete them",
+  minStake:
+    "Collateral is locked by you before starting gig to ensure high quality of work.",
+  deadline: "The date by which you have to submit work.",
+};
+
 export const monthMap = {
   0: "Jan",
   1: "Feb",
@@ -212,6 +190,7 @@ export const statusToStatusIdMap = {
   myCompleted: 203,
   myViolations: 402,
   myDisputed: 403,
+  myDelisted: 401,
 };
 
 export const statusIdToStatusMap = {

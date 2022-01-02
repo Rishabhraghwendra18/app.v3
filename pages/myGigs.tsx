@@ -17,6 +17,7 @@ import { useMoralis, useMoralisCloudFunction } from "react-moralis";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import MyGigsTemplate from "app/components/templates/MyGigs";
 import AnimatedLayout from "app/components/layouts/animatedLayout";
+import Link from "next/link";
 
 interface Props {}
 
@@ -76,12 +77,14 @@ const MyGigs: NextPage<Props> = () => {
               </div>
             </div>
           </div>
-          <Button
-            sx={{ textTransform: "none", color: "#eaeaea" }}
-            endIcon={<ArrowRightIcon />}
-          >
-            Explore gigs
-          </Button>
+          <Link href="/" passHref>
+            <Button
+              sx={{ textTransform: "none", color: "#eaeaea" }}
+              endIcon={<ArrowRightIcon />}
+            >
+              Explore gigs
+            </Button>
+          </Link>
         </div>
       </div>
       <AnimatedLayout>

@@ -1,5 +1,7 @@
 import OptionFilter from "app/components/elements/filters/OptionFilter";
 import TextFilter from "app/components/elements/filters/TextFilter";
+import { LightTooltip } from "app/components/elements/styledComponents";
+import { exploreHelperTexts } from "app/constants/constants";
 import { useState } from "react";
 
 interface Props {}
@@ -9,21 +11,22 @@ const ExploreFilter: React.FC<Props> = (props: Props) => {
   const [deadlineOptionSelected, setDeadlineOptionSelected] = useState(0);
 
   return (
-    <div>
+    <div className="mb-16">
       <div>
-        <div>
-          <div className="m-8 mb-2 flex flex-row" style={{ width: "100%" }}>
-            <span className="font-semibold text-sm text-blue-light">
-              Required Skills
-            </span>
-          </div>
-          <TextFilter />
+        <div className="mt-4">
+          <TextFilter label="Required Skills" />
         </div>
 
         <div className="m-8 mb-2 flex flex-row">
-          <span className="font-semibold text-sm text-blue-light">
-            Collateral required
-          </span>
+          <LightTooltip
+            arrow
+            placement="top"
+            title={exploreHelperTexts["minStake"]}
+          >
+            <span className="text-base text-blue-light">
+              Collateral required
+            </span>
+          </LightTooltip>
         </div>
         <OptionFilter
           checked={collateralOptionSelected === 0}
@@ -65,9 +68,13 @@ const ExploreFilter: React.FC<Props> = (props: Props) => {
 
       <div>
         <div className="m-8 mb-2 flex flex-row">
-          <span className="font-semibold text-sm text-blue-light">
-            Deadline
-          </span>
+          <LightTooltip
+            arrow
+            placement="top"
+            title={exploreHelperTexts["deadline"]}
+          >
+            <span className="text-base text-blue-light">Deadline</span>
+          </LightTooltip>
         </div>
         <OptionFilter
           checked={deadlineOptionSelected === 0}

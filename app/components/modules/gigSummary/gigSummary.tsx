@@ -43,7 +43,7 @@ const GigSummary = ({ gig }: Props) => {
   return (
     <Link href={`/gig/${gig.dealId}`} passHref>
       <GigSummaryButton variant="outlined" sx={{ pt: 1, mb: 1 }}>
-        <Grid container spacing={2} columns={7} sx={{ textTransform: "none" }}>
+        <Grid container spacing={1} columns={7} sx={{ textTransform: "none" }}>
           <Grid item xs={4}>
             <Box sx={{ display: "flex", flexDirection: "row" }}>
               <GigAvatar alt="Username" src={gig.user[0].profilePicture} />

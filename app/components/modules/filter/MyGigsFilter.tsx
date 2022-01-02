@@ -13,7 +13,7 @@ const MyGigsFilter: React.FC<Props> = (props: Props) => {
   const statusParam = router.query.status as string;
   const { filterMyGigs, setMyGigs } = useMyGigs();
   useEffect(() => {
-    setStatus(statusToStatusIdMap[statusParam]);
+    setStatus(statusToStatusIdMap[statusParam] || 100);
     filterMyGigs({
       onSuccess: (res) => {
         setMyGigs(res);

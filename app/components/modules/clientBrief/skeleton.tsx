@@ -9,12 +9,12 @@ const ClientBriefSkeleton = (props: Props) => {
 
   return (
     <Grow in={fetching} timeout={1000}>
-      <div>
+      <div className="w-full">
         <div className="w-full mt-2">
           <Skeleton height={64} width={`50%`} />
         </div>
-        <div className="flex flex-row">
-          <div className="grid grid-cols-5 w-3/5">
+        <div className="flex flex-row w-full">
+          <div className="grid grid-cols-5 w-full">
             <div className="flex flex-col my-8">
               <div className="text-sm text-blue-light">Gig Reward</div>
               <div className="flex flex-row items-baseline">
@@ -29,7 +29,7 @@ const ClientBriefSkeleton = (props: Props) => {
               </div>
             </div>
             <div className="flex flex-col my-8">
-              <div className="text-sm text-blue-light">Bounty Deadline</div>
+              <div className="text-sm text-blue-light">Submission Deadline</div>
               <div className="flex flex-row items-baseline">
                 <div className="text-xl mt-1 font-bold">
                   <Skeleton height={32} width={120} animation="wave" />
@@ -37,7 +37,7 @@ const ClientBriefSkeleton = (props: Props) => {
               </div>
             </div>
             <div className="flex flex-col my-8">
-              <div className="text-sm text-blue-light">Stake Required</div>
+              <div className="text-sm text-blue-light">Collateral Required</div>
               <div className="flex flex-row items-baseline">
                 <Skeleton height={32} width={50} animation="wave" />
                 <div className="text-sm text-grey-normal flex flex-col justify-end items-end ml-1 mb-1">
@@ -50,7 +50,7 @@ const ClientBriefSkeleton = (props: Props) => {
               </div>
             </div>
             <div className="flex flex-col my-8">
-              <div className="text-sm text-blue-light">Confirmation Window</div>
+              <div className="text-sm text-blue-light">Days to Accept Work</div>
               <div className="flex flex-row items-baseline">
                 <Skeleton height={32} width={50} animation="wave" />
                 <div className="text-sm text-grey-normal flex flex-col justify-end items-end ml-1 mb-1">
@@ -59,7 +59,7 @@ const ClientBriefSkeleton = (props: Props) => {
               </div>
             </div>
             <div className="flex flex-col my-8">
-              <div className="text-sm text-blue-light">Bounty Status</div>
+              <div className="text-sm text-blue-light">Gig Status</div>
               <div className="flex flex-row">
                 <Skeleton height={32} width={120} animation="wave" />
               </div>

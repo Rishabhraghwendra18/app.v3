@@ -7,14 +7,10 @@ import { fetchFromIPFS, getGig, getMyProposals } from "app/utils/moralis";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
-import type { NextRouter } from "next/router";
 
-interface Props {
-  tab: string;
-  proposalId: string;
-}
+interface Props {}
 
 interface GigContextType {
   gig: Gig;
@@ -37,7 +33,7 @@ interface GigContextType {
 
 export const GigContext = createContext<GigContextType>({} as GigContextType);
 
-const GigPage: NextPage<Props> = ({ tab, proposalId }: Props) => {
+const GigPage: NextPage<Props> = (props: Props) => {
   const context = useProviderGig();
   const { route, query } = useRouter();
   const router = useRouter();
@@ -85,8 +81,8 @@ const GigPage: NextPage<Props> = ({ tab, proposalId }: Props) => {
           }
           Promise.all(promises)
             .then(() => {
-              if (tab || router.query.tab) {
-                context.setTab(parseInt(tab || (router.query.tab as string)));
+              if (router.query.tab) {
+                context.setTab(parseInt(router.query.tab as string));
               }
               context.setFetching(false);
             })
@@ -149,15 +145,5 @@ export function useProviderGig() {
 }
 
 export const useGig = () => useContext(GigContext);
-
-export const getServerSideProps = async (context) => {
-  // returns {tab: getLinkTab(item.actionId), proposal: item.proposalId}
-  return {
-    props: {
-      tab: context.query.tab || null,
-      proposalId: context.query.proposal || null,
-    },
-  };
-};
 
 export default GigPage;

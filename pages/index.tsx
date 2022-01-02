@@ -8,6 +8,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useMoralis, useMoralisCloudFunction } from "react-moralis";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import AnimatedLayout from "app/components/layouts/animatedLayout";
+import Link from "next/link";
 
 type fetchResponse = {
   result: Array<Gig>;
@@ -92,10 +93,14 @@ const Home: NextPage<Props> = ({ bounties }) => {
                 </div>
               </div>
             </div>
-            <Button sx={{ textTransform: "none", color: "#eaeaea" }}>
-              Track my gigs
-              <ArrowRightIcon />
-            </Button>
+            <Link href="/myGigs" passHref>
+              <Button
+                sx={{ textTransform: "none", color: "#eaeaea" }}
+                endIcon={<ArrowRightIcon />}
+              >
+                Track my gigs
+              </Button>
+            </Link>
           </div>
         </div>
         <ExploreContext.Provider value={value}>

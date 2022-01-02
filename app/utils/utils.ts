@@ -88,3 +88,25 @@ export function getSuccessRate(proposal) {
     100;
   return isNaN(successRate) ? 0 : successRate;
 }
+
+export function sort(sortCurrBy, sortCurrOrder, sortedGigs) {
+  if (sortedGigs) {
+    if (sortCurrOrder === "desc") {
+      return sortedGigs.sort((a, b) =>
+        a[sortCurrBy] < b[sortCurrBy]
+          ? 1
+          : b[sortCurrBy] < a[sortCurrBy]
+          ? -1
+          : 0
+      );
+    } else if (sortCurrOrder === "asc") {
+      return sortedGigs.sort((a, b) =>
+        a[sortCurrBy] > b[sortCurrBy]
+          ? 1
+          : b[sortCurrBy] > a[sortCurrBy]
+          ? -1
+          : 0
+      );
+    }
+  }
+}
