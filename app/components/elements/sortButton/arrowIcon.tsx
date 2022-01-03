@@ -14,7 +14,7 @@ const ArrowIcon = ({ state, visible }: Props) => {
         state ? "rotate-180" : "rotate-0"
       } transform transition ease-in-out duration-1000 ml-1`}
     >
-      <ArrowDropUpIcon className={`${!visible && "hidden"}`} />
+      {visible && <ArrowDropUpIcon />}
     </div>
   );
 };

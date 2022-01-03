@@ -90,7 +90,6 @@ export function getSuccessRate(proposal) {
 }
 
 export function sort(sortCurrBy, sortCurrOrder, array) {
-  console.log("in sort", array);
   const sortArray = [...array];
   if (sortArray) {
     if (sortCurrOrder === "desc") {

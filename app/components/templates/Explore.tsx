@@ -19,6 +19,7 @@ const Explore: React.FC<Props> = (props: Props) => {
     if (loaded) {
       setGigs(sort(sortBy, sortOrder, gigs));
     }
+    console.log(sortBy);
   }, [loaded]);
 
   return (

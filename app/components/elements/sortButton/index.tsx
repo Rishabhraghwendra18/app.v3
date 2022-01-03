@@ -1,6 +1,5 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { sort } from "app/utils/utils";
-import { useExplore } from "pages";
 import { Button } from "@mui/material";
 import ArrowIcon from "./arrowIcon";
 import { Gig, Proposal } from "app/types";
@@ -26,7 +25,10 @@ const SortButton = ({
   array,
   setArray,
 }: Props) => {
-  const { gigs } = useExplore();
+  useEffect(() => {
+    console.log(`Name: ${name} currentSort: ${currentSort}`);
+  }, []);
+
   return (
     <div>
       <Button
