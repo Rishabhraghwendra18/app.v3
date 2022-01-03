@@ -1,29 +1,29 @@
 import OptionFilter from "app/components/elements/filters/OptionFilter";
 import TextFilter from "app/components/elements/filters/TextFilter";
 import { statusToStatusIdMap } from "app/constants/constants";
+import { ProposalStatus } from "app/types";
 import { useRouter } from "next/router";
 import { useMyGigs } from "pages/myGigs";
+import { useMyProposals } from "pages/myProposals";
 import { useEffect, useState } from "react";
 
 interface Props {}
 
-const MyGigsFilter: React.FC<Props> = (props: Props) => {
-  const [status, setStatus] = useState();
+const MyProposalsFilter: React.FC<Props> = (props: Props) => {
+  const [status, setStatus] = useState<ProposalStatus | undefined>();
   const router = useRouter();
   const statusParam = router.query.status as string;
-  const { filterMyGigs, setMyGigs, setLoaded } = useMyGigs();
+  const { getMyProposals, setMyProposals, setLoaded } = useMyProposals();
   useEffect(() => {
     if (statusParam) {
       setStatus(statusToStatusIdMap[statusParam]);
       setLoaded(false);
-      filterMyGigs({
+      getMyProposals({
         onSuccess: (res) => {
-          setMyGigs(res);
+          setMyProposals(res);
           setLoaded(true);
         },
         params: {
-          sortBy: "reward",
-          sortOrder: "asc",
           status: statusToStatusIdMap[statusParam],
         },
       });
@@ -36,64 +36,43 @@ const MyGigsFilter: React.FC<Props> = (props: Props) => {
           <span className="font-semibold text-sm text-blue-light">Status</span>
         </div>
         <OptionFilter
-          checked={status === 100}
+          checked={status === undefined}
           option={100}
           setOptionSelected={setStatus}
           text={"Show All"}
-          groupName="status"
+          groupName="proposalStatus"
         />
         <OptionFilter
           checked={status === 101}
           option={101}
           setOptionSelected={setStatus}
-          text={"Not Started"}
-          groupName="status"
+          text={"Open"}
+          groupName="proposalStatus"
         />
         <OptionFilter
-          checked={status === 201}
-          option={201}
+          checked={status === 102}
+          option={102}
           setOptionSelected={setStatus}
-          text={"In Progress"}
-          groupName="status"
+          text={"Shortlisted"}
+          groupName="proposalStatus"
         />
         <OptionFilter
-          checked={status === 202}
-          option={202}
+          checked={status === 103}
+          option={103}
           setOptionSelected={setStatus}
-          text={"In Review"}
-          groupName="status"
-        />
-        <OptionFilter
-          checked={status === 203}
-          option={203}
-          setOptionSelected={setStatus}
-          text={"Completed"}
-          groupName="status"
-        />
-        <OptionFilter
-          checked={status === 402}
-          option={402}
-          setOptionSelected={setStatus}
-          text={"Violations"}
-          groupName="status"
-        />
-        <OptionFilter
-          checked={status === 403}
-          option={403}
-          setOptionSelected={setStatus}
-          text={"Disputed"}
-          groupName="status"
+          text={"Accepted"}
+          groupName="proposalStatus"
         />
         <OptionFilter
           checked={status === 401}
           option={401}
           setOptionSelected={setStatus}
-          text={"Delisted"}
-          groupName="status"
+          text={"Rejected"}
+          groupName="proposalStatus"
         />
       </div>
     </div>
   );
 };
 
-export default MyGigsFilter;
+export default MyProposalsFilter;

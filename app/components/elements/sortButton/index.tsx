@@ -3,6 +3,7 @@ import { sort } from "app/utils/utils";
 import { useExplore } from "pages";
 import { Button } from "@mui/material";
 import ArrowIcon from "./arrowIcon";
+import { Gig, Proposal } from "app/types";
 
 interface Props {
   text: string;
@@ -11,6 +12,8 @@ interface Props {
   currentSort: boolean;
   setSortBy: Dispatch<SetStateAction<string>>;
   setSortOrder: Dispatch<SetStateAction<string>>;
+  array: Gig[] | Proposal[];
+  setArray: Function;
 }
 
 const SortButton = ({
@@ -20,6 +23,8 @@ const SortButton = ({
   currentSort,
   setSortBy,
   setSortOrder,
+  array,
+  setArray,
 }: Props) => {
   const { gigs } = useExplore();
   return (
@@ -36,7 +41,7 @@ const SortButton = ({
               : "asc"
             : "desc";
           setSortBy(name);
-          sort(name, newSortOrder, gigs);
+          setArray(sort(name, newSortOrder, array));
           setSortOrder(newSortOrder);
         }}
       >

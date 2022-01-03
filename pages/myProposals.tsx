@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { Gig, GigStatus } from "app/types";
+import { Proposal, ProposalStatus } from "app/types";
 import type { NextPage } from "next";
 import Head from "next/head";
 import {
@@ -11,30 +11,30 @@ import {
 } from "react";
 import { useMoralisCloudFunction } from "react-moralis";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import MyGigsTemplate from "app/components/templates/MyGigs";
 import AnimatedLayout from "app/components/layouts/animatedLayout";
 import Link from "next/link";
+import MyProposalsTemplate from "app/components/templates/MyProposals";
 
 interface Props {}
 
-interface MyGigsContextType {
-  filterMyGigs: Function;
-  data: Array<Gig> | unknown;
+interface MyProposalsContextType {
+  getMyProposals: Function;
+  data: Proposal[] | unknown;
   isFetching: boolean;
-  myGigs: Array<Gig> | undefined;
-  setMyGigs: Dispatch<SetStateAction<Gig[] | undefined>>;
-  status: GigStatus;
-  setStatus: Dispatch<SetStateAction<GigStatus | undefined>>;
+  myProposals: Proposal[] | undefined;
+  setMyProposals: Dispatch<SetStateAction<Proposal[] | undefined>>;
+  status: ProposalStatus;
+  setStatus: Dispatch<SetStateAction<ProposalStatus | undefined>>;
   loaded: boolean;
   setLoaded: Dispatch<SetStateAction<boolean>>;
 }
 
-export const MyGigsContext = createContext<MyGigsContextType>(
-  {} as MyGigsContextType
+export const MyProposalsContext = createContext<MyProposalsContextType>(
+  {} as MyProposalsContextType
 );
 
-const MyGigs: NextPage<Props> = () => {
-  const value = useProviderMyGigs();
+const MyProposals: NextPage<Props> = () => {
+  const value = useProviderMyProposals();
 
   return (
     <div>
@@ -48,15 +48,15 @@ const MyGigs: NextPage<Props> = () => {
         <div className="flex flex-row col-span-5">
           <div className="flex flex-row w-5/6 items-center">
             <span className="text-base md:text-2xl lg:text-3xl text-blue-bright">
-              My Gigs
+              My Proposals
             </span>
             <div className="flex flex-row ml-8 justify-center">
               <div className="text-base md:text-2xl lg:text-3xl mt-1 text-blue-light">
                 {" "}
-                {value.myGigs?.length}
+                {value.myProposals?.length}
               </div>
               <div className="hidden md:flex text-sm flex flex-col justify-end items-end ml-1 mb-1 text-blue-light">
-                Matching Gigs
+                Matching Proposals
               </div>
             </div>
           </div>
@@ -71,25 +71,26 @@ const MyGigs: NextPage<Props> = () => {
         </div>
       </div>
       <AnimatedLayout>
-        <MyGigsContext.Provider value={value}>
-          <MyGigsTemplate />
-        </MyGigsContext.Provider>
+        <MyProposalsContext.Provider value={value}>
+          <MyProposalsTemplate />
+        </MyProposalsContext.Provider>
       </AnimatedLayout>
     </div>
   );
 };
 
-export function useProviderMyGigs() {
-  const [status, setStatus] = useState<GigStatus>(101);
-  const [myGigs, setMyGigs] = useState<Gig[] | undefined>([]);
-  const [loaded, setLoaded] = useState<boolean>(false);
+export function useProviderMyProposals() {
+  const [status, setStatus] = useState<ProposalStatus>(101);
+  const [myProposals, setMyProposals] = useState<Proposal[] | undefined>([]);
+  const [loaded, setLoaded] = useState(false);
+
   const {
-    fetch: filterMyGigs,
+    fetch: getMyProposals,
     data,
     error,
     isFetching,
   } = useMoralisCloudFunction(
-    "filterMyBounties",
+    "getMySubmittedProposals",
     {
       limit: 100,
     },
@@ -97,11 +98,11 @@ export function useProviderMyGigs() {
   );
 
   return {
-    filterMyGigs,
+    getMyProposals,
     data,
     isFetching,
-    myGigs,
-    setMyGigs,
+    myProposals,
+    setMyProposals,
     status,
     setStatus,
     loaded,
@@ -109,6 +110,6 @@ export function useProviderMyGigs() {
   };
 }
 
-export const useMyGigs = () => useContext(MyGigsContext);
+export const useMyProposals = () => useContext(MyProposalsContext);
 
-export default MyGigs;
+export default MyProposals;

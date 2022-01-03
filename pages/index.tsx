@@ -4,7 +4,14 @@ import { Gig } from "app/types";
 import { filterByDate } from "app/utils/utils";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useMoralis, useMoralisCloudFunction } from "react-moralis";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import AnimatedLayout from "app/components/layouts/animatedLayout";
@@ -19,54 +26,51 @@ interface Props {
 }
 
 interface ExploreContextType {
-  filterGigs?: Function;
-  data: Array<Gig> | unknown;
+  filterGigs: Function;
+  data: Gig[] | unknown;
   isFetching: boolean;
   minDeadline: number;
-  setMinDeadline?: Function;
+  setMinDeadline: Function;
   maxDeadline: number;
-  setMaxDeadline?: Function;
+  setMaxDeadline: Function;
   minCollateral: number;
-  setMinCollateral?: Function;
+  setMinCollateral: Function;
   maxCollateral: number;
-  setMaxCollateral?: Function;
-  gigs: Array<Gig> | undefined;
-  setGigs?: Function;
-  skills: Array<object>;
-  setSkills?: Function;
+  setMaxCollateral: Function;
+  gigs: Gig[];
+  setGigs: Function;
+  skills: { label: string }[];
+  setSkills: Function;
+  loaded: boolean;
+  setLoaded: Dispatch<SetStateAction<boolean>>;
 }
 
-export const ExploreContext = createContext<ExploreContextType>({
-  data: undefined,
-  gigs: undefined,
-  isFetching: false,
-  minDeadline: 0,
-  maxDeadline: 365,
-  minCollateral: 0,
-  maxCollateral: Number.MAX_SAFE_INTEGER,
-  skills: [],
-});
+export const ExploreContext = createContext<ExploreContextType>(
+  {} as ExploreContextType
+);
 
 const Home: NextPage<Props> = ({ bounties }) => {
   const value = useProviderExplore();
-  const { isInitialized } = useMoralis();
-  useEffect(() => {
-    if (isInitialized) {
-      value.filterGigs({
-        onSuccess: (res: Array<Gig>) => {
-          value.setGigs(
-            filterByDate(res, [value.minDeadline, value.maxDeadline])
-          );
-        },
-        params: {
-          tags: [],
-          lockedStake: [value.minCollateral, value.maxCollateral],
-          sortBy: "reward",
-          sortOrder: "asc",
-        },
-      });
-    }
-  }, [isInitialized]);
+  // const { isInitialized } = useMoralis();
+  // useEffect(() => {
+  //   if (isInitialized) {
+  //     value.setLoaded(false);
+  //     value.filterGigs({
+  //       onSuccess: (res: Gig[]) => {
+  //         value.setGigs(
+  //           filterByDate(res, [value.minDeadline, value.maxDeadline])
+  //         );
+  //         value.setLoaded(true);
+  //       },
+  //       params: {
+  //         tags: [],
+  //         lockedStake: [value.minCollateral, value.maxCollateral],
+  //         sortBy: "reward",
+  //         sortOrder: "asc",
+  //       },
+  //     });
+  //   }
+  // }, [isInitialized]);
 
   return (
     <div>
@@ -117,7 +121,8 @@ export function useProviderExplore() {
   const [minCollateral, setMinCollateral] = useState(0);
   const [maxCollateral, setMaxCollateral] = useState(Number.MAX_SAFE_INTEGER);
   const [skills, setSkills] = useState([]);
-  const [gigs, setGigs] = useState<Gig[] | undefined>([]);
+  const [loaded, setLoaded] = useState(false);
+  const [gigs, setGigs] = useState<Gig[]>([] as Gig[]);
   const {
     fetch: filterGigs,
     data,
@@ -147,6 +152,8 @@ export function useProviderExplore() {
     setSkills,
     gigs,
     setGigs,
+    loaded,
+    setLoaded,
   };
 }
 

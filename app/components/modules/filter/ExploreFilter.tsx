@@ -2,13 +2,44 @@ import OptionFilter from "app/components/elements/filters/OptionFilter";
 import TextFilter from "app/components/elements/filters/TextFilter";
 import { LightTooltip } from "app/components/elements/styledComponents";
 import { exploreHelperTexts } from "app/constants/constants";
-import { useState } from "react";
+import { Gig } from "app/types";
+import { filterByDate } from "app/utils/utils";
+import { useExplore } from "pages";
+import { useEffect, useState } from "react";
+import { useMoralis } from "react-moralis";
 
 interface Props {}
 
 const ExploreFilter: React.FC<Props> = (props: Props) => {
   const [collateralOptionSelected, setCollateralOptionSelected] = useState(0);
   const [deadlineOptionSelected, setDeadlineOptionSelected] = useState(0);
+  const { isInitialized } = useMoralis();
+  const {
+    setLoaded,
+    filterGigs,
+    setGigs,
+    minCollateral,
+    maxCollateral,
+    minDeadline,
+    maxDeadline,
+  } = useExplore();
+  useEffect(() => {
+    if (isInitialized) {
+      setLoaded(false);
+      filterGigs({
+        onSuccess: (res: Gig[]) => {
+          setGigs(filterByDate(res, [minDeadline, maxDeadline]));
+          setLoaded(true);
+        },
+        params: {
+          tags: [],
+          lockedStake: [minCollateral, maxCollateral],
+          sortBy: "reward",
+          sortOrder: "asc",
+        },
+      });
+    }
+  }, [isInitialized]);
 
   return (
     <div className="mb-16">

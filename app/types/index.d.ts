@@ -62,7 +62,7 @@ export interface Gig {
   proposal: Array<Proposal>;
 }
 
-type ProposalStatus = 100 | 102 | 103 | 401;
+type ProposalStatus = 101 | 102 | 103 | 401;
 
 export interface Proposal {
   completedJobs: number;
@@ -79,7 +79,8 @@ export interface Proposal {
   status: ProposalStatus;
   title: string;
   updatedAt: string;
-  user: Array<User>;
+  user: any; // fix
+  bounty: Gig[];
 }
 
 export interface ContractGig {

@@ -1,42 +1,32 @@
-import { useExplore } from "pages";
 import SummarySkeleton from "../elements/skeleton/summarySkeleton";
-import ExploreFilter from "../modules/filter/ExploreFilter";
-import GigSummary from "../modules/gigSummary/gigSummary";
-import { useEffect, useState } from "react";
-import { Reorder } from "framer-motion";
+import MyProposalsFilter from "../modules/filter/MyProposalsFilter";
+import ProposalSummary from "../modules/proposalSummary";
+import { useMyProposals } from "pages/myProposals";
 import SortButton from "../elements/sortButton";
+import { useEffect, useState } from "react";
 import { sort } from "app/utils/utils";
-import { Gig } from "app/types";
+import { Proposal } from "app/types";
+import { Reorder } from "framer-motion";
 
 interface Props {}
 
-const Explore: React.FC<Props> = (props: Props) => {
-  const { isFetching, gigs, setGigs, loaded } = useExplore();
-  const [sortBy, setSortBy] = useState("reward");
+const MyProposalsTemplate: React.FC<Props> = (props: Props) => {
+  const { isFetching, myProposals, setMyProposals, loaded } = useMyProposals();
+  const [sortBy, setSortBy] = useState("lockedStake");
   const [sortOrder, setSortOrder] = useState("desc");
 
   useEffect(() => {
     if (loaded) {
-      setGigs(sort(sortBy, sortOrder, gigs));
+      setMyProposals(sort(sortBy, sortOrder, myProposals));
     }
   }, [loaded]);
-
   return (
     <div className="grid gap-1 grid-cols-6 mt-2 md:mt-8">
-      <ExploreFilter />
+      <MyProposalsFilter />
       <div className="col-span-5 flex flex-col pr-4">
-        <div className="grid grid-cols-7 text-sm text-blue-light mb-1 mr-3">
+        <div className="grid grid-cols-7 text-sm text-blue-light mb-1">
           <div className="col-span-4"></div>
-          <SortButton
-            text={"Reward"}
-            name={"reward"}
-            sortOrder={sortOrder}
-            currentSort={sortBy === "reward"}
-            setSortBy={setSortBy}
-            setSortOrder={setSortOrder}
-            array={gigs as Gig[]}
-            setArray={setGigs}
-          />
+          <div></div>
           <SortButton
             text={"Deadline"}
             name={"deadline"}
@@ -44,37 +34,37 @@ const Explore: React.FC<Props> = (props: Props) => {
             currentSort={sortBy === "deadline"}
             setSortBy={setSortBy}
             setSortOrder={setSortOrder}
-            array={gigs as Gig[]}
-            setArray={setGigs}
+            array={myProposals as Proposal[]}
+            setArray={setMyProposals}
           />
           <SortButton
             text={"Collateral Required"}
-            name={"minStake"}
+            name={"lockedStake"}
             sortOrder={sortOrder}
-            currentSort={sortBy === "minStake"}
+            currentSort={sortBy === "lockedStake"}
             setSortBy={setSortBy}
             setSortOrder={setSortOrder}
-            array={gigs as Gig[]}
-            setArray={setGigs}
+            array={myProposals as Proposal[]}
+            setArray={setMyProposals}
           />
         </div>
 
-        {isFetching ? (
+        {!loaded ? (
           <SummarySkeleton isFetching={isFetching} />
         ) : (
           <Reorder.Group
             axis="y"
-            values={gigs as any}
+            values={myProposals as any}
             layoutScroll
-            onReorder={() => console.log("reorder")}
+            onReorder={() => console.log("reoirder")}
           >
-            {gigs?.map((item) => (
+            {myProposals?.map((item) => (
               <Reorder.Item
                 key={item.dealId}
                 value={item}
                 transition={{ duration: 1 }}
               >
-                <GigSummary gig={item} />
+                <ProposalSummary proposal={item} />
               </Reorder.Item>
             ))}
           </Reorder.Group>
@@ -84,4 +74,4 @@ const Explore: React.FC<Props> = (props: Props) => {
   );
 };
 
-export default Explore;
+export default MyProposalsTemplate;

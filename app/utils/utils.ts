@@ -16,7 +16,7 @@ export const smartTrim = (string: string, maxLength: number) => {
 };
 
 export const filterByDate = (
-  gigs: Array<Gig> | undefined,
+  gigs: Array<Gig>,
   deadlineFilter: Array<number | undefined>
 ) => {
   function filterDate(item) {
@@ -89,10 +89,12 @@ export function getSuccessRate(proposal) {
   return isNaN(successRate) ? 0 : successRate;
 }
 
-export function sort(sortCurrBy, sortCurrOrder, sortedGigs) {
-  if (sortedGigs) {
+export function sort(sortCurrBy, sortCurrOrder, array) {
+  console.log("in sort", array);
+  const sortArray = [...array];
+  if (sortArray) {
     if (sortCurrOrder === "desc") {
-      return sortedGigs.sort((a, b) =>
+      return sortArray.sort((a, b) =>
         a[sortCurrBy] < b[sortCurrBy]
           ? 1
           : b[sortCurrBy] < a[sortCurrBy]
@@ -100,7 +102,7 @@ export function sort(sortCurrBy, sortCurrOrder, sortedGigs) {
           : 0
       );
     } else if (sortCurrOrder === "asc") {
-      return sortedGigs.sort((a, b) =>
+      return sortArray.sort((a, b) =>
         a[sortCurrBy] > b[sortCurrBy]
           ? 1
           : b[sortCurrBy] > a[sortCurrBy]

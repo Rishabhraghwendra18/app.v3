@@ -191,15 +191,28 @@ export const statusToStatusIdMap = {
   myViolations: 402,
   myDisputed: 403,
   myDelisted: 401,
+  open: 101,
+  shortlisted: 102,
+  accepted: 103,
+  rejected: 401,
 };
 
 export const statusIdToStatusMap = {
+  100: "all",
   101: "myCreated",
   201: "myActive",
   202: "myInReview",
   203: "myCompleted",
   402: "myViolations",
   403: "myDisputed",
+};
+
+export const proposalStatusIdToStatusMap = {
+  100: "all",
+  101: "open",
+  102: "shortlisted",
+  103: "accepted",
+  401: "rejected",
 };
 
 export const actionIdToTabMap = {

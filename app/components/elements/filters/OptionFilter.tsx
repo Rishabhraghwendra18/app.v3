@@ -1,5 +1,8 @@
 import { Radio } from "@mui/material";
-import { statusIdToStatusMap } from "app/constants/constants";
+import {
+  proposalStatusIdToStatusMap,
+  statusIdToStatusMap,
+} from "app/constants/constants";
 import { filterByDate } from "app/utils/utils";
 import { useRouter } from "next/router";
 import { useExplore } from "pages";
@@ -85,6 +88,11 @@ const OptionFilter: React.FC<Props> = ({
       case "status":
         router.push({
           search: `?status=${statusIdToStatusMap[option]}`,
+        });
+        break;
+      case "proposalStatus":
+        router.push({
+          search: `?status=${proposalStatusIdToStatusMap[option]}`,
         });
         break;
     }
