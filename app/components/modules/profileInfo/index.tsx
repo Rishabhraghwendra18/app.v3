@@ -5,6 +5,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import Portfolio from "./portfolio";
 import { animationVariant } from "app/constants/constants";
+import ProfileSkeleton from "./skeleton";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface Props {}
@@ -13,6 +14,9 @@ const ProfileInfo = (props: Props) => {
   const {
     state: { userInfo, loading, userStake },
   } = useGlobal();
+  if (loading) {
+    return <ProfileSkeleton />;
+  }
   return (
     <motion.main
       initial="hidden"

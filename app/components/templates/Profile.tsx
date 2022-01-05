@@ -1,14 +1,16 @@
 import { Avatar, Box, Skeleton, styled, Tabs } from "@mui/material";
-import { useGlobal } from "app/context/web3Context";
+import { updateUserStake, useGlobal } from "app/context/web3Context";
 import cover2 from "app/images/cover2.jpg";
 import { a11yProps } from "app/utils/utils";
 import { AnimatePresence } from "framer-motion";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PrimaryButton } from "../elements/buttons/primaryButton";
 import { StyledTab } from "../elements/styledComponents";
 import DepositManagement from "../modules/depositManagement";
 import ProfileInfo from "../modules/profileInfo";
 import EditIcon from "@mui/icons-material/Edit";
+import { useMoralis } from "react-moralis";
+import ProfileForm from "../modules/profileForm";
 
 interface Props {}
 
@@ -22,16 +24,37 @@ export const ProfileAvatar = styled(Avatar)(({ theme }) => ({
   borderWidth: 2,
 }));
 
+const AvatarSkeleton = styled(Skeleton)(({ theme }) => ({
+  height: 180,
+  width: 180,
+  objectFit: "cover",
+  float: "left",
+  marginTop: -130,
+  position: "relative",
+  borderWidth: 2,
+}));
+
 const ProfileTemplate = (props: Props) => {
   const {
-    state: { userInfo, loading },
+    state: { userInfo, loading, contracts },
+    dispatch,
   } = useGlobal();
   const [tab, setTab] = useState(0);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  // useEffect(() => {
+  //   if(!loading){
+  //     updateUserStake(dispatch, user, contracts);
+  //   }
+  // }, [loading]);
+
   return (
     <div className="flex-grow p-0 overflow-hidden mb-16">
+      {isOpen && <ProfileForm isOpen={isOpen} setIsOpen={setIsOpen} />}
       <div
         className="banner"
         style={{
@@ -40,13 +63,25 @@ const ProfileTemplate = (props: Props) => {
       />
       <div className="mx-32">
         <div className="mt-4">
-          <ProfileAvatar src={userInfo?.get("profilePicture")} />
+          {loading ? (
+            <AvatarSkeleton variant="circular" />
+          ) : (
+            <ProfileAvatar src={userInfo?.get("profilePicture")} />
+          )}
           <div className="flex flex-row ml-2">
             <div className="flex flex-col">
-              <span className="text-2xl">{userInfo?.get("name")}</span>
-              <span className="text-sm text-grey-normal">
-                @{userInfo?.get("spectUsername")}
-              </span>
+              {loading ? (
+                <Skeleton variant="text" width={300} animation="wave" />
+              ) : (
+                <span className="text-2xl">{userInfo?.get("name")}</span>
+              )}
+              {loading ? (
+                <Skeleton variant="text" width={100} animation="wave" />
+              ) : (
+                <span className="text-sm text-grey-normal">
+                  @{userInfo?.get("spectUsername")}
+                </span>
+              )}
             </div>
             <div className="w-1/5 ml-8">
               <PrimaryButton
@@ -54,6 +89,7 @@ const ProfileTemplate = (props: Props) => {
                 size="small"
                 fullWidth
                 endIcon={<EditIcon />}
+                onClick={() => setIsOpen(true)}
               >
                 Edit Profile
               </PrimaryButton>
