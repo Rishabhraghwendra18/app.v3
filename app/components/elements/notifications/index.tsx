@@ -10,6 +10,7 @@ import {
 import { useMoralis } from "react-moralis";
 import { Notification } from "app/types";
 import { actionIdToTabMap } from "app/constants/constants";
+import { Button } from "@mui/material";
 
 interface Props {}
 
@@ -30,14 +31,13 @@ const Notifications = (props: Props) => {
   }, [isAuthenticated]);
 
   return (
-    <Popover
-      className="relative group"
-      onMouseEnter={() => setShow(true)}
-      onMouseLeave={() => setShow(false)}
-    >
+    <Popover className="relative group" onMouseLeave={() => setShow(false)}>
       {({ open }) => (
         <>
-          <Popover.Button className="hidden md:flex flex flex-row font-bold justify-center items-center ml-5 px-2 text-gray-400 rounded-full">
+          <Popover.Button
+            className="hidden md:flex flex flex-row font-bold justify-center items-center ml-5 px-2 text-gray-400 rounded-full bg-transparent"
+            onMouseEnter={() => setShow(true)}
+          >
             {show === true && (
               <div className="flex flex-col justify-center ml-1 text-blue-bright">
                 <svg
@@ -126,7 +126,7 @@ const Notifications = (props: Props) => {
                         as={`/gig/${item.dealId}`}
                         passHref
                       >
-                        <div className="flex items-center p-2 -m-3 ease-in-out rounded-lg hover:bg-grey-bluish focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 cursor-pointer transform transition-colors ease-in-out duration-1000">
+                        <div className="flex items-center p-2 -m-2 ease-in-out rounded-lg hover:bg-grey-bluish focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 cursor-pointer transform transition-colors ease-in-out duration-1000 w-full">
                           <NavbarAvatar src={item.user[0]?.profilePicture} />
 
                           <div className="ml-4">
@@ -147,19 +147,20 @@ const Notifications = (props: Props) => {
                   ))}
                 </div>
                 <div className="bg-blue-darkbg">
-                  <div className="flow-root px-2 py-2 ease-in-out rounded-md hover:bg-blue-light focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 transform transition-colors ease-in-out duration-1000">
+                  <div className="flow-root px-2 py-2 ease-in-out rounded-md focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 transform transition-colors ease-in-out duration-1000">
                     <span className="flex items-center">
-                      <button
-                        className="text-sm font-medium text-blue-bright"
+                      <Button
                         onClick={() => {
                           clearNotifs().then((res) => {
                             setNotifs([]);
                             setNumActiveNotifs(0);
                           });
                         }}
+                        fullWidth
+                        sx={{ textTransform: "none" }}
                       >
                         Clear Notifications
-                      </button>
+                      </Button>
                     </span>
                   </div>
                 </div>

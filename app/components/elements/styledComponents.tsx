@@ -1,6 +1,7 @@
 import {
   Avatar,
   styled,
+  Tab,
   Tooltip,
   tooltipClasses,
   TooltipProps,
@@ -11,6 +12,12 @@ export const NavbarAvatar = styled(Avatar)(({ theme }) => ({
   width: 37,
   objectFit: "cover",
   borderWidth: 2,
+}));
+
+export const StyledTab = styled(Tab)(({ theme }) => ({
+  textTransform: "none",
+  fontSize: "1.2rem",
+  marginRight: 25,
 }));
 
 export const LightTooltip = styled(({ className, ...props }: TooltipProps) => (

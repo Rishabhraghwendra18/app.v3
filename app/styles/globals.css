@@ -24,11 +24,11 @@
   line-height: 1.5rem;
 }
 
-.example-appear {
-  opacity: 0.01;
-}
-
-.example-appear.example-appear-active {
-  opacity: 1;
-  transition: opacity 0.5s ease-in;
+.banner {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  position: relative;
+  min-height: 22rem;
+  background-size: cover;
 }

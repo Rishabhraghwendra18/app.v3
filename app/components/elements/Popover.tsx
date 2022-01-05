@@ -35,7 +35,7 @@ const NavbarPopover: React.FC<Props> = ({
       {({ open }) => (
         <>
           <Popover.Button
-            className="hidden md:flex flex-row items-center justify-center ml-8 font-bold"
+            className="hidden md:flex flex-row items-center justify-center ml-8 font-bold bg-transparent"
             onMouseEnter={() => setShow(true)}
           >
             <PopoverButton />

@@ -22,11 +22,7 @@ const GigTemplate = (props: Props) => {
   return (
     <div className="p-8 mx-12">
       {fetching ? <GigHeadingSkeleton /> : <GigHeading />}
-      <AnimatePresence
-        exitBeforeEnter
-        initial={false}
-        onExitComplete={() => window.scrollTo(0, 0)}
-      >
+      <AnimatePresence exitBeforeEnter initial={false}>
         {fetching ? (
           <ClientBriefSkeleton key={-1} />
         ) : (

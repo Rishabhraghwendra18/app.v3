@@ -35,7 +35,6 @@ export const GigContext = createContext<GigContextType>({} as GigContextType);
 
 const GigPage: NextPage<Props> = (props: Props) => {
   const context = useProviderGig();
-  const { route, query } = useRouter();
   const router = useRouter();
   const { id } = router.query;
   const {
