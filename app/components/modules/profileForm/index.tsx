@@ -65,7 +65,7 @@ const ProfileForm = ({ isOpen, setIsOpen }: Props) => {
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <Box sx={modalStyle}>
-        <Stepper nonLinear activeStep={activeStep}>
+        <Stepper nonLinear alternativeLabel activeStep={activeStep}>
           {steps.map((label, index) => {
             const stepProps: { completed?: boolean } = {};
             return (
@@ -102,7 +102,7 @@ const ProfileForm = ({ isOpen, setIsOpen }: Props) => {
         )}
         {activeStep === 1 && (
           <React.Fragment>
-            <div className="text-grey-light my-4">
+            <div className="text-grey-light my-8">
               <ReactQuill
                 theme="snow"
                 modules={modules}

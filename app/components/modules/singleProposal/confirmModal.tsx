@@ -233,7 +233,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
                 helperText={
                   amount > balance
                     ? "Not enough Matic available"
-                    : "You need to wrap matic so it can be used in our platform"
+                    : "You need to deposit matic for collateral"
                 }
                 inputProps={{ step: 0.1 }}
                 InputProps={{

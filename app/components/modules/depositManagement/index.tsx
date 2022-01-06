@@ -1,12 +1,14 @@
 import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
 import { useGlobal } from "app/context/globalContext";
-import React from "react";
+import React, { useState } from "react";
 import WrapTextIcon from "@mui/icons-material/WrapText";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { motion } from "framer-motion";
 import { animationVariant } from "app/constants/constants";
+import DepositModal from "./depositModal";
+import WithdrawModal from "./withdrawModal";
 
 interface Props {}
 
@@ -14,6 +16,10 @@ const DepositManagement = (props: Props) => {
   const {
     state: { userStake },
   } = useGlobal();
+
+  const [depositOpen, setDepositOpen] = useState(false);
+  const [withdrawOpen, setWithdrawOpen] = useState(false);
+  const [step, setStep] = useState(0);
   return (
     <motion.main
       initial="hidden"
@@ -22,6 +28,20 @@ const DepositManagement = (props: Props) => {
       variants={animationVariant}
     >
       <div className="grid gap-1 grid-cols-3 lg:gap-2 lg:grid-cols-7">
+        {depositOpen && (
+          <DepositModal
+            isOpen={depositOpen}
+            setIsOpen={setDepositOpen}
+            step={step}
+          />
+        )}
+        {withdrawOpen && (
+          <WithdrawModal
+            isOpen={withdrawOpen}
+            setIsOpen={setWithdrawOpen}
+            step={step}
+          />
+        )}
         <div className="mt-3 lg:mt-6">
           <div className="text-sm md:text-sm text-blue-light">
             Collateral Locked
@@ -69,6 +89,10 @@ const DepositManagement = (props: Props) => {
                 endIcon={<WrapTextIcon />}
                 fullWidth
                 sx={{ marginRight: 5 }}
+                onClick={() => {
+                  setStep(0);
+                  setDepositOpen(true);
+                }}
               >
                 Wrap Matic
               </PrimaryButton>
@@ -77,6 +101,10 @@ const DepositManagement = (props: Props) => {
                 endIcon={<MenuOpenIcon />}
                 fullWidth
                 sx={{ marginRight: 5 }}
+                onClick={() => {
+                  setStep(1);
+                  setWithdrawOpen(true);
+                }}
               >
                 Unwrap Matic
               </PrimaryButton>
@@ -117,6 +145,10 @@ const DepositManagement = (props: Props) => {
                   variant="contained"
                   endIcon={<AccountBalanceIcon />}
                   fullWidth
+                  onClick={() => {
+                    setStep(1);
+                    setDepositOpen(true);
+                  }}
                 >
                   Deposit
                 </PrimaryButton>
@@ -153,6 +185,10 @@ const DepositManagement = (props: Props) => {
                 variant="contained"
                 endIcon={<AccountBalanceWalletIcon />}
                 fullWidth
+                onClick={() => {
+                  setStep(0);
+                  setWithdrawOpen(true);
+                }}
               >
                 Withdraw
               </PrimaryButton>

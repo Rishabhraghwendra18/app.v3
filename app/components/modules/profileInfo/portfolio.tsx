@@ -2,6 +2,8 @@
 import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
 import { useGlobal } from "app/context/globalContext";
 import EditIcon from "@mui/icons-material/Edit";
+import { useState } from "react";
+import PortfolioForm from "./portfolioForm";
 
 interface Props {}
 
@@ -9,8 +11,11 @@ const Portfolio = (props: Props) => {
   const {
     state: { userInfo, loading },
   } = useGlobal();
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="my-8">
+      {isOpen && <PortfolioForm isOpen={isOpen} setIsOpen={setIsOpen} />}
       <div className="text-2xl font-bold text-blue-bright">Portfolio</div>
       <div className="w-1/5">
         <PrimaryButton
@@ -18,7 +23,7 @@ const Portfolio = (props: Props) => {
           size="small"
           fullWidth
           endIcon={<EditIcon />}
-          // onClick={() => setIsOpen(true)}
+          onClick={() => setIsOpen(true)}
         >
           Edit Portfolio
         </PrimaryButton>

@@ -59,7 +59,7 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
       });
   };
   return (
-    <div>
+    <div className="">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-2 pt-8">
           <div className="m-2">

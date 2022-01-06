@@ -68,9 +68,7 @@ const WrapModal = ({
           }
           inputProps={{ step: 0.1 }}
           InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">WMatic</InputAdornment>
-            ),
+            endAdornment: <InputAdornment position="end">Matic</InputAdornment>,
           }}
         />
         <div className="w-1/3 my-2">
