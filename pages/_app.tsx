@@ -2,7 +2,7 @@ import "../app/styles/globals.css";
 import "../app/styles/quill.bubble.css";
 import type { AppProps } from "next/app";
 import { MoralisProvider } from "react-moralis";
-import GlobalProvider from "app/context/web3Context";
+import GlobalProvider from "app/context/globalContext";
 import { createTheme, ThemeProvider } from "@mui/material";
 import Script from "next/script";
 import { muiTheme } from "app/constants/muiTheme";

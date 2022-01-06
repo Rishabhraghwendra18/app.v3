@@ -7,7 +7,7 @@ interface Props {
 
 const SummarySkeleton = ({ isFetching }: Props) => {
   return (
-    <Grow in={isFetching} timeout={1000}>
+    <Grow in={isFetching} timeout={500}>
       <section>
         {Array(5)
           .fill("")

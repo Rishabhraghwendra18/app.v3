@@ -18,7 +18,7 @@ import {
   secondConfirmation,
   wrapMatic,
 } from "app/utils/contracts";
-import { updateUserStake, useGlobal } from "app/context/web3Context";
+import { updateUserStake, useGlobal } from "app/context/globalContext";
 import { useMoralis } from "react-moralis";
 import { ethers } from "ethers";
 import { ToastContainer, toast } from "material-react-toastify";
@@ -233,7 +233,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
                 helperText={
                   amount > balance
                     ? "Not enough Matic available"
-                    : "You need to wrap matic so it can be used in our platform"
+                    : "You need to deposit matic for collateral"
                 }
                 inputProps={{ step: 0.1 }}
                 InputProps={{

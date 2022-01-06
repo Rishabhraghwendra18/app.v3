@@ -3,10 +3,10 @@ import { gigs, profile, proposals, wallets } from "app/constants/constants";
 import { smartTrim } from "app/utils/utils";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { useMoralis } from "react-moralis";
 import Logo from "app/images/logo.png";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import { NavbarAvatar } from "app/components/elements/styledComponents";
 import Notifications from "../../elements/notifications";
 
@@ -16,8 +16,12 @@ export const Navbar = (props: Props) => {
   const { isAuthenticated, authenticate, isAuthenticating, user } =
     useMoralis();
   const {
-    state: { userInfo },
+    state: { userInfo, loading },
   } = useGlobal();
+  useEffect(() => {
+    profile[0].href = `/profile/${userInfo?.get("spectUsername")}`;
+  }, [loading]);
+
   return (
     <div>
       <nav

@@ -1,6 +1,6 @@
 import AnimatedLayout from "app/components/layouts/animatedLayout";
 import GigTemplate from "app/components/templates/Gig";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import { ContractGig, Gig, Proposal, Submission, VerifiedGig } from "app/types";
 import { getDealMetadata } from "app/utils/contracts";
 import { fetchFromIPFS, getGig, getMyProposals } from "app/utils/moralis";
@@ -35,7 +35,6 @@ export const GigContext = createContext<GigContextType>({} as GigContextType);
 
 const GigPage: NextPage<Props> = (props: Props) => {
   const context = useProviderGig();
-  const { route, query } = useRouter();
   const router = useRouter();
   const { id } = router.query;
   const {

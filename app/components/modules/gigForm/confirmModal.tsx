@@ -11,7 +11,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { listBounty } from "app/utils/contracts";
-import { updateUserStake, useGlobal } from "app/context/web3Context";
+import { updateUserStake, useGlobal } from "app/context/globalContext";
 import { IGigFormInput } from "app/components/modules/gigForm";
 import { toIPFS } from "app/utils/moralis";
 import { useMoralis } from "react-moralis";

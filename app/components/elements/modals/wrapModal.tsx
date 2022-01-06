@@ -5,7 +5,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import { approve, wrapMatic } from "app/utils/contracts";
 import { ethers } from "ethers";
 import { toast } from "material-react-toastify";
@@ -68,9 +68,7 @@ const WrapModal = ({
           }
           inputProps={{ step: 0.1 }}
           InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">WMatic</InputAdornment>
-            ),
+            endAdornment: <InputAdornment position="end">Matic</InputAdornment>,
           }}
         />
         <div className="w-1/3 my-2">

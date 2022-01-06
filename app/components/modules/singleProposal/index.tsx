@@ -5,7 +5,7 @@ import {
   monthMap,
   proposalStatusMapping,
 } from "app/constants/constants";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import { formatTime, fromWei, getSuccessRate } from "app/utils/utils";
 import Link from "next/link";
 import { useGig } from "pages/gig/[id]";

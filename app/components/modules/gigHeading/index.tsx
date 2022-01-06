@@ -1,25 +1,13 @@
 import { Avatar, Chip, styled, Tabs, Tab, Tooltip, Fade } from "@mui/material";
 import Link from "next/link";
 import { useGig } from "pages/gig/[id]";
-import { formatTimeAgo, formatTimeLeft } from "app/utils/utils";
+import { a11yProps, formatTimeAgo, formatTimeLeft } from "app/utils/utils";
 import { gigStatusMapping } from "app/constants/constants";
 import { Box } from "@mui/system";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
+import { StyledTab } from "app/components/elements/styledComponents";
 
 interface Props {}
-
-const StyledTab = styled(Tab)(({ theme }) => ({
-  textTransform: "none",
-  fontSize: "1.2rem",
-  marginRight: 25,
-}));
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
 
 const HeadingAvatar = styled(Avatar)(({ theme }) => ({
   width: "6rem",
@@ -181,11 +169,7 @@ export const GigHeading = (props: Props) => {
             borderColor: "divider",
           }}
         >
-          <Tabs
-            value={tab}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
+          <Tabs value={tab} onChange={handleChange}>
             <StyledTab label="Client Brief" {...a11yProps(0)} value={0} />
             {[101].includes(gig.status) &&
               gig.clientUsername === userInfo?.get("spectUsername") && (

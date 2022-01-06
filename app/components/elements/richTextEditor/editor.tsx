@@ -7,11 +7,11 @@ import dynamic from "next/dynamic";
 
 interface Props {
   value: Delta;
-  onChange: any;
+  onChange?: any;
   placeholder: string;
 }
 
-const Editor = ({ value, onChange, placeholder }: Props) => {
+const Editor = ({ value, placeholder, onChange }: Props) => {
   return (
     <div className="">
       <ReactQuill

@@ -20,7 +20,7 @@ import { Proposal } from "app/types";
 import { useGig } from "pages/gig/[id]";
 import { toIPFS } from "app/utils/moralis";
 import { firstConfirmation } from "app/utils/contracts";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import Link from "next/link";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";

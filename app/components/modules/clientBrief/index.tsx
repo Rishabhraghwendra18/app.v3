@@ -5,7 +5,7 @@ import {
   gigStatusMapping,
   monthMap,
 } from "app/constants/constants";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import { formatTime, formatTimeLeft } from "app/utils/utils";
 import { useGig } from "pages/gig/[id]";
 import React, { useEffect, useState } from "react";

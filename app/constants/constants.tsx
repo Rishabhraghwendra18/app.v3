@@ -148,6 +148,14 @@ export const exploreHelperTexts = {
   deadline: "The date by which you have to submit work.",
 };
 
+export const profileHelperTexts = {
+  name: "Your name I guess",
+  username: "This is your username",
+  email: "This is the email where we will send you notifications",
+  skills: "Add the skills you have which will be seen by potential clients",
+  title: "Your designation/ title of work",
+};
+
 export const monthMap = {
   0: "Jan",
   1: "Feb",
