@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { initContractsAndUserStake, useGlobal } from "app/context/web3Context";
+import {
+  initContractsAndUserStake,
+  useGlobal,
+} from "app/context/globalContext";
 import { useMoralis } from "react-moralis";
 import { Navbar } from "app/components/modules/navbar/navbar";
 import { Footer } from "app/components/modules/footer/footer";

@@ -1,7 +1,7 @@
 import { Button, Tooltip } from "@mui/material";
 import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
 import { monthMap } from "app/constants/constants";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import { Proposal } from "app/types";
 import { formatTime, getSuccessRate } from "app/utils/utils";
 import Link from "next/link";

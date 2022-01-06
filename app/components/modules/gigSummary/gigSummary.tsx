@@ -12,7 +12,7 @@ import { gigHelperTexts, monthMap } from "app/constants/constants";
 import { Gig } from "app/types";
 import React from "react";
 import PersonIcon from "@mui/icons-material/Person";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import { formatTimeAgo } from "app/utils/utils";
 import Link from "next/link";
 import { useExplore } from "pages";

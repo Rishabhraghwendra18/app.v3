@@ -1,6 +1,6 @@
 import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
 import { animationVariant } from "app/constants/constants";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import { motion } from "framer-motion";
 import { useGig } from "pages/gig/[id]";
 import ReadSubmission from "./readSubmission";

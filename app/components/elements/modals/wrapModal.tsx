@@ -5,7 +5,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import { approve, wrapMatic } from "app/utils/contracts";
 import { ethers } from "ethers";
 import { toast } from "material-react-toastify";

@@ -1,5 +1,5 @@
 import { Avatar, Box, Skeleton, styled, Tabs } from "@mui/material";
-import { updateUserStake, useGlobal } from "app/context/web3Context";
+import { updateUserStake, useGlobal } from "app/context/globalContext";
 import cover2 from "app/images/cover2.jpg";
 import { a11yProps } from "app/utils/utils";
 import { AnimatePresence } from "framer-motion";
@@ -9,7 +9,6 @@ import { StyledTab } from "../elements/styledComponents";
 import DepositManagement from "../modules/depositManagement";
 import ProfileInfo from "../modules/profileInfo";
 import EditIcon from "@mui/icons-material/Edit";
-import { useMoralis } from "react-moralis";
 import ProfileForm from "../modules/profileForm";
 
 interface Props {}
@@ -96,6 +95,26 @@ const ProfileTemplate = (props: Props) => {
             </div>
             <div className="flex-auto"></div>
             <div className="flex flex-row text-grey-normal">
+              {userInfo?.get("github") && (
+                <a
+                  className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
+                  href={userInfo?.get("github")}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <i className="fab fa-github mx-4" />
+                </a>
+              )}
+              {userInfo?.get("linkedin") && (
+                <a
+                  className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
+                  href={userInfo?.get("linkedin")}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <i className="fab fa-linkedin mx-4" />
+                </a>
+              )}
               {userInfo?.get("twitter") && (
                 <a
                   className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
@@ -116,6 +135,18 @@ const ProfileTemplate = (props: Props) => {
                   <i className="fab fa-instagram mx-4" />
                 </a>
               )}
+              {userInfo?.get("discord") && (
+                <a
+                  className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
+                  href={`https://discordapp.com/channels/@me/${userInfo?.get(
+                    "discord"
+                  )}/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <i className="fab fa-discord mx-4"></i>
+                </a>
+              )}
               {userInfo?.get("behance") && (
                 <a
                   className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
@@ -124,26 +155,6 @@ const ProfileTemplate = (props: Props) => {
                   rel="noreferrer"
                 >
                   <i className="fab fa-behance mx-4" />
-                </a>
-              )}
-              {userInfo?.get("github") && (
-                <a
-                  className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
-                  href={userInfo?.get("github")}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <i className="fab fa-github mx-4" />
-                </a>
-              )}
-              {userInfo?.get("linkedin") && (
-                <a
-                  className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
-                  href={userInfo?.get("linkedin")}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <i className="fab fa-linkedin mx-4" />
                 </a>
               )}
               {userInfo?.get("website") && (

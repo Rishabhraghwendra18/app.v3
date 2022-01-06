@@ -18,7 +18,7 @@ import {
   secondConfirmation,
   wrapMatic,
 } from "app/utils/contracts";
-import { updateUserStake, useGlobal } from "app/context/web3Context";
+import { updateUserStake, useGlobal } from "app/context/globalContext";
 import { useMoralis } from "react-moralis";
 import { ethers } from "ethers";
 import { ToastContainer, toast } from "material-react-toastify";

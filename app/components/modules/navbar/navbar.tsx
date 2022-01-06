@@ -6,7 +6,7 @@ import Link from "next/link";
 import React, { useEffect } from "react";
 import { useMoralis } from "react-moralis";
 import Logo from "app/images/logo.png";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import { NavbarAvatar } from "app/components/elements/styledComponents";
 import Notifications from "../../elements/notifications";
 

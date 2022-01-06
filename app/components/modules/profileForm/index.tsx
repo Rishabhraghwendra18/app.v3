@@ -16,11 +16,15 @@ import InfoForm from "./infoForm";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import LinkForm from "./linkForm";
+import ClearIcon from "@mui/icons-material/Clear";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import SaveIcon from "@mui/icons-material/Save";
+import { useGlobal } from "app/context/globalContext";
+import { useMoralis } from "react-moralis";
 
 interface Props {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  // values: IGigFormInput;
 }
 const modalStyle = {
   position: "absolute" as "absolute",
@@ -38,9 +42,15 @@ const steps = ["Personal Info", "Bio", "Social Links"];
 
 const ProfileForm = ({ isOpen, setIsOpen }: Props) => {
   const [activeStep, setActiveStep] = useState(0);
-  const [loaderText, setLoaderText] = useState("");
+  const [loaderText, setLoaderText] = useState("Updating metadata");
   const [loading, setLoading] = useState(false);
-  const [description, setDescription] = useState("");
+  const [isDirty, setIsDirty] = useState(false);
+  const {
+    state: { userInfo },
+    dispatch,
+  } = useGlobal();
+  const [description, setDescription] = useState();
+  const { Moralis } = useMoralis();
 
   const handleClose = () => setIsOpen(false);
 
@@ -50,10 +60,6 @@ const ProfileForm = ({ isOpen, setIsOpen }: Props) => {
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   return (
@@ -91,7 +97,7 @@ const ProfileForm = ({ isOpen, setIsOpen }: Props) => {
         </Backdrop>
         {activeStep === 0 && (
           <React.Fragment>
-            <InfoForm />
+            <InfoForm handleNext={handleNext} setLoading={setLoading} />
           </React.Fragment>
         )}
         {activeStep === 1 && (
@@ -100,29 +106,68 @@ const ProfileForm = ({ isOpen, setIsOpen }: Props) => {
               <ReactQuill
                 theme="snow"
                 modules={modules}
-                defaultValue={description}
+                defaultValue={userInfo?.get("description")}
+                onChange={(value, delta, user, editor) => {
+                  setDescription(editor.getContents() as any);
+                }}
+                onFocus={() => setIsDirty(true)}
                 placeholder={"Add bio for your profile"}
               />
+              <div className="m-4">
+                <Button
+                  variant="contained"
+                  endIcon={<SaveIcon />}
+                  fullWidth
+                  disabled={!isDirty}
+                  onClick={() => {
+                    setLoading(true);
+                    userInfo?.set("description", description);
+                    Moralis.Object.saveAll([userInfo as any])
+                      .then(([userInfo]) => {
+                        setLoading(false);
+                        dispatch({
+                          type: "SET_USERINFO",
+                          value: userInfo,
+                        });
+                        handleNext();
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                        setLoading(false);
+                        alert(err);
+                      });
+                  }}
+                >
+                  Save
+                </Button>
+              </div>
             </div>
           </React.Fragment>
         )}
         {activeStep === 2 && (
           <React.Fragment>
-            <LinkForm />
+            <LinkForm handleClose={handleClose} setLoading={setLoading} />
           </React.Fragment>
         )}
         <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
           <Button
+            color="inherit"
             variant="outlined"
-            disabled={activeStep === 0}
-            onClick={handleBack}
-            sx={{ mr: 1 }}
+            onClick={handleClose}
+            sx={{ mr: 1, color: "#f45151" }}
+            endIcon={<ClearIcon />}
           >
-            Back
+            Exit
           </Button>
           <Box sx={{ flex: "1 1 auto" }} />
-          <Button onClick={handleNext} sx={{ mr: 1 }} variant="contained">
-            Save
+          <Button
+            onClick={handleNext}
+            sx={{ mr: 1 }}
+            disabled={activeStep === steps.length - 1}
+            variant="outlined"
+            endIcon={<NavigateNextIcon />}
+          >
+            Next
           </Button>
         </Box>
       </Box>

@@ -1,5 +1,5 @@
 import { Chip } from "@mui/material";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import dynamic from "next/dynamic";
 import React from "react";
 import { motion } from "framer-motion";

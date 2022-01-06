@@ -14,7 +14,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import React, { useState } from "react";
 import { useGig } from "pages/gig/[id]";
 import { toIPFS, uploadFile } from "app/utils/moralis";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import Link from "next/link";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { ISubmissionFormInput } from "./submissionForm";

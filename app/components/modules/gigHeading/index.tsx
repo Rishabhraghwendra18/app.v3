@@ -4,7 +4,7 @@ import { useGig } from "pages/gig/[id]";
 import { a11yProps, formatTimeAgo, formatTimeLeft } from "app/utils/utils";
 import { gigStatusMapping } from "app/constants/constants";
 import { Box } from "@mui/system";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import { StyledTab } from "app/components/elements/styledComponents";
 
 interface Props {}

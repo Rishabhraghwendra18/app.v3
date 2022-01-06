@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import { useGlobal } from "app/context/web3Context";
+import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
+import { useGlobal } from "app/context/globalContext";
+import EditIcon from "@mui/icons-material/Edit";
 
 interface Props {}
 
@@ -10,7 +12,18 @@ const Portfolio = (props: Props) => {
   return (
     <div className="my-8">
       <div className="text-2xl font-bold text-blue-bright">Portfolio</div>
-      <div className="grid gap-8 grid-cols-3 my-12">
+      <div className="w-1/5">
+        <PrimaryButton
+          variant="outlined"
+          size="small"
+          fullWidth
+          endIcon={<EditIcon />}
+          // onClick={() => setIsOpen(true)}
+        >
+          Edit Portfolio
+        </PrimaryButton>
+      </div>
+      <div className="grid gap-8 grid-cols-3 my-8">
         {userInfo?.get("portfolio").map((value, index) => (
           <button
             className="shadow-2xl w-full h-64 transition duration-1000 ease-in-out transform hover:-translate-y-1 border-blue-border rounded-xl bg-transparent"

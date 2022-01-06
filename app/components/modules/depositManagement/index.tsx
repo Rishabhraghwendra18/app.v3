@@ -1,5 +1,5 @@
 import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
-import { useGlobal } from "app/context/web3Context";
+import { useGlobal } from "app/context/globalContext";
 import React from "react";
 import WrapTextIcon from "@mui/icons-material/WrapText";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
@@ -91,8 +91,8 @@ const DepositManagement = (props: Props) => {
         </div>
       </div>
       <div className="border-1 border-blue-200 mt-8 rounded-xl">
-        <div className="w-full bg-blue-100 dark:bg-blue-spectlight rounded-t-xl py-2 border-b-1 border-blue-200">
-          <span className="ml-8 text-blue-500 dark:text-blue-spectbright font-bold my-3">
+        <div className="w-full bg-blue-light rounded-t-xl py-2 border-b-1 border-blue-200">
+          <span className="ml-8 text-blue-bright font-bold my-3">
             Deposit management
           </span>
         </div>
@@ -127,8 +127,8 @@ const DepositManagement = (props: Props) => {
               role="alert"
             >
               <p>
-                Deposit WMatic to work on a gig. Collateral amount for a gig
-                will be locked from this deposit.
+                Deposit WMatic to work on a gig. Collateral is locked from this
+                deposit.
               </p>
             </div>
           </div>
