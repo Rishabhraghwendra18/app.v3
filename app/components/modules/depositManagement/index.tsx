@@ -6,9 +6,10 @@ import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { motion } from "framer-motion";
-import { animationVariant } from "app/constants/constants";
+import { animationVariant, profileHelperTexts } from "app/constants/constants";
 import DepositModal from "./depositModal";
 import WithdrawModal from "./withdrawModal";
+import { LightTooltip } from "app/components/elements/styledComponents";
 
 interface Props {}
 
@@ -17,8 +18,6 @@ const DepositManagement = (props: Props) => {
     state: { userStake },
   } = useGlobal();
 
-  const [depositOpen, setDepositOpen] = useState(false);
-  const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [step, setStep] = useState(0);
   return (
     <motion.main
@@ -28,23 +27,15 @@ const DepositManagement = (props: Props) => {
       variants={animationVariant}
     >
       <div className="grid gap-1 grid-cols-3 lg:gap-2 lg:grid-cols-7">
-        {depositOpen && (
-          <DepositModal
-            isOpen={depositOpen}
-            setIsOpen={setDepositOpen}
-            step={step}
-          />
-        )}
-        {withdrawOpen && (
-          <WithdrawModal
-            isOpen={withdrawOpen}
-            setIsOpen={setWithdrawOpen}
-            step={step}
-          />
-        )}
         <div className="mt-3 lg:mt-6">
           <div className="text-sm md:text-sm text-blue-light">
-            Collateral Locked
+            <LightTooltip
+              arrow
+              placement="right"
+              title={profileHelperTexts["deposit"]}
+            >
+              <span>Collateral Locked</span>
+            </LightTooltip>
           </div>
           <div className="flex flex-row">
             <div className="text-base md:text-3xl mt-1">
@@ -57,7 +48,13 @@ const DepositManagement = (props: Props) => {
         </div>
         <div className="mt-3 lg:mt-6">
           <div className="text-sm md:text-sm text-blue-light">
-            Deposited Funds
+            <LightTooltip
+              arrow
+              placement="right"
+              title={profileHelperTexts["deposit"]}
+            >
+              <span>Deposited Funds</span>
+            </LightTooltip>
           </div>
           <div className="flex flex-row">
             <div className="text-base md:text-3xl mt-1">
@@ -70,7 +67,13 @@ const DepositManagement = (props: Props) => {
         </div>
         <div className="mt-3 lg:mt-6">
           <div className="text-sm md:text-sm text-blue-light">
-            Available Funds
+            <LightTooltip
+              arrow
+              placement="right"
+              title={profileHelperTexts["available"]}
+            >
+              <span>Available Funds</span>
+            </LightTooltip>
           </div>
           <div className="flex flex-row">
             <div className="text-base md:text-3xl mt-1">
@@ -84,30 +87,8 @@ const DepositManagement = (props: Props) => {
         <div className="col-span-4 rounded-3xl mt-3">
           <div className="flex flex-col w-full">
             <div className="flex flex-row mt-6 w-full">
-              <PrimaryButton
-                variant="outlined"
-                endIcon={<WrapTextIcon />}
-                fullWidth
-                sx={{ marginRight: 5 }}
-                onClick={() => {
-                  setStep(0);
-                  setDepositOpen(true);
-                }}
-              >
-                Wrap Matic
-              </PrimaryButton>
-              <PrimaryButton
-                variant="outlined"
-                endIcon={<MenuOpenIcon />}
-                fullWidth
-                sx={{ marginRight: 5 }}
-                onClick={() => {
-                  setStep(1);
-                  setWithdrawOpen(true);
-                }}
-              >
-                Unwrap Matic
-              </PrimaryButton>
+              <DepositModal step={0} />
+              <WithdrawModal step={1} />
             </div>
           </div>
           <div className="w-full flex items-center text-blue-bright text-base py-3 rounded-xl">
@@ -141,17 +122,7 @@ const DepositManagement = (props: Props) => {
                 </div>
               </div>
               <div className="flex flex-col w-2/3">
-                <PrimaryButton
-                  variant="contained"
-                  endIcon={<AccountBalanceIcon />}
-                  fullWidth
-                  onClick={() => {
-                    setStep(1);
-                    setDepositOpen(true);
-                  }}
-                >
-                  Deposit
-                </PrimaryButton>
+                <DepositModal step={1} />
               </div>
             </div>
             <div
@@ -167,7 +138,13 @@ const DepositManagement = (props: Props) => {
           <div className="mt-3 lg:mt-6 flex flex-row">
             <div className="flex flex-col w-2/3 lg:w-1/3 ml-4 lg:ml-8">
               <div className="text-sm md:text-sm text-blue-light">
-                Unlocked deposit
+                <LightTooltip
+                  arrow
+                  placement="right"
+                  title={profileHelperTexts["unlocked"]}
+                >
+                  <span>Unlocked Deposit</span>
+                </LightTooltip>
               </div>
               <div className="flex flex-row">
                 <div className="text-base md:text-3xl mt-1">
@@ -181,17 +158,7 @@ const DepositManagement = (props: Props) => {
               </div>
             </div>
             <div className="w-2/3 ">
-              <PrimaryButton
-                variant="contained"
-                endIcon={<AccountBalanceWalletIcon />}
-                fullWidth
-                onClick={() => {
-                  setStep(0);
-                  setWithdrawOpen(true);
-                }}
-              >
-                Withdraw
-              </PrimaryButton>
+              <WithdrawModal step={0} />
             </div>
           </div>
         </div>

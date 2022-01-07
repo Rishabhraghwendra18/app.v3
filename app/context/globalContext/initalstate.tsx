@@ -1,5 +1,4 @@
 import { Contracts, UserStake } from "app/types";
-import { ethers } from "ethers";
 import Moralis from "moralis/types";
 
 export interface State {

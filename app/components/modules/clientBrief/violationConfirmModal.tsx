@@ -15,13 +15,15 @@ import React, { useState } from "react";
 import { useGig } from "pages/gig/[id]";
 import Link from "next/link";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
-import { IProposalFormInput } from ".";
-import { useMoralisCloudFunction } from "react-moralis";
+import {
+  callConfirmationDeadlineViolation,
+  delistGig,
+} from "app/utils/contracts";
+import { useGlobal } from "app/context/globalContext";
 
 interface props {
   isOpen: boolean;
   setIsOpen: Function;
-  values: IProposalFormInput;
 }
 
 const style = {
@@ -36,18 +38,14 @@ const style = {
   p: 1,
 };
 
-export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
+export const ViolationConfirmModal = ({ isOpen, setIsOpen }: props) => {
   const handleClose = () => setIsOpen(false);
   const [loading, setLoading] = useState(false);
   const [finished, setFinished] = useState(false);
   const { gig } = useGig();
-  const { fetch: createProposal } = useMoralisCloudFunction(
-    "createProposal",
-    {
-      limit: 100,
-    },
-    { autoFetch: false }
-  );
+  const {
+    state: { contracts },
+  } = useGlobal();
 
   return (
     <Modal open={isOpen} onClose={handleClose}>
@@ -66,7 +64,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
           >
             <CircularProgress color="inherit" />
             <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
-              {"Sending your proposal"}
+              {"Waiting for transaction to complete"}
             </Typography>
           </Box>
         </Backdrop>
@@ -76,10 +74,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
             <DialogTitle color="primary">Success</DialogTitle>
             <DialogContent>
               <DialogContentText color="#eaeaea">
-                Proposal sent succesfully!
-              </DialogContentText>
-              <DialogContentText color="#eaeaea">
-                Client will review your proposal now
+                Violation called succesfully!
               </DialogContentText>
             </DialogContent>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
@@ -88,7 +83,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                 href={{
                   pathname: `/gig/${gig.dealId}`,
                   query: {
-                    tab: 3,
+                    tab: 0,
                   },
                 }}
                 as={`/gig/${gig.dealId}`}
@@ -109,10 +104,10 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
             <DialogTitle color="primary">Confirm?</DialogTitle>
             <DialogContent>
               <DialogContentText color="#eaeaea">
-                Are you sure you want to send this proposal?
+                Are you sure you want to call confirmation violation?
               </DialogContentText>
               <DialogContentText color="#eaeaea">
-                You cannot send another proposal!
+                You can delete the gig or accept another proposal after this.
               </DialogContentText>
             </DialogContent>
             <Box
@@ -137,19 +132,17 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                 endIcon={<DoneIcon />}
                 onClick={() => {
                   setLoading(true);
-                  createProposal({
-                    onSuccess: (res) => {
+                  callConfirmationDeadlineViolation(
+                    gig.dealId,
+                    contracts?.dealContract
+                  )
+                    .then((res) => {
                       setLoading(false);
                       setFinished(true);
-                    },
-                    params: {
-                      dealId: gig.dealId,
-                      title: values?.title,
-                      proposalText: values?.description,
-                      lockedStake: values.minStake,
-                      deadline: new Date(values.deadline).toUTCString(),
-                    },
-                  });
+                    })
+                    .catch((err) => {
+                      setLoading(false);
+                    });
                 }}
                 sx={{ mr: 1, textTransform: "none" }}
                 variant="outlined"

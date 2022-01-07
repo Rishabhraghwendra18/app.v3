@@ -11,17 +11,25 @@ import {
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Proposal } from "app/types";
 import { useGig } from "pages/gig/[id]";
+import { toIPFS } from "app/utils/moralis";
+import {
+  callSubmissionDeadlineViolation,
+  firstConfirmation,
+} from "app/utils/contracts";
+import { useGlobal } from "app/context/globalContext";
 import Link from "next/link";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
-import { IProposalFormInput } from ".";
-import { useMoralisCloudFunction } from "react-moralis";
+
+import { toast, ToastContainer } from "material-react-toastify";
+import { useMoralis } from "react-moralis";
 
 interface props {
   isOpen: boolean;
   setIsOpen: Function;
-  values: IProposalFormInput;
 }
 
 const style = {
@@ -36,22 +44,22 @@ const style = {
   p: 1,
 };
 
-export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
+export const ConfirmViolationModal = ({ isOpen, setIsOpen }: props) => {
   const handleClose = () => setIsOpen(false);
   const [loading, setLoading] = useState(false);
+  const [loaderText, setLoaderText] = useState("");
   const [finished, setFinished] = useState(false);
+  const [hash, setHash] = useState("");
   const { gig } = useGig();
-  const { fetch: createProposal } = useMoralisCloudFunction(
-    "createProposal",
-    {
-      limit: 100,
-    },
-    { autoFetch: false }
-  );
-
+  const {
+    state: { contracts },
+  } = useGlobal();
+  const { Moralis } = useMoralis();
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <Box sx={style}>
+        <ToastContainer />
+
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={loading}
@@ -66,7 +74,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
           >
             <CircularProgress color="inherit" />
             <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
-              {"Sending your proposal"}
+              {loaderText}
             </Typography>
           </Box>
         </Backdrop>
@@ -76,19 +84,33 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
             <DialogTitle color="primary">Success</DialogTitle>
             <DialogContent>
               <DialogContentText color="#eaeaea">
-                Proposal sent succesfully!
+                Deadline violation called successfully!
               </DialogContentText>
               <DialogContentText color="#eaeaea">
-                Client will review your proposal now
+                Escrow along with the compensation has been transferred to your
+                deposit.
               </DialogContentText>
             </DialogContent>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2, px: 1 }}>
+              <a
+                href={`https://mumbai.polygonscan.com/tx/${hash}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Button
+                  sx={{ color: "#99ccff" }}
+                  color="inherit"
+                  endIcon={<AssignmentIcon />}
+                >
+                  View transaction
+                </Button>
+              </a>
               <Box sx={{ flex: "1 1 auto" }} />
               <Link
                 href={{
                   pathname: `/gig/${gig.dealId}`,
                   query: {
-                    tab: 3,
+                    tab: 0,
                   },
                 }}
                 as={`/gig/${gig.dealId}`}
@@ -109,10 +131,10 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
             <DialogTitle color="primary">Confirm?</DialogTitle>
             <DialogContent>
               <DialogContentText color="#eaeaea">
-                Are you sure you want to send this proposal?
+                Are you sure you want to call dealdine violation?
               </DialogContentText>
               <DialogContentText color="#eaeaea">
-                You cannot send another proposal!
+                You will receive your escrow back along with some compensation.
               </DialogContentText>
             </DialogContent>
             <Box
@@ -135,24 +157,36 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
               <Box sx={{ flex: "1 1 auto" }} />
               <Button
                 endIcon={<DoneIcon />}
-                onClick={() => {
-                  setLoading(true);
-                  createProposal({
-                    onSuccess: (res) => {
-                      setLoading(false);
-                      setFinished(true);
-                    },
-                    params: {
-                      dealId: gig.dealId,
-                      title: values?.title,
-                      proposalText: values?.description,
-                      lockedStake: values.minStake,
-                      deadline: new Date(values.deadline).toUTCString(),
-                    },
-                  });
-                }}
                 sx={{ mr: 1, textTransform: "none" }}
                 variant="outlined"
+                onClick={() => {
+                  setLoaderText("Waiting for the transaction to complete");
+                  setLoading(true);
+                  callSubmissionDeadlineViolation(
+                    gig.dealId,
+                    contracts?.dealContract
+                  )
+                    .then((res) => {
+                      const hash = res.transactionHash;
+                      setHash(hash);
+                      setLoading(false);
+                      setFinished(true);
+                    })
+                    .catch((err) => {
+                      toast.error(err.message, {
+                        position: "bottom-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        className: "text-sm text-grey-spect border-blue-500",
+                      });
+                      console.log(err);
+                      setLoading(false);
+                    });
+                }}
               >
                 Hell yeah!
               </Button>

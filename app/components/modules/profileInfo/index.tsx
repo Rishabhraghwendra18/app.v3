@@ -1,19 +1,28 @@
 import { Chip } from "@mui/material";
 import { useGlobal } from "app/context/globalContext";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import Portfolio from "./portfolio";
-import { animationVariant } from "app/constants/constants";
+import {
+  animationVariant,
+  exploreHelperTexts,
+  profileHelperTexts,
+} from "app/constants/constants";
 import ProfileSkeleton from "./skeleton";
+import { useProfile } from "pages/profile/[username]";
+import { LightTooltip } from "app/components/elements/styledComponents";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface Props {}
 
 const ProfileInfo = (props: Props) => {
   const {
-    state: { userInfo, loading, userStake },
-  } = useGlobal();
+    profileUser: userInfo,
+    profileUserStake: userStake,
+    loading,
+  } = useProfile();
+
   if (loading) {
     return <ProfileSkeleton />;
   }
@@ -26,7 +35,15 @@ const ProfileInfo = (props: Props) => {
     >
       <div className="grid gap-1 grid-cols-3 lg:gap-2 lg:grid-cols-7 mt-3 lg:mt-6">
         <div className="">
-          <div className="text-sm md:text-sm text-blue-light">Collateral</div>
+          <div className="text-sm md:text-sm text-blue-light">
+            <LightTooltip
+              arrow
+              placement="right"
+              title={profileHelperTexts["minStake"]}
+            >
+              <span>Collateral</span>
+            </LightTooltip>
+          </div>
           <div className="flex flex-row">
             <div className="text-base md:text-3xl mt-1">
               {userStake?.collateral?.toFixed(2)}
@@ -37,7 +54,15 @@ const ProfileInfo = (props: Props) => {
           </div>
         </div>
         <div className="">
-          <div className="text-sm md:text-sm text-blue-light">Deposited</div>
+          <div className="text-sm md:text-sm text-blue-light">
+            <LightTooltip
+              arrow
+              placement="right"
+              title={profileHelperTexts["deposit"]}
+            >
+              <span>Deposited</span>
+            </LightTooltip>
+          </div>
           <div className="flex flex-row">
             <div className="text-base md:text-3xl mt-1">
               {userStake?.deposit?.toFixed(2)}

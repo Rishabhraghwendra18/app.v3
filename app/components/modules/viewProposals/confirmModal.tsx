@@ -3,13 +3,9 @@ import {
   Box,
   Button,
   CircularProgress,
-  Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Fade,
-  Grow,
   Modal,
   Typography,
 } from "@mui/material";
@@ -26,6 +22,7 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 
 import { toast, ToastContainer } from "material-react-toastify";
+import { useMoralis } from "react-moralis";
 
 interface props {
   isOpen: boolean;
@@ -55,6 +52,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
   const {
     state: { contracts },
   } = useGlobal();
+  const { Moralis } = useMoralis();
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <Box sx={style}>
@@ -162,7 +160,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
                     "Uploading proposal metadata to IPFS, please wait"
                   );
                   setLoading(true);
-                  toIPFS("object", {
+                  toIPFS(Moralis, "object", {
                     name: gig.name,
                     tags: gig.tags,
                     description: gig.description,

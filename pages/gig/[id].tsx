@@ -3,12 +3,13 @@ import GigTemplate from "app/components/templates/Gig";
 import { useGlobal } from "app/context/globalContext";
 import { ContractGig, Gig, Proposal, Submission, VerifiedGig } from "app/types";
 import { getDealMetadata } from "app/utils/contracts";
-import { fetchFromIPFS, getGig, getMyProposals } from "app/utils/moralis";
+import { fetchFromIPFS } from "app/utils/moralis";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useMoralis } from "react-moralis";
+import { useMoralis, useMoralisCloudFunction } from "react-moralis";
+import { Delta } from "quill";
 
 interface Props {}
 
@@ -23,12 +24,16 @@ interface GigContextType {
   setSubmission: Function;
   proposals: Array<Proposal>;
   setProposals: Function;
-  evidence?: object;
+  evidence?: {
+    disputeReason: Delta;
+  };
   setEvidence: Function;
   fetching: boolean;
   setFetching: Function;
   tab: number;
   setTab: Function;
+  getGig: Function;
+  getMyProposals: Function;
 }
 
 export const GigContext = createContext<GigContextType>({} as GigContextType);
@@ -46,50 +51,67 @@ const GigPage: NextPage<Props> = (props: Props) => {
     const promises: Array<any> = [];
     context.setFetching(true);
     if (!loading && isAuthenticated) {
-      getGig(id).then((res: Array<Gig>) => {
-        context.setGig(res[0]);
-        if (res[0]) {
-          const status = res[0].status;
-          if ([102, 201, 202, 203, 204, 402, 403].includes(status)) {
-            promises.push(
-              getDealMetadata(res[0].dealId, contracts?.dealContract).then(
-                (deal) => {
-                  context.setContractGig(deal);
-                  if ([202, 203, 204, 403].includes(status)) {
-                    fetchFromIPFS(deal.submission).then((res) => {
-                      context.setSubmission(res);
-                    });
+      context.getGig({
+        onSuccess: (res: Gig[]) => {
+          console.log(res);
+          context.setGig(res[0]);
+          if (res[0]) {
+            const status = res[0].status;
+            if ([102, 201, 202, 203, 204, 402, 403].includes(status)) {
+              promises.push(
+                getDealMetadata(res[0].dealId, contracts?.dealContract).then(
+                  (deal) => {
+                    context.setContractGig(deal);
+                    if ([202, 203, 204, 403].includes(status)) {
+                      fetchFromIPFS(deal.submission).then((res) => {
+                        context.setSubmission(res);
+                      });
+                    }
                   }
+                )
+              );
+            }
+            if (status === 101) {
+              promises.push(
+                context.getMyProposals({
+                  onSuccess: (res: Proposal[]) => {
+                    console.log(res);
+                    context.setProposals(res.reverse());
+                  },
+                  params: {
+                    dealId: id,
+                    status: 0,
+                    sortOrder: "desc",
+                    sortBy: "createdAt",
+                  },
+                })
+              );
+            }
+            if (status === 403) {
+              console.log("403");
+              promises.push(
+                fetchFromIPFS(res[0].evidence).then((res) => {
+                  context.setEvidence(res);
+                  console.log(res);
+                })
+              );
+            }
+            Promise.all(promises)
+              .then(() => {
+                if (router.query.tab) {
+                  context.setTab(parseInt(router.query.tab as string));
                 }
-              )
-            );
-          }
-          if (status === 101) {
-            promises.push(
-              getMyProposals(id, 0, "desc", "createdAt").then((res) => {
-                context.setProposals(res.reverse());
+                context.setFetching(false);
               })
-            );
+              .catch((err) => {
+                console.log(err);
+                context.setFetching(false);
+              });
           }
-          if (status === 403) {
-            promises.push(
-              fetchFromIPFS(res[0].evidence).then((res) => {
-                context.setEvidence(res);
-              })
-            );
-          }
-          Promise.all(promises)
-            .then(() => {
-              if (router.query.tab) {
-                context.setTab(parseInt(router.query.tab as string));
-              }
-              context.setFetching(false);
-            })
-            .catch((err) => {
-              console.log(err);
-              context.setFetching(false);
-            });
-        }
+        },
+        params: {
+          id: id,
+        },
       });
     }
   }, [loading, isAuthenticated, router.query.tab]);
@@ -122,6 +144,20 @@ export function useProviderGig() {
   const [evidence, setEvidence] = useState();
   const [fetching, setFetching] = useState(true);
   const [tab, setTab] = useState(0);
+  const { fetch: getGig } = useMoralisCloudFunction(
+    "getBounty",
+    {
+      limit: 1,
+    },
+    { autoFetch: false }
+  );
+  const { fetch: getMyProposals } = useMoralisCloudFunction(
+    "getProposals",
+    {
+      limit: 100,
+    },
+    { autoFetch: false }
+  );
 
   return {
     gig,
@@ -140,6 +176,8 @@ export function useProviderGig() {
     setFetching,
     tab,
     setTab,
+    getGig,
+    getMyProposals,
   };
 }
 

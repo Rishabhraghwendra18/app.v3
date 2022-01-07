@@ -12,12 +12,12 @@ interface Props {
 }
 
 export const Layout = ({ children }: Props) => {
-  const { isAuthenticated, user } = useMoralis();
+  const { isAuthenticated, user, Moralis } = useMoralis();
   const { dispatch } = useGlobal();
 
   useEffect(() => {
     if (isAuthenticated) {
-      initContractsAndUserStake(dispatch, user);
+      initContractsAndUserStake(dispatch, user, Moralis);
     }
   }, [isAuthenticated]);
 

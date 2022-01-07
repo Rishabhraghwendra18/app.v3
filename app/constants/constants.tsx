@@ -154,6 +154,11 @@ export const profileHelperTexts = {
   email: "This is the email where we will send you notifications",
   skills: "Add the skills you have which will be seen by potential clients",
   title: "Your designation/ title of work",
+  minStake:
+    "Collateral is locked by you before starting gig to ensure high quality of work",
+  deposit: "The total WMatic deposited on our platform",
+  available: "Available Wmatic free to deposit",
+  unlocked: "Total WMatic available for you to withdraw",
 };
 
 export const monthMap = {
@@ -178,9 +183,9 @@ export const gigStatusMapping = {
   202: "In review",
   203: "Completed",
   204: "Revision requested",
-  401: "Delist",
+  401: "Deleted",
   402: "Submission Violation",
-  403: "Dispute",
+  403: "In Dispute",
   404: "Expired",
 };
 
@@ -228,6 +233,7 @@ export const actionIdToTabMap = {
   1: 3,
   2: 0,
   3: 5,
+  6: 6,
 };
 
 export const animationVariant = {

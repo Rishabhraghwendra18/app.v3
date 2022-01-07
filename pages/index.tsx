@@ -51,27 +51,6 @@ export const ExploreContext = createContext<ExploreContextType>(
 
 const Home: NextPage<Props> = ({ bounties }) => {
   const value = useProviderExplore();
-  // const { isInitialized } = useMoralis();
-  // useEffect(() => {
-  //   if (isInitialized) {
-  //     value.setLoaded(false);
-  //     value.filterGigs({
-  //       onSuccess: (res: Gig[]) => {
-  //         value.setGigs(
-  //           filterByDate(res, [value.minDeadline, value.maxDeadline])
-  //         );
-  //         value.setLoaded(true);
-  //       },
-  //       params: {
-  //         tags: [],
-  //         lockedStake: [value.minCollateral, value.maxCollateral],
-  //         sortBy: "reward",
-  //         sortOrder: "asc",
-  //       },
-  //     });
-  //   }
-  // }, [isInitialized]);
-
   return (
     <div>
       <Head>

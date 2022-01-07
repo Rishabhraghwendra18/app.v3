@@ -1,13 +1,11 @@
 import { Grow, Skeleton } from "@mui/material";
-import { useGlobal } from "app/context/globalContext";
+import { useProfile } from "pages/profile/[username]";
 import React from "react";
 
 interface Props {}
 
 const ProfileSkeleton = (props: Props) => {
-  const {
-    state: { loading },
-  } = useGlobal();
+  const { loading } = useProfile();
   return (
     <Grow in={loading} timeout={500}>
       <div className="flex flex-col">

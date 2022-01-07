@@ -8,16 +8,13 @@ import SingleProposal from "../modules/singleProposal";
 import ViewProposals from "../modules/viewProposals";
 import { AnimatePresence } from "framer-motion";
 import Submission from "../modules/submission";
+import dynamic from "next/dynamic";
+import Dispute from "../modules/dispute";
 
 interface Props {}
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
 const GigTemplate = (props: Props) => {
-  const { fetching, gig, tab } = useGig();
+  const { fetching, gig, tab, evidence } = useGig();
 
   return (
     <div className="p-8 mx-12">
@@ -37,6 +34,7 @@ const GigTemplate = (props: Props) => {
           <SingleProposal key={4} />
         )}
         {tab === 5 && !fetching && <Submission key={5} />}
+        {tab === 6 && !fetching && <Dispute key={6} />}
       </AnimatePresence>
     </div>
   );
