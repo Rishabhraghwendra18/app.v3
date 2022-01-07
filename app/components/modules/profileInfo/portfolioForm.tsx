@@ -4,6 +4,7 @@ import {
   Button,
   CircularProgress,
   DialogTitle,
+  Fade,
   IconButton,
   Modal,
   TextField,
@@ -25,11 +26,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useGlobal } from "app/context/globalContext";
 import { uploadFile } from "app/utils/moralis";
 import { useMoralis } from "react-moralis";
+import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
+2;
+import EditIcon from "@mui/icons-material/Edit";
+import { useProfile } from "pages/profile/[username]";
 
-interface Props {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+interface Props {}
 const modalStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -50,7 +52,7 @@ export interface IPortfolioFormInput {
   }[];
 }
 
-const PortfolioForm = ({ isOpen, setIsOpen }: Props) => {
+const PortfolioForm = ({}: Props) => {
   const {
     state: { userInfo },
     dispatch,
@@ -58,8 +60,11 @@ const PortfolioForm = ({ isOpen, setIsOpen }: Props) => {
   const [loaderText, setLoaderText] = useState("Updating metadata");
   const [loading, setLoading] = useState(false);
   const { Moralis } = useMoralis();
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleClose = () => setIsOpen(false);
+
+  const { editable } = useProfile();
 
   const {
     handleSubmit,
@@ -137,157 +142,182 @@ const PortfolioForm = ({ isOpen, setIsOpen }: Props) => {
   };
 
   return (
-    <Modal open={isOpen} onClose={handleClose}>
-      <Box sx={modalStyle}>
-        <Backdrop
-          sx={{ color: "#eaeaea", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={loading}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <CircularProgress color="inherit" />
-            <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
-              {loaderText}
-            </Typography>
-          </Box>
-        </Backdrop>
-        <div className="flex flex-rw">
-          <DialogTitle color="primary">Portfolios</DialogTitle>
-          <div className="flex-auto"></div>
-          <IconButton
-            color="inherit"
-            onClick={handleClose}
-            aria-label="close"
-            sx={{ color: "#f45151", m: 1 }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </div>
-
-        <div className="ml-4">
-          <Button
-            sx={{ color: "#99ccff" }}
-            color="inherit"
-            endIcon={<AddCircleOutlineIcon />}
-            onClick={() => append({ title: "", link: "", ipfs: "" })}
-          >
-            Add Portfolio
-          </Button>
-        </div>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col mx-4 w-full"
-        >
-          {fields.map((field, index) => {
-            return (
-              <div key={field.id}>
-                <section className={"section"} key={field.id}>
-                  <div className="flex flex row py-1">
-                    <div className="px-2 w-full">
-                      <Controller
-                        name={`portfolios.${index}.title`}
-                        control={control}
-                        rules={{ minLength: 3 }}
-                        render={({ field, fieldState }) => (
-                          <LightTooltip arrow placement="bottom" title={"name"}>
-                            <TextField
-                              {...field}
-                              label="Name"
-                              variant="standard"
-                              helperText={
-                                fieldState.error?.type === "minLength" &&
-                                "Link name too short. Please make it more understandable."
-                              }
-                              fullWidth
-                              required
-                              error={fieldState.error ? true : false}
-                            />
-                          </LightTooltip>
-                        )}
-                      />
-                    </div>
-                    <div className="px-2 w-full">
-                      <Controller
-                        name={`portfolios.${index}.link`}
-                        control={control}
-                        rules={{
-                          pattern:
-                            /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/,
-                        }}
-                        render={({ field, fieldState }) => (
-                          <LightTooltip arrow placement="bottom" title={"link"}>
-                            <TextField
-                              {...field}
-                              label="Link"
-                              variant="standard"
-                              helperText={
-                                fieldState.error?.type === "pattern" &&
-                                "Wrong URL format. Please provide the correct URL."
-                              }
-                              fullWidth
-                              required
-                              error={fieldState.error ? true : false}
-                            />
-                          </LightTooltip>
-                        )}
-                      />
-                    </div>
-                    <FileInput
-                      name={`portfolios.${index}.ipfs`}
-                      control={control}
-                      getValues={getValues}
-                      setValue={setValue}
-                    />
-                    <div className="flex flex-col items-center justify-center px-2">
-                      <Button
-                        color="inherit"
-                        variant="outlined"
-                        sx={{
-                          mr: 1,
-                          mt: 2,
-                          color: "#f45151",
-                          textTransform: "none",
-                        }}
-                        endIcon={<DeleteOutlineIcon />}
-                        onClick={() => remove(index)}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </div>
-                </section>
-              </div>
-            );
-          })}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              mt: 2,
-            }}
-          >
-            <Button
-              variant="contained"
-              endIcon={<SaveIcon />}
-              fullWidth
-              disabled={!isDirty}
-              type="submit"
-              sx={{ width: "50%" }}
+    <div className="w-full">
+      <PrimaryButton
+        variant="outlined"
+        size="small"
+        fullWidth
+        hidden={!editable}
+        endIcon={<EditIcon />}
+        onClick={() => setIsOpen(true)}
+      >
+        Edit Portfolio
+      </PrimaryButton>
+      <Modal open={isOpen} onClose={handleClose}>
+        <Fade in={isOpen} timeout={500}>
+          <Box sx={modalStyle}>
+            <Backdrop
+              sx={{
+                color: "#eaeaea",
+                zIndex: (theme) => theme.zIndex.drawer + 1,
+              }}
+              open={loading}
             >
-              Save
-            </Button>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <CircularProgress color="inherit" />
+                <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
+                  {loaderText}
+                </Typography>
+              </Box>
+            </Backdrop>
+            <div className="flex flex-rw">
+              <DialogTitle color="primary">Portfolios</DialogTitle>
+              <div className="flex-auto"></div>
+              <IconButton
+                color="inherit"
+                onClick={handleClose}
+                aria-label="close"
+                sx={{ color: "#f45151", m: 1 }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </div>
+
+            <div className="ml-4">
+              <Button
+                sx={{ color: "#99ccff" }}
+                color="inherit"
+                endIcon={<AddCircleOutlineIcon />}
+                onClick={() => append({ title: "", link: "", ipfs: "" })}
+              >
+                Add Portfolio
+              </Button>
+            </div>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col mx-4 w-full"
+            >
+              {fields.map((field, index) => {
+                return (
+                  <div key={field.id}>
+                    <section className={"section"} key={field.id}>
+                      <div className="flex flex row py-1">
+                        <div className="px-2 w-full">
+                          <Controller
+                            name={`portfolios.${index}.title`}
+                            control={control}
+                            rules={{ minLength: 3 }}
+                            render={({ field, fieldState }) => (
+                              <LightTooltip
+                                arrow
+                                placement="bottom"
+                                title={"name"}
+                              >
+                                <TextField
+                                  {...field}
+                                  label="Name"
+                                  variant="standard"
+                                  helperText={
+                                    fieldState.error?.type === "minLength" &&
+                                    "Link name too short. Please make it more understandable."
+                                  }
+                                  fullWidth
+                                  required
+                                  error={fieldState.error ? true : false}
+                                />
+                              </LightTooltip>
+                            )}
+                          />
+                        </div>
+                        <div className="px-2 w-full">
+                          <Controller
+                            name={`portfolios.${index}.link`}
+                            control={control}
+                            rules={{
+                              pattern:
+                                /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/,
+                            }}
+                            render={({ field, fieldState }) => (
+                              <LightTooltip
+                                arrow
+                                placement="bottom"
+                                title={"link"}
+                              >
+                                <TextField
+                                  {...field}
+                                  label="Link"
+                                  variant="standard"
+                                  helperText={
+                                    fieldState.error?.type === "pattern" &&
+                                    "Wrong URL format. Please provide the correct URL."
+                                  }
+                                  fullWidth
+                                  required
+                                  error={fieldState.error ? true : false}
+                                />
+                              </LightTooltip>
+                            )}
+                          />
+                        </div>
+                        <FileInput
+                          name={`portfolios.${index}.ipfs`}
+                          control={control}
+                          getValues={getValues}
+                          setValue={setValue}
+                        />
+                        <div className="flex flex-col items-center justify-center px-2">
+                          <Button
+                            color="inherit"
+                            variant="outlined"
+                            sx={{
+                              mr: 1,
+                              mt: 2,
+                              color: "#f45151",
+                              textTransform: "none",
+                            }}
+                            endIcon={<DeleteOutlineIcon />}
+                            onClick={() => remove(index)}
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                );
+              })}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  mt: 2,
+                }}
+              >
+                <Button
+                  variant="contained"
+                  endIcon={<SaveIcon />}
+                  fullWidth
+                  disabled={!isDirty}
+                  type="submit"
+                  sx={{ width: "50%" }}
+                >
+                  Save
+                </Button>
+              </Box>
+            </form>
           </Box>
-        </form>
-      </Box>
-    </Modal>
+        </Fade>
+      </Modal>
+    </div>
   );
 };
 

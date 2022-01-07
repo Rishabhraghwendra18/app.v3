@@ -1,6 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
-import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
 import PortfolioForm from "./portfolioForm";
 import { useProfile } from "pages/profile/[username]";
@@ -13,19 +11,9 @@ const Portfolio = (props: Props) => {
 
   return (
     <div className="my-8">
-      {isOpen && <PortfolioForm isOpen={isOpen} setIsOpen={setIsOpen} />}
       <div className="text-2xl font-bold text-blue-bright">Portfolio</div>
       <div className="w-1/5">
-        <PrimaryButton
-          variant="outlined"
-          size="small"
-          fullWidth
-          hidden={!editable}
-          endIcon={<EditIcon />}
-          onClick={() => setIsOpen(true)}
-        >
-          Edit Portfolio
-        </PrimaryButton>
+        <PortfolioForm />
       </div>
       <div className="grid gap-8 grid-cols-3 my-8">
         {userInfo?.get("portfolio")?.map((value, index) => (

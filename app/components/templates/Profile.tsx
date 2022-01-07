@@ -7,7 +7,6 @@ import { PrimaryButton } from "../elements/buttons/primaryButton";
 import { StyledTab } from "../elements/styledComponents";
 import DepositManagement from "../modules/depositManagement";
 import ProfileInfo from "../modules/profileInfo";
-import EditIcon from "@mui/icons-material/Edit";
 import ProfileForm from "../modules/profileForm";
 import { useProfile } from "pages/profile/[username]";
 
@@ -39,16 +38,12 @@ const ProfileTemplate = (props: Props) => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
-
-  const [isOpen, setIsOpen] = useState(false);
-
   useEffect(() => {
     console.log(loading);
   }, [loading]);
 
   return (
     <div className="flex-grow p-0 overflow-hidden mb-16">
-      {isOpen && <ProfileForm isOpen={isOpen} setIsOpen={setIsOpen} />}
       <div
         className="banner"
         style={{
@@ -78,16 +73,7 @@ const ProfileTemplate = (props: Props) => {
               )}
             </div>
             <div className="w-1/5 ml-8">
-              <PrimaryButton
-                variant="outlined"
-                size="small"
-                fullWidth
-                endIcon={<EditIcon />}
-                hidden={!editable}
-                onClick={() => setIsOpen(true)}
-              >
-                Edit Profile
-              </PrimaryButton>
+              <ProfileForm />
             </div>
             <div className="flex-auto"></div>
             {!loading && (

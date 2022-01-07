@@ -154,6 +154,11 @@ export const profileHelperTexts = {
   email: "This is the email where we will send you notifications",
   skills: "Add the skills you have which will be seen by potential clients",
   title: "Your designation/ title of work",
+  minStake:
+    "Collateral is locked by you before starting gig to ensure high quality of work",
+  deposit: "The total WMatic deposited on our platform",
+  available: "Available Wmatic free to deposit",
+  unlocked: "Total WMatic available for you to withdraw",
 };
 
 export const monthMap = {
