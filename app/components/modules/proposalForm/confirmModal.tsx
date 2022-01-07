@@ -13,12 +13,10 @@ import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
 import React, { useState } from "react";
 import { useGig } from "pages/gig/[id]";
-import { createProposal } from "app/utils/moralis";
-import { updateUserStake, useGlobal } from "app/context/globalContext";
 import Link from "next/link";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { IProposalFormInput } from ".";
-import { useMoralis } from "react-moralis";
+import { useMoralisCloudFunction } from "react-moralis";
 
 interface props {
   isOpen: boolean;
@@ -42,12 +40,14 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
   const handleClose = () => setIsOpen(false);
   const [loading, setLoading] = useState(false);
   const [finished, setFinished] = useState(false);
-  const { gig, setTab } = useGig();
-  const {
-    state: { contracts, userStake },
-    dispatch,
-  } = useGlobal();
-  const { user } = useMoralis();
+  const { gig } = useGig();
+  const { fetch: createProposal } = useMoralisCloudFunction(
+    "createProposal",
+    {
+      limit: 100,
+    },
+    { autoFetch: false }
+  );
 
   return (
     <Modal open={isOpen} onClose={handleClose}>
@@ -137,15 +137,18 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                 endIcon={<DoneIcon />}
                 onClick={() => {
                   setLoading(true);
-                  createProposal(
-                    gig.dealId,
-                    values?.title,
-                    values?.description,
-                    values?.minStake,
-                    new Date(values?.deadline).toUTCString()
-                  ).then((res) => {
-                    setLoading(false);
-                    setFinished(true);
+                  createProposal({
+                    onSuccess: (res) => {
+                      setLoading(false);
+                      setFinished(true);
+                    },
+                    params: {
+                      dealId: gig.dealId,
+                      title: values?.title,
+                      proposalText: values?.description,
+                      lockedStake: values.minStake,
+                      deadline: new Date(values.deadline).toUTCString(),
+                    },
                   });
                 }}
                 sx={{ mr: 1, textTransform: "none" }}

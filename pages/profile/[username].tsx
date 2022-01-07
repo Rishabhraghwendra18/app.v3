@@ -41,7 +41,7 @@ const ProfilePage: NextPage<Props> = (props: Props) => {
   } = useGlobal();
   const router = useRouter();
   const { username } = router.query;
-  const { isInitialized } = useMoralis();
+  const { isInitialized, Moralis: moralisObject } = useMoralis();
   useEffect(() => {
     if (!loading && isInitialized) {
       if (userInfo?.get("spectUsername") === username) {
@@ -51,7 +51,7 @@ const ProfilePage: NextPage<Props> = (props: Props) => {
         context.setLoading(false);
       } else {
         const initProfileUser = async () => {
-          const user = await getUser(username as string);
+          const user = await getUser(moralisObject, username as string);
           const deposit = await contracts?.userContract.getDeposit(
             user?.get("ethAddress")
           );
@@ -69,7 +69,7 @@ const ProfilePage: NextPage<Props> = (props: Props) => {
         initProfileUser();
       }
     }
-  }, [loading]);
+  }, [loading, username]);
   return (
     <div>
       <Head>

@@ -24,6 +24,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import CloseIcon from "@mui/icons-material/Close";
 import { useGlobal } from "app/context/globalContext";
 import { uploadFile } from "app/utils/moralis";
+import { useMoralis } from "react-moralis";
 
 interface Props {
   isOpen: boolean;
@@ -46,16 +47,17 @@ export interface IPortfolioFormInput {
     title: string;
     link: string;
     ipfs: string;
-    filename: string;
   }[];
 }
 
 const PortfolioForm = ({ isOpen, setIsOpen }: Props) => {
   const {
     state: { userInfo },
+    dispatch,
   } = useGlobal();
   const [loaderText, setLoaderText] = useState("Updating metadata");
   const [loading, setLoading] = useState(false);
+  const { Moralis } = useMoralis();
 
   const handleClose = () => setIsOpen(false);
 
@@ -67,7 +69,7 @@ const PortfolioForm = ({ isOpen, setIsOpen }: Props) => {
     formState: { isDirty },
   } = useForm<IPortfolioFormInput>({
     defaultValues: {
-      portfolios: userInfo?.get("portfolio") || {},
+      portfolios: userInfo?.get("portfolio") || undefined,
     },
   });
 
@@ -81,12 +83,21 @@ const PortfolioForm = ({ isOpen, setIsOpen }: Props) => {
   }, []);
 
   const onSubmit = (values) => {
-    console.log(values);
+    setLoaderText("Updating metadata...");
+    setLoading(true);
+    userInfo?.set("portfolio", values.portfolios);
+    userInfo?.save().then((res) => {
+      dispatch({
+        type: "SET_USERINFO",
+        value: userInfo,
+      });
+      setLoading(false);
+      handleClose();
+    });
   };
 
   const FileInput = ({ control, name, setValue, getValues }) => {
     const { field } = useController({ control, name });
-    const [file, setFile] = useState("");
     return (
       <LightTooltip arrow placement="bottom" title={"image"}>
         <Button
@@ -100,26 +111,17 @@ const PortfolioForm = ({ isOpen, setIsOpen }: Props) => {
             width: "70%",
           }}
         >
-          {file || "Upload File"}
+          {field.value ? "Change File" : "Upload File"}
           <input
             type="file"
             hidden
-            value={file}
             onChange={(e) => {
               if (e.target?.files) {
-                setFile(e.target.files[0].name);
-                setValue(
-                  "fileName",
-                  e.target.files ? e.target.files[0].name : "",
-                  {
-                    shouldDirty: true,
-                  }
-                );
                 setLoaderText("Uploading image to IPFS please wait");
                 setLoading(true);
-                uploadFile(e.target.files[0])
-                  .then((res) => {
-                    field.onChange(res);
+                uploadFile(e.target.files[0], Moralis)
+                  .then((res: any) => {
+                    field.onChange(res._ipfs);
                     setLoading(false);
                   })
                   .catch((err) => {
@@ -162,7 +164,7 @@ const PortfolioForm = ({ isOpen, setIsOpen }: Props) => {
             color="inherit"
             onClick={handleClose}
             aria-label="close"
-            sx={{ color: "#f45151", p: 1 }}
+            sx={{ color: "#f45151", m: 1 }}
           >
             <CloseIcon />
           </IconButton>
@@ -237,7 +239,7 @@ const PortfolioForm = ({ isOpen, setIsOpen }: Props) => {
                       />
                     </div>
                     <FileInput
-                      name="ipfs"
+                      name={`portfolios.${index}.ipfs`}
                       control={control}
                       getValues={getValues}
                       setValue={setValue}

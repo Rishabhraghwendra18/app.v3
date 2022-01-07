@@ -134,3 +134,5 @@ export interface Notification {
   updatedAt: string;
   user: User[];
 }
+
+export type Moralis = Moralis;

@@ -1,52 +1,4 @@
-const Moralis = require("moralis");
-
-Moralis.initialize(process.env.MORALIS_APPLICATION_ID);
-Moralis.serverURL = process.env.MORALIS_SERVER_ID;
-
-// export function createBounty(
-//   name,
-//   tags,
-//   description,
-//   reward,
-//   minStake,
-//   deadline,
-//   timeToAcceptInDays,
-//   dealId
-// ) {
-//   let tagArray = [];
-//   tags.map((t) => tagArray.push(t.value));
-//   const params = {
-//     name: name,
-//     tags: tagArray,
-//     description: description,
-//     reward: reward,
-//     minStake: minStake,
-//     deadline: deadline,
-//     acceptanceDeadline: new Date(),
-//     timeToAcceptInDays: timeToAcceptInDays,
-//     dealId: dealId,
-//   };
-//   return Moralis.Cloud.run("createBounty", params);
-// }
-
-export function createProposal(
-  dealId,
-  title,
-  proposalText,
-  lockedStake,
-  deadline
-) {
-  const params = {
-    dealId: dealId,
-    title: title,
-    proposalText: proposalText,
-    lockedStake: lockedStake,
-    deadline: deadline,
-  };
-  return Moralis.Cloud.run("createProposal", params);
-}
-
-export function getUser(username?: string) {
+export function getUser(Moralis, username?: string) {
   const params = {
     username: username,
   };
@@ -55,109 +7,21 @@ export function getUser(username?: string) {
   } else return Moralis.Cloud.run("getUser");
 }
 
-export function initUser() {
-  return Moralis.Cloud.run("initUser");
-}
+// export function initUser() {
+//   return Moralis.Cloud.run("initUser");
+// }
 
-export async function uploadFile(data) {
+export async function uploadFile(data, Moralis) {
   const file = new Moralis.File(data.name, data);
   return file.saveIPFS();
 }
 
-export async function filterJobs(
-  mainFilter,
-  jobTypeFilter,
-  lockedStakeFilter,
-  deadlineFilter,
-  sortBy,
-  sortOrder
-) {
-  var dateLowerBound = new Date(
-    new Date().getTime() + deadlineFilter[0] * 24 * 60 * 60 * 1000
-  );
-  var dateUpperBound = new Date(
-    new Date().getTime() + deadlineFilter[1] * 24 * 60 * 60 * 1000
-  );
-
-  const params = {
-    ethAddress: "0x92d202402068108f3301e3c0bcf8b77f4a94a2a7",
-    mainFilter: mainFilter,
-    jobType: jobTypeFilter,
-    lockedStake: lockedStakeFilter,
-    deadlineFilter: [dateLowerBound, dateUpperBound],
-    sortBy: sortBy,
-    sortOrder: sortOrder,
-  };
-
-  const res = await Moralis.Cloud.run("filterJobsNew", params);
-
-  return res;
-}
-
-export async function filterMyBounties(status, sortBy, sortOrder) {
-  const params = {
-    status: status,
-    sortBy: sortBy,
-    sortOrder: sortOrder,
-  };
-
-  const res = await Moralis.Cloud.run("filterMyBounties", params);
-
-  return res;
-}
-
-export async function filterBounties() {
-  //   tags,
-  //   lockedStakeFilter,
-  //   sortBy,
-  //   sortOrder
-  const params = {
-    tags: [],
-    lockedStake: [0, 99999],
-    sortBy: "reward",
-    sortOrder: "desc",
-  };
-
-  //   function filterByDate(item) {
-  //     const today = new Date();
-  //     const min = new Date(today);
-  //     min.setDate(min.getDate() + deadlineFilter[0]);
-  //     const max = new Date(today);
-  //     max.setDate(min.getDate() + deadlineFilter[1]);
-  //     if (item.deadline > min && item.deadline < max) {
-  //       return true;
-  //     }
-  //     return false;
-  //   }
-  //   const res = await Moralis.Cloud.run("filterBounties", params);
-  return Moralis.Cloud.run("filterBounties", params);
-
-  //   return res.filter(filterByDate);
-}
-
-export function getIfUsernameValid(username) {
-  const params = {
-    username: username,
-  };
-  return Moralis.Cloud.run("getIfUsernameValid", params);
-}
-
-export function getGig(id) {
-  const params = {
-    id: id,
-  };
-  return Moralis.Cloud.run("getBounty", params);
-}
-
-export function getMyProposals(dealId, status, sortOrder, sortBy) {
-  const params = {
-    dealId: dealId,
-    status: status,
-    sortOrder: sortOrder,
-    sortBy: sortBy,
-  };
-  return Moralis.Cloud.run("getProposals", params);
-}
+// export function getIfUsernameValid(username) {
+//   const params = {
+//     username: username,
+//   };
+//   return Moralis.Cloud.run("getIfUsernameValid", params);
+// }
 
 export function getProposal(id) {
   const params = {
@@ -225,7 +89,7 @@ export async function downloadImage(url, filename) {
     .catch((e) => console.error(e));
 }
 
-export function getMyNotifications() {
+export function getMyNotifications(Moralis) {
   return Moralis.Cloud.run("getMyNotifications");
 }
 

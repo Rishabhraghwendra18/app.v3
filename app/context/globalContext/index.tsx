@@ -34,7 +34,8 @@ const GlobalContext = createContext<{
 
 const initContractsAndUserStake = async (
   dispatch: React.Dispatch<Action>,
-  user: Moralis.User | null
+  user: Moralis.User | null,
+  moralis: Moralis
 ) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   dispatch({ type: "START_ASYNC" });
@@ -69,7 +70,7 @@ const initContractsAndUserStake = async (
       user?.get("ethAddress"),
       userContract.address
     );
-    const userInfo = await getUser();
+    const userInfo = await getUser(moralis);
     dispatch({
       type: "SET_USERINFO",
       value: userInfo,

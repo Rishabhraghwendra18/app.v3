@@ -19,11 +19,11 @@ const Notifications = (props: Props) => {
   const [notifs, setNotifs] = useState<Notification[]>([] as Notification[]);
   const [numActiveNotifs, setNumActiveNotifs] = useState(0);
 
-  const { isAuthenticated } = useMoralis();
+  const { isAuthenticated, Moralis } = useMoralis();
 
   useEffect(() => {
     if (isAuthenticated) {
-      getMyNotifications().then((res: Notification[]) => {
+      getMyNotifications(Moralis).then((res: Notification[]) => {
         setNotifs(res.reverse());
         setNumActiveNotifs(res.filter((n) => n.active === true).length);
       });
