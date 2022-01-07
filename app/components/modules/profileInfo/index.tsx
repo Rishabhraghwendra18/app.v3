@@ -1,19 +1,23 @@
 import { Chip } from "@mui/material";
 import { useGlobal } from "app/context/globalContext";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import Portfolio from "./portfolio";
 import { animationVariant } from "app/constants/constants";
 import ProfileSkeleton from "./skeleton";
+import { useProfile } from "pages/profile/[username]";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface Props {}
 
 const ProfileInfo = (props: Props) => {
   const {
-    state: { userInfo, loading, userStake },
-  } = useGlobal();
+    profileUser: userInfo,
+    profileUserStake: userStake,
+    loading,
+  } = useProfile();
+
   if (loading) {
     return <ProfileSkeleton />;
   }

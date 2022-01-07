@@ -1,5 +1,4 @@
 import { Avatar, Box, Skeleton, styled, Tabs } from "@mui/material";
-import { updateUserStake, useGlobal } from "app/context/globalContext";
 import cover2 from "app/images/cover2.jpg";
 import { a11yProps } from "app/utils/utils";
 import { AnimatePresence } from "framer-motion";
@@ -10,6 +9,7 @@ import DepositManagement from "../modules/depositManagement";
 import ProfileInfo from "../modules/profileInfo";
 import EditIcon from "@mui/icons-material/Edit";
 import ProfileForm from "../modules/profileForm";
+import { useProfile } from "pages/profile/[username]";
 
 interface Props {}
 
@@ -34,22 +34,17 @@ const AvatarSkeleton = styled(Skeleton)(({ theme }) => ({
 }));
 
 const ProfileTemplate = (props: Props) => {
-  const {
-    state: { userInfo, loading, contracts },
-    dispatch,
-  } = useGlobal();
   const [tab, setTab] = useState(0);
+  const { profileUser: userInfo, loading, editable } = useProfile();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
 
   const [isOpen, setIsOpen] = useState(false);
 
-  // useEffect(() => {
-  //   if(!loading){
-  //     updateUserStake(dispatch, user, contracts);
-  //   }
-  // }, [loading]);
+  useEffect(() => {
+    console.log(loading);
+  }, [loading]);
 
   return (
     <div className="flex-grow p-0 overflow-hidden mb-16">
@@ -88,86 +83,89 @@ const ProfileTemplate = (props: Props) => {
                 size="small"
                 fullWidth
                 endIcon={<EditIcon />}
+                hidden={!editable}
                 onClick={() => setIsOpen(true)}
               >
                 Edit Profile
               </PrimaryButton>
             </div>
             <div className="flex-auto"></div>
-            <div className="flex flex-row text-grey-normal">
-              {userInfo?.get("github") && (
-                <a
-                  className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
-                  href={userInfo?.get("github")}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <i className="fab fa-github mx-4" />
-                </a>
-              )}
-              {userInfo?.get("linkedin") && (
-                <a
-                  className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
-                  href={userInfo?.get("linkedin")}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <i className="fab fa-linkedin mx-4" />
-                </a>
-              )}
-              {userInfo?.get("twitter") && (
-                <a
-                  className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
-                  href={userInfo?.get("twitter")}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <i className="fab fa-twitter mx-4" />
-                </a>
-              )}
-              {userInfo?.get("instagram") && (
-                <a
-                  className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
-                  href={userInfo?.get("instagram")}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <i className="fab fa-instagram mx-4" />
-                </a>
-              )}
-              {userInfo?.get("discord") && (
-                <a
-                  className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
-                  href={`https://discordapp.com/channels/@me/${userInfo?.get(
-                    "discord"
-                  )}/`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <i className="fab fa-discord mx-4"></i>
-                </a>
-              )}
-              {userInfo?.get("behance") && (
-                <a
-                  className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
-                  href={userInfo?.get("behance")}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <i className="fab fa-behance mx-4" />
-                </a>
-              )}
-              {userInfo?.get("website") && (
-                <a
-                  className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
-                  href={userInfo?.get("website")}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <i className="fab fa-firefox-browser mx-4" />
-                </a>
-              )}
-            </div>
+            {!loading && (
+              <div className="flex flex-row text-grey-normal">
+                {userInfo?.get("github") && (
+                  <a
+                    className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
+                    href={userInfo?.get("github")}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i className="fab fa-github mx-4" />
+                  </a>
+                )}
+                {userInfo?.get("linkedin") && (
+                  <a
+                    className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
+                    href={userInfo?.get("linkedin")}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i className="fab fa-linkedin mx-4" />
+                  </a>
+                )}
+                {userInfo?.get("twitter") && (
+                  <a
+                    className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
+                    href={userInfo?.get("twitter")}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i className="fab fa-twitter mx-4" />
+                  </a>
+                )}
+                {userInfo?.get("instagram") && (
+                  <a
+                    className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
+                    href={userInfo?.get("instagram")}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i className="fab fa-instagram mx-4" />
+                  </a>
+                )}
+                {userInfo?.get("discord") && (
+                  <a
+                    className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
+                    href={`https://discordapp.com/channels/@me/${userInfo?.get(
+                      "discord"
+                    )}/`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i className="fab fa-discord mx-4"></i>
+                  </a>
+                )}
+                {userInfo?.get("behance") && (
+                  <a
+                    className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
+                    href={userInfo?.get("behance")}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i className="fab fa-behance mx-4" />
+                  </a>
+                )}
+                {userInfo?.get("website") && (
+                  <a
+                    className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
+                    href={userInfo?.get("website")}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i className="fab fa-firefox-browser mx-4" />
+                  </a>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -180,7 +178,12 @@ const ProfileTemplate = (props: Props) => {
         >
           <Tabs value={tab} onChange={handleChange}>
             <StyledTab label="Profile" {...a11yProps(0)} value={0} />
-            <StyledTab label="Deposit Management" {...a11yProps(1)} value={1} />
+            <StyledTab
+              label="Deposit Management"
+              {...a11yProps(1)}
+              value={1}
+              hidden={!editable}
+            />
           </Tabs>
         </Box>
         <AnimatePresence exitBeforeEnter initial={false}>

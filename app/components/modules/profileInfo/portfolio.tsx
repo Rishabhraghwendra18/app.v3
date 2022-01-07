@@ -1,16 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
-import { useGlobal } from "app/context/globalContext";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
 import PortfolioForm from "./portfolioForm";
+import { useProfile } from "pages/profile/[username]";
 
 interface Props {}
 
 const Portfolio = (props: Props) => {
-  const {
-    state: { userInfo, loading },
-  } = useGlobal();
+  const { profileUser: userInfo, loading, editable } = useProfile();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -22,6 +20,7 @@ const Portfolio = (props: Props) => {
           variant="outlined"
           size="small"
           fullWidth
+          hidden={!editable}
           endIcon={<EditIcon />}
           onClick={() => setIsOpen(true)}
         >
@@ -29,7 +28,7 @@ const Portfolio = (props: Props) => {
         </PrimaryButton>
       </div>
       <div className="grid gap-8 grid-cols-3 my-8">
-        {userInfo?.get("portfolio").map((value, index) => (
+        {userInfo?.get("portfolio")?.map((value, index) => (
           <button
             className="shadow-2xl w-full h-64 transition duration-1000 ease-in-out transform hover:-translate-y-1 border-blue-border rounded-xl bg-transparent"
             key={index}

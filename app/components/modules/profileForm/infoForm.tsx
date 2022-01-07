@@ -55,8 +55,8 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="ml-4 mr-32">
-          <div className="my-8">
+        <div className="ml-4 mr-32 my-8">
+          <div className="my-2">
             <Controller
               name="name"
               control={control}
