@@ -14,16 +14,19 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { motion } from "framer-motion";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import dynamic from "next/dynamic";
-import { ConfirmModal } from "./confirmModal";
+import { DeleteConfirmModal } from "./deleteConfirmModal";
+import FmdBadIcon from "@mui/icons-material/FmdBad";
+import { ViolationConfirmModal } from "./violationConfirmModal";
 
 interface Props {}
 
 const ClientBrief = (props: Props) => {
-  const { gig, setTab } = useGig();
+  const { gig, setTab, contractGig } = useGig();
   const {
     state: { conversionRate, userInfo },
   } = useGlobal();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [isViolationConfirmOpen, setIsViolationConfirmOpen] = useState(false);
 
   if (!gig) {
     return <div></div>;
@@ -36,7 +39,18 @@ const ClientBrief = (props: Props) => {
         variants={animationVariant}
       >
         <div className="">
-          <ConfirmModal setIsOpen={setIsOpen} isOpen={isOpen} />
+          {isDeleteConfirmOpen && (
+            <DeleteConfirmModal
+              setIsOpen={setIsDeleteConfirmOpen}
+              isOpen={isDeleteConfirmOpen}
+            />
+          )}
+          {isViolationConfirmOpen && (
+            <ViolationConfirmModal
+              setIsOpen={setIsViolationConfirmOpen}
+              isOpen={isViolationConfirmOpen}
+            />
+          )}
           <div className="flex flex-row">
             <div className="grid grid-cols-5 w-3/4">
               <div className="flex flex-col my-8">
@@ -137,9 +151,25 @@ const ClientBrief = (props: Props) => {
                     size="large"
                     fullWidth
                     endIcon={<DeleteIcon />}
-                    onClick={() => setIsOpen(true)}
+                    onClick={() => setIsDeleteConfirmOpen(true)}
                   >
                     Delete Gig
+                  </PrimaryButton>
+                </div>
+              )}
+            {[102].includes(gig.status) &&
+              gig.clientUsername === userInfo?.get("spectUsername") &&
+              contractGig.deadline.confirmationDeadline <
+                Math.floor(Date.now() / 1000) && (
+                <div className="w-1/4">
+                  <PrimaryButton
+                    variant="outlined"
+                    size="large"
+                    fullWidth
+                    endIcon={<FmdBadIcon />}
+                    onClick={() => setIsViolationConfirmOpen(true)}
+                  >
+                    Call Confirmation Deadline Violation
                   </PrimaryButton>
                 </div>
               )}

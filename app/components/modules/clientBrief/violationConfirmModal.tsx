@@ -15,8 +15,10 @@ import React, { useState } from "react";
 import { useGig } from "pages/gig/[id]";
 import Link from "next/link";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
-import { useMoralisCloudFunction } from "react-moralis";
-import { delistGig } from "app/utils/contracts";
+import {
+  callConfirmationDeadlineViolation,
+  delistGig,
+} from "app/utils/contracts";
 import { useGlobal } from "app/context/globalContext";
 
 interface props {
@@ -36,7 +38,7 @@ const style = {
   p: 1,
 };
 
-export const ConfirmModal = ({ isOpen, setIsOpen }: props) => {
+export const ViolationConfirmModal = ({ isOpen, setIsOpen }: props) => {
   const handleClose = () => setIsOpen(false);
   const [loading, setLoading] = useState(false);
   const [finished, setFinished] = useState(false);
@@ -44,13 +46,6 @@ export const ConfirmModal = ({ isOpen, setIsOpen }: props) => {
   const {
     state: { contracts },
   } = useGlobal();
-  const { fetch: createProposal } = useMoralisCloudFunction(
-    "createProposal",
-    {
-      limit: 100,
-    },
-    { autoFetch: false }
-  );
 
   return (
     <Modal open={isOpen} onClose={handleClose}>
@@ -79,18 +74,27 @@ export const ConfirmModal = ({ isOpen, setIsOpen }: props) => {
             <DialogTitle color="primary">Success</DialogTitle>
             <DialogContent>
               <DialogContentText color="#eaeaea">
-                Gig deleted succesfully!
+                Violation called succesfully!
               </DialogContentText>
             </DialogContent>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Box sx={{ flex: "1 1 auto" }} />
-              <Link href="/" passHref>
+              <Link
+                href={{
+                  pathname: `/gig/${gig.dealId}`,
+                  query: {
+                    tab: 0,
+                  },
+                }}
+                as={`/gig/${gig.dealId}`}
+                passHref
+              >
                 <Button
                   variant="outlined"
                   endIcon={<ArrowCircleRightIcon />}
                   onClick={handleClose}
                 >
-                  Home
+                  Go to gig!
                 </Button>
               </Link>
             </Box>
@@ -100,10 +104,10 @@ export const ConfirmModal = ({ isOpen, setIsOpen }: props) => {
             <DialogTitle color="primary">Confirm?</DialogTitle>
             <DialogContent>
               <DialogContentText color="#eaeaea">
-                Are you sure you want to delete this Gig?
+                Are you sure you want to call confirmation violation?
               </DialogContentText>
               <DialogContentText color="#eaeaea">
-                This cannot be undone!
+                You can delete the gig or accept another proposal after this.
               </DialogContentText>
             </DialogContent>
             <Box
@@ -128,7 +132,10 @@ export const ConfirmModal = ({ isOpen, setIsOpen }: props) => {
                 endIcon={<DoneIcon />}
                 onClick={() => {
                   setLoading(true);
-                  delistGig(contracts?.dealContract, gig.dealId)
+                  callConfirmationDeadlineViolation(
+                    gig.dealId,
+                    contracts?.dealContract
+                  )
                     .then((res) => {
                       setLoading(false);
                       setFinished(true);
