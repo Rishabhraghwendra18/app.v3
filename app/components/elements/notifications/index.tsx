@@ -112,7 +112,7 @@ const Notifications = (props: Props) => {
                         item.active = false;
                         setNotifs(notifs);
                         setNumActiveNotifs(numActiveNotifs - 1);
-                        setNotifToInactive(item.objectId);
+                        setNotifToInactive(Moralis, item.objectId);
                       }}
                     >
                       <Link
@@ -151,7 +151,7 @@ const Notifications = (props: Props) => {
                     <span className="flex items-center">
                       <Button
                         onClick={() => {
-                          clearNotifs().then((res) => {
+                          clearNotifs(Moralis).then((res) => {
                             setNotifs([]);
                             setNumActiveNotifs(0);
                           });

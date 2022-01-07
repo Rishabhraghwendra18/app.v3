@@ -9,6 +9,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useMoralis, useMoralisCloudFunction } from "react-moralis";
+import { Delta } from "quill";
 
 interface Props {}
 
@@ -23,7 +24,9 @@ interface GigContextType {
   setSubmission: Function;
   proposals: Array<Proposal>;
   setProposals: Function;
-  evidence?: object;
+  evidence?: {
+    disputeReason: Delta;
+  };
   setEvidence: Function;
   fetching: boolean;
   setFetching: Function;
@@ -85,9 +88,11 @@ const GigPage: NextPage<Props> = (props: Props) => {
               );
             }
             if (status === 403) {
+              console.log("403");
               promises.push(
                 fetchFromIPFS(res[0].evidence).then((res) => {
                   context.setEvidence(res);
+                  console.log(res);
                 })
               );
             }

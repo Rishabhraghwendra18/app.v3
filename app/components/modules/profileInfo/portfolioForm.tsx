@@ -119,7 +119,7 @@ const PortfolioForm = ({ isOpen, setIsOpen }: Props) => {
               if (e.target?.files) {
                 setLoaderText("Uploading image to IPFS please wait");
                 setLoading(true);
-                uploadFile(e.target.files[0], Moralis)
+                uploadFile(Moralis, e.target.files[0])
                   .then((res: any) => {
                     field.onChange(res._ipfs);
                     setLoading(false);

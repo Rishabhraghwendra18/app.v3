@@ -11,7 +11,7 @@ export function getUser(Moralis, username?: string) {
 //   return Moralis.Cloud.run("initUser");
 // }
 
-export async function uploadFile(data, Moralis) {
+export async function uploadFile(Moralis, data) {
   const file = new Moralis.File(data.name, data);
   return file.saveIPFS();
 }
@@ -22,45 +22,6 @@ export async function uploadFile(data, Moralis) {
 //   };
 //   return Moralis.Cloud.run("getIfUsernameValid", params);
 // }
-
-export function getProposal(id) {
-  const params = {
-    id: id,
-  };
-  return Moralis.Cloud.run("getProposal", params);
-}
-
-export function setProposalStatus(proposalId, status) {
-  const params = {
-    id: proposalId,
-    status: status,
-  };
-  return Moralis.Cloud.run("setProposalStatus", params);
-}
-
-export function getMySubmittedProposals(status) {
-  const params = {
-    status: status,
-  };
-  return Moralis.Cloud.run("getMySubmittedProposals", params);
-}
-
-export function startBounty(id) {
-  const params = {
-    id: id,
-  };
-  return Moralis.Cloud.run("startBounty", params);
-}
-
-export function updateBountyStatus(id, status, comments, fileName) {
-  const params = {
-    id: id,
-    status: status,
-    submissionText: comments,
-    submissionFile: fileName,
-  };
-  return Moralis.Cloud.run("updateBountyStatus", params);
-}
 
 function forceDownload(blob, filename) {
   var a = document.createElement("a");
@@ -93,14 +54,14 @@ export function getMyNotifications(Moralis) {
   return Moralis.Cloud.run("getMyNotifications");
 }
 
-export function setNotifToInactive(notifId) {
+export function setNotifToInactive(Moralis, notifId) {
   const params = {
     notifId: notifId,
   };
   return Moralis.Cloud.run("setNotifToInactive", params);
 }
 
-export function clearNotifs() {
+export function clearNotifs(Moralis) {
   return Moralis.Cloud.run("clearNotifs");
 }
 
@@ -117,15 +78,7 @@ export async function fetchFromIPFS(ipfsHash) {
   return response.json();
 }
 
-export async function getVerifiableBounty(dealId) {
-  return Moralis.Cloud.run("getVerifiableBounty", { dealId: dealId });
-}
-
-export async function getVerifiableSubmission(dealId) {
-  return Moralis.Cloud.run("getVerifiableSubmission", { dealId: dealId });
-}
-
-export function toIPFS(sourceType: string, source: any) {
+export function toIPFS(Moralis, sourceType: string, source: any) {
   const params = {
     sourceType: sourceType,
     source: source,

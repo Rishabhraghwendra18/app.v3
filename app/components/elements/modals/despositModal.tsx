@@ -6,8 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useGlobal } from "app/context/globalContext";
-import { approve, wrapMatic } from "app/utils/contracts";
-import { ethers } from "ethers";
+import { addToStake } from "app/utils/contracts";
 import { toast } from "material-react-toastify";
 import React from "react";
 import { useMoralis } from "react-moralis";
@@ -23,7 +22,7 @@ interface Props {
   handleClose: Function;
 }
 
-const WrapModal = ({
+const DepositModal = ({
   setLoaderText,
   setLoading,
   handleNextStep,
@@ -48,7 +47,7 @@ const WrapModal = ({
         }}
       >
         <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
-          You need to have {required} more Wrapped Matic(WMatic) to proceed.
+          You need to desposit {required} more Wrapped Matic(WMatic) to proceed.
         </Typography>
         <TextField
           autoFocus
@@ -64,16 +63,18 @@ const WrapModal = ({
           helperText={
             amount > balance
               ? "Not enough Matic available"
-              : "You need to wrap matic so it can be used in our platform"
+              : "You need to deposit matic for collateral"
           }
           inputProps={{ step: 0.1 }}
           InputProps={{
-            endAdornment: <InputAdornment position="end">Matic</InputAdornment>,
+            endAdornment: (
+              <InputAdornment position="end">WMatic</InputAdornment>
+            ),
           }}
         />
         <div className="w-1/3 my-2">
           <TextField
-            value={balance}
+            value={userStake?.balance}
             margin="dense"
             id="name"
             label="Available Balance"
@@ -82,7 +83,7 @@ const WrapModal = ({
             variant="standard"
             InputProps={{
               endAdornment: (
-                <InputAdornment position="end">Matic</InputAdornment>
+                <InputAdornment position="end">WMatic</InputAdornment>
               ),
               readOnly: true,
             }}
@@ -103,17 +104,8 @@ const WrapModal = ({
           onClick={() => {
             setLoaderText("Waiting for the transaction to complete");
             setLoading(true);
-            wrapMatic(contracts?.tokenContract, amount)
+            addToStake(contracts?.userContract, amount)
               .then((res) => {
-                contracts?.tokenContract
-                  .balanceOf(user?.get("ethAddress"))
-                  .then((res) => {
-                    dispatch({
-                      type: "SET_BALANCE",
-                      value: parseFloat(ethers.utils.formatEther(res)),
-                    });
-                  });
-
                 setLoading(false);
                 handleNextStep();
               })
@@ -134,11 +126,11 @@ const WrapModal = ({
           variant="outlined"
           disabled={amount > balance}
         >
-          Wrap
+          Deposit
         </Button>
       </Box>
     </React.Fragment>
   );
 };
 
-export default WrapModal;
+export default DepositModal;

@@ -14,20 +14,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { motion } from "framer-motion";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import dynamic from "next/dynamic";
+import { ConfirmModal } from "./confirmModal";
 
 interface Props {}
 
 const ClientBrief = (props: Props) => {
-  const { gig, fetching, setTab } = useGig();
+  const { gig, setTab } = useGig();
   const {
     state: { conversionRate, userInfo },
   } = useGlobal();
-
-  const [animate, setAnimate] = useState(false);
-
-  useEffect(() => {
-    setAnimate(true);
-  }, []);
+  const [isOpen, setIsOpen] = useState(false);
 
   if (!gig) {
     return <div></div>;
@@ -40,6 +36,7 @@ const ClientBrief = (props: Props) => {
         variants={animationVariant}
       >
         <div className="">
+          <ConfirmModal setIsOpen={setIsOpen} isOpen={isOpen} />
           <div className="flex flex-row">
             <div className="grid grid-cols-5 w-3/4">
               <div className="flex flex-col my-8">
@@ -140,6 +137,7 @@ const ClientBrief = (props: Props) => {
                     size="large"
                     fullWidth
                     endIcon={<DeleteIcon />}
+                    onClick={() => setIsOpen(true)}
                   >
                     Delete Gig
                   </PrimaryButton>

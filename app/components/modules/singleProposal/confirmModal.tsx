@@ -62,6 +62,8 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
 
   const handleClose = () => setIsOpen(false);
 
+  const handleNextStep = () => setActiveStep(activeStep + 1);
+
   useEffect(() => {
     // updateUserStake(dispatch, user, contracts);
     if (userStake?.balance !== undefined) {
@@ -198,7 +200,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
           <WrapModal
             setLoaderText={setLoaderText}
             setLoading={setLoading}
-            setActiveStep={setActiveStep}
+            handleNextStep={handleNextStep}
             balance={balance}
             amount={amount}
             setAmount={setAmount}

@@ -15,7 +15,10 @@ import React, { useEffect, useState } from "react";
 import { Proposal } from "app/types";
 import { useGig } from "pages/gig/[id]";
 import { toIPFS } from "app/utils/moralis";
-import { firstConfirmation } from "app/utils/contracts";
+import {
+  callSubmissionDeadlineViolation,
+  firstConfirmation,
+} from "app/utils/contracts";
 import { useGlobal } from "app/context/globalContext";
 import Link from "next/link";
 import AssignmentIcon from "@mui/icons-material/Assignment";
@@ -27,7 +30,6 @@ import { useMoralis } from "react-moralis";
 interface props {
   isOpen: boolean;
   setIsOpen: Function;
-  proposal: Proposal;
 }
 
 const style = {
@@ -42,7 +44,7 @@ const style = {
   p: 1,
 };
 
-export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
+export const ConfirmViolationModal = ({ isOpen, setIsOpen }: props) => {
   const handleClose = () => setIsOpen(false);
   const [loading, setLoading] = useState(false);
   const [loaderText, setLoaderText] = useState("");
@@ -82,10 +84,11 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
             <DialogTitle color="primary">Success</DialogTitle>
             <DialogContent>
               <DialogContentText color="#eaeaea">
-                Proposal accepted succesfully!
+                Deadline violation called successfully!
               </DialogContentText>
               <DialogContentText color="#eaeaea">
-                Freelancer will start work within a day from now.
+                Escrow along with the compensation has been transferred to your
+                deposit.
               </DialogContentText>
             </DialogContent>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2, px: 1 }}>
@@ -107,7 +110,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
                 href={{
                   pathname: `/gig/${gig.dealId}`,
                   query: {
-                    tab: 4,
+                    tab: 0,
                   },
                 }}
                 as={`/gig/${gig.dealId}`}
@@ -128,11 +131,10 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
             <DialogTitle color="primary">Confirm?</DialogTitle>
             <DialogContent>
               <DialogContentText color="#eaeaea">
-                Are you sure you want to accept this proposal? It cannot be
-                undonee.
+                Are you sure you want to call dealdine violation?
               </DialogContentText>
               <DialogContentText color="#eaeaea">
-                This will be then sent to freelancer for second confirmation
+                You will receive your escrow back along with some compensation.
               </DialogContentText>
             </DialogContent>
             <Box
@@ -155,50 +157,36 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
               <Box sx={{ flex: "1 1 auto" }} />
               <Button
                 endIcon={<DoneIcon />}
-                onClick={() => {
-                  setLoaderText(
-                    "Uploading proposal metadata to IPFS, please wait"
-                  );
-                  setLoading(true);
-                  toIPFS(Moralis, "object", {
-                    name: gig.name,
-                    tags: gig.tags,
-                    description: gig.description,
-                    proposalTitle: proposal.title,
-                    proposal: proposal.proposalText,
-                    revisions: proposal.numRevisions,
-                  }).then((res) => {
-                    setLoaderText("Waiting for the transaction to complete");
-                    const ipfsUrlArray = res.path.split("/");
-                    firstConfirmation(
-                      proposal.deadline,
-                      proposal.user[0].ethAddress,
-                      proposal.lockedStake,
-                      gig.dealId,
-                      ipfsUrlArray[ipfsUrlArray.length - 1],
-                      contracts?.dealContract
-                    )
-                      .then((res) => {
-                        setHash(res.transactionHash);
-                        setLoading(false);
-                        setFinished(true);
-                      })
-                      .catch((err) => {
-                        setLoading(false);
-                        toast.error(err.message, {
-                          position: "bottom-center",
-                          autoClose: 3000,
-                          hideProgressBar: true,
-                          closeOnClick: true,
-                          pauseOnHover: true,
-                          draggable: true,
-                          progress: undefined,
-                        });
-                      });
-                  });
-                }}
                 sx={{ mr: 1, textTransform: "none" }}
                 variant="outlined"
+                onClick={() => {
+                  setLoaderText("Waiting for the transaction to complete");
+                  setLoading(true);
+                  callSubmissionDeadlineViolation(
+                    gig.dealId,
+                    contracts?.dealContract
+                  )
+                    .then((res) => {
+                      const hash = res.transactionHash;
+                      setHash(hash);
+                      setLoading(false);
+                      setFinished(true);
+                    })
+                    .catch((err) => {
+                      toast.error(err.message, {
+                        position: "bottom-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        className: "text-sm text-grey-spect border-blue-500",
+                      });
+                      console.log(err);
+                      setLoading(false);
+                    });
+                }}
               >
                 Hell yeah!
               </Button>

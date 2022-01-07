@@ -89,7 +89,7 @@ export interface ContractGig {
   collateral: BigNumber;
   confirmationDeadlineViolation: boolean;
   confirmed: boolean;
-  deadline: Array<object | string>;
+  deadline: Array<object | string> | any;
   freelancer: string;
   gigCid: string;
   inDispute: false;

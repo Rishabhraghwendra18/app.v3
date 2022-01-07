@@ -14,23 +14,24 @@ const ReadSubmission = (props: Props) => {
   return (
     <div>
       <div className="dark:text-grey-light mt-4">
-        <span className="text-xl text-blue-bright w-1/2 my-4">Links</span>
-        {submission &&
-          submission.links?.map((link, idx) => {
-            return (
-              <li key={idx} className="flex flex-row text-base">
-                <span className="mr-2">{link.name}</span>
-                <a
-                  className="hover:text-blue-bright transition transform duration-1000 underline"
-                  href={link.link}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {link.link}
-                </a>
-              </li>
-            );
-          })}
+        {submission?.links && submission?.links[0] && (
+          <span className="text-xl text-blue-bright w-1/2 my-4">Links</span>
+        )}
+        {submission?.links?.map((link, idx) => {
+          return (
+            <li key={idx} className="flex flex-row text-base">
+              <span className="mr-2">{link.name}</span>
+              <a
+                className="hover:text-blue-bright transition transform duration-1000 underline"
+                href={link.link}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {link.link}
+              </a>
+            </li>
+          );
+        })}
         {submission?.submissionFile && (
           <div className="mt-4 flex flex-col">
             <span className="text-xl text-blue-bright w-1/2 my-1">Files</span>

@@ -178,9 +178,9 @@ export const gigStatusMapping = {
   202: "In review",
   203: "Completed",
   204: "Revision requested",
-  401: "Delist",
+  401: "Deleted",
   402: "Submission Violation",
-  403: "Dispute",
+  403: "In Dispute",
   404: "Expired",
 };
 
@@ -228,6 +228,7 @@ export const actionIdToTabMap = {
   1: 3,
   2: 0,
   3: 5,
+  6: 6,
 };
 
 export const animationVariant = {

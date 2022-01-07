@@ -21,6 +21,7 @@ import { ISubmissionFormInput } from "./submissionForm";
 import { accept, submitContract } from "app/utils/contracts";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { toast, ToastContainer } from "material-react-toastify";
+import { useMoralis } from "react-moralis";
 
 interface props {
   isOpen: boolean;
@@ -64,6 +65,8 @@ export const ConfirmModal = ({
   const {
     state: { contracts },
   } = useGlobal();
+
+  const { Moralis } = useMoralis();
 
   return (
     <Modal open={isOpen} onClose={handleClose}>
@@ -173,20 +176,21 @@ export const ConfirmModal = ({
                       let fileUploaded;
                       if (values.file) {
                         try {
-                          fileUploaded = await uploadFile(values.file);
+                          fileUploaded = await uploadFile(Moralis, values.file);
                         } catch (err) {
                           console.log(err);
                           setLoading(false);
                           alert(err);
+                          return;
                         }
                       }
                       setLoaderText(
                         "Uploading submission metadata to IPFS, please wait"
                       );
-                      toIPFS("object", {
+                      toIPFS(Moralis, "object", {
                         submissionText: values.comments,
                         submissionFile: fileUploaded?.ipfs(),
-                        submissionFilename: values.file.name,
+                        submissionFilename: values.file?.name,
                         links: values.links,
                       }).then((res) => {
                         setLoaderText(

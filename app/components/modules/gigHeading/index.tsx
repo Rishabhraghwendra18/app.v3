@@ -117,7 +117,7 @@ export const GigHeading = (props: Props) => {
                     </div>
                   </div>
                 )}
-                {!fetching && [202, 203, 402, 403].includes(gig.status) && (
+                {!fetching && [202, 203, 403].includes(gig.status) && (
                   <div className="flex flex-row hover:text-blue-bright mr-8 transform transition-colors ease-in-out duration-1000">
                     <div className="flex flex-col mr-1">
                       <svg
