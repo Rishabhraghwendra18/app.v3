@@ -94,14 +94,14 @@ const PortfolioForm = ({}: Props) => {
     userInfo?.save().then((res) => {
       dispatch({
         type: "SET_USERINFO",
-        value: userInfo,
+        value: res,
       });
       setLoading(false);
       handleClose();
     });
   };
 
-  const FileInput = ({ control, name, setValue, getValues }) => {
+  const FileInput = ({ control, name }) => {
     const { field } = useController({ control, name });
     return (
       <LightTooltip arrow placement="bottom" title={"image"}>
@@ -269,8 +269,6 @@ const PortfolioForm = ({}: Props) => {
                         <FileInput
                           name={`portfolios.${index}.ipfs`}
                           control={control}
-                          getValues={getValues}
-                          setValue={setValue}
                         />
                         <div className="flex flex-col items-center justify-center px-2">
                           <Button

@@ -7,21 +7,10 @@ export function getUser(Moralis, username?: string) {
   } else return Moralis.Cloud.run("getUser");
 }
 
-// export function initUser() {
-//   return Moralis.Cloud.run("initUser");
-// }
-
 export async function uploadFile(Moralis, data) {
   const file = new Moralis.File(data.name, data);
   return file.saveIPFS();
 }
-
-// export function getIfUsernameValid(username) {
-//   const params = {
-//     username: username,
-//   };
-//   return Moralis.Cloud.run("getIfUsernameValid", params);
-// }
 
 function forceDownload(blob, filename) {
   var a = document.createElement("a");

@@ -1,14 +1,27 @@
-import { Avatar, Box, Skeleton, styled, Tabs } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  IconButton,
+  Skeleton,
+  styled,
+  Tabs,
+} from "@mui/material";
 import cover2 from "app/images/cover2.jpg";
 import { a11yProps } from "app/utils/utils";
 import { AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { PrimaryButton } from "../elements/buttons/primaryButton";
-import { StyledTab } from "../elements/styledComponents";
+import { LightTooltip, StyledTab } from "../elements/styledComponents";
 import DepositManagement from "../modules/depositManagement";
 import ProfileInfo from "../modules/profileInfo";
 import ProfileForm from "../modules/profileForm";
 import { useProfile } from "pages/profile/[username]";
+import InitUserModal from "../elements/modals/initUserModal";
+import { useGlobal } from "app/context/globalContext";
+import { uploadFile } from "app/utils/moralis";
+import { useMoralis } from "react-moralis";
+import EditIcon from "@mui/icons-material/Edit";
 
 interface Props {}
 
@@ -35,15 +48,21 @@ const AvatarSkeleton = styled(Skeleton)(({ theme }) => ({
 const ProfileTemplate = (props: Props) => {
   const [tab, setTab] = useState(0);
   const { profileUser: userInfo, loading, editable } = useProfile();
+  const [isOpen, setIsOpen] = useState(false);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
+  const { Moralis } = useMoralis();
+  const { dispatch } = useGlobal();
   useEffect(() => {
-    console.log(loading);
-  }, [loading]);
+    if (editable && !userInfo.get("isInitialized")) {
+      setIsOpen(true);
+    }
+  }, [editable]);
 
   return (
     <div className="flex-grow p-0 overflow-hidden mb-16">
+      <InitUserModal isOpen={isOpen} setIsOpen={setIsOpen} />
       <div
         className="banner"
         style={{
@@ -56,6 +75,50 @@ const ProfileTemplate = (props: Props) => {
             <AvatarSkeleton variant="circular" />
           ) : (
             <ProfileAvatar src={userInfo?.get("profilePicture")} />
+          )}
+          {editable && (
+            <LightTooltip
+              arrow
+              placement="bottom"
+              title={"Change profile picture"}
+            >
+              <Button
+                component="label"
+                color="inherit"
+                sx={{
+                  marginTop: 1,
+                  position: "absolute",
+                  marginLeft: -18,
+                  borderBottomLeftRadius: "100%",
+                  borderBottomRightRadius: "100%",
+                  width: "7rem",
+                }}
+              >
+                <EditIcon />
+                <input
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  onChange={(evt) => {
+                    if (evt.target?.files && evt.target?.files[0]) {
+                      uploadFile(Moralis, evt.target.files[0])
+                        .then((res) => {
+                          userInfo.set("profilePicture", res._ipfs);
+                          userInfo.save().then((res) => {
+                            dispatch({
+                              type: "SET_USERINFO",
+                              value: res,
+                            });
+                          });
+                        })
+                        .catch((err) => {
+                          alert(err);
+                        });
+                    }
+                  }}
+                />
+              </Button>
+            </LightTooltip>
           )}
           <div className="flex flex-row ml-2">
             <div className="flex flex-col">
@@ -72,9 +135,7 @@ const ProfileTemplate = (props: Props) => {
                 </span>
               )}
             </div>
-            <div className="w-1/5 ml-8">
-              <ProfileForm />
-            </div>
+            <div className="w-1/5 ml-8">{editable && <ProfileForm />}</div>
             <div className="flex-auto"></div>
             {!loading && (
               <div className="flex flex-row text-grey-normal">

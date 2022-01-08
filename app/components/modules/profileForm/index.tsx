@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { animationVariant, modules } from "app/constants/constants";
 import dynamic from "next/dynamic";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InfoForm from "./infoForm";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";

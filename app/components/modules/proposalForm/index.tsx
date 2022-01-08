@@ -14,10 +14,12 @@ import DateAdapter from "@mui/lab/AdapterDayjs";
 import dayjs from "dayjs";
 import Editor from "app/components/elements/richTextEditor/editor";
 import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGig } from "pages/gig/[id]";
 import { motion } from "framer-motion";
 import { ConfirmModal } from "./confirmModal";
+import { useGlobal } from "app/context/globalContext";
+import InitUserModal from "app/components/elements/modals/initUserModal";
 
 interface Props {}
 
@@ -50,8 +52,11 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
   } = useForm<IProposalFormInput>();
 
   const { gig } = useGig();
+  const {
+    state: { userInfo },
+  } = useGlobal();
   const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [isInitOpen, setIsInitOpen] = useState(false);
   const [values, setValues] = useState<IProposalFormInput>(
     {} as IProposalFormInput
   );
@@ -61,9 +66,11 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
     setValues(values);
   };
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  useEffect(() => {
+    if (!userInfo?.get("isInitialized")) {
+      setIsInitOpen(true);
+    }
+  }, []);
 
   return (
     <motion.main
@@ -75,6 +82,9 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
       <div className="mt-4 p-1">
         {isOpen && (
           <ConfirmModal isOpen={isOpen} setIsOpen={setIsOpen} values={values} />
+        )}
+        {isInitOpen && (
+          <InitUserModal isOpen={isInitOpen} setIsOpen={setIsInitOpen} />
         )}
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
           <div className="flex flex-col pb-4">

@@ -7,14 +7,10 @@ interface Props {}
 
 const Portfolio = (props: Props) => {
   const { profileUser: userInfo, loading, editable } = useProfile();
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <div className="my-8">
       <div className="text-2xl font-bold text-blue-bright">Portfolio</div>
-      <div className="w-1/5">
-        <PortfolioForm />
-      </div>
+      <div className="w-1/5">{editable && <PortfolioForm />}</div>
       <div className="grid gap-8 grid-cols-3 my-8">
         {userInfo?.get("portfolio")?.map((value, index) => (
           <button
