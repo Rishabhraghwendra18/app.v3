@@ -105,6 +105,7 @@ const SubmissionForm = (props: Props) => {
               sx={{ color: "#99ccff" }}
               color="inherit"
               endIcon={<AddCircleOutlineIcon />}
+              id="bAddLink"
               onClick={() => append({ name: "", link: "" })}
             >
               Add Link
@@ -129,6 +130,7 @@ const SubmissionForm = (props: Props) => {
                             <TextField
                               {...field}
                               label="Name"
+                              id={`tLinkName${index}`}
                               variant="standard"
                               helperText={
                                 fieldState.error?.type === "minLength" &&
@@ -159,6 +161,7 @@ const SubmissionForm = (props: Props) => {
                             <TextField
                               {...field}
                               label="Link"
+                              id={`tLinkURL${index}`}
                               variant="standard"
                               helperText={
                                 fieldState.error?.type === "pattern" &&
@@ -200,6 +203,7 @@ const SubmissionForm = (props: Props) => {
                     placeholder={
                       "Write comments describing your submission and any instructions if needed"
                     }
+                    id="tSubmissionComments"
                   />
                 </div>
               )}
@@ -215,6 +219,7 @@ const SubmissionForm = (props: Props) => {
               size="large"
               fullWidth
               type="submit"
+              id="bSubmitWork"
               endIcon={<AssignmentTurnedInIcon />}
             >
               Submit Work

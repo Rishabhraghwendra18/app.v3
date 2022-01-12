@@ -9,9 +9,10 @@ interface Props {
   value: Delta;
   onChange?: any;
   placeholder: string;
+  id: string;
 }
 
-const Editor = ({ value, placeholder, onChange }: Props) => {
+const Editor = ({ value, placeholder, onChange, id }: Props) => {
   return (
     <div className="">
       <ReactQuill
@@ -22,6 +23,7 @@ const Editor = ({ value, placeholder, onChange }: Props) => {
         }}
         defaultValue={value}
         placeholder={placeholder}
+        id={id}
       />
     </div>
   );

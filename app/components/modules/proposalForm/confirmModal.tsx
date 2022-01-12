@@ -153,6 +153,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                 }}
                 sx={{ mr: 1, textTransform: "none" }}
                 variant="outlined"
+                id="bConfirmProposal"
               >
                 Hell yeah!
               </Button>

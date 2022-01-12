@@ -83,7 +83,7 @@ export const ConfirmModal = ({
               alignItems: "center",
             }}
           >
-            <CircularProgress color="inherit" />
+            <CircularProgress color="inherit" id="eLoader" />
             <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
               {loaderText}
             </Typography>
@@ -168,6 +168,7 @@ export const ConfirmModal = ({
               <Box sx={{ flex: "1 1 auto" }} />
               <Button
                 endIcon={<DoneIcon />}
+                id="bConfirm"
                 onClick={async () => {
                   switch (confirmType) {
                     case 1:

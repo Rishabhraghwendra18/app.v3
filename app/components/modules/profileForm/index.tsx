@@ -75,6 +75,7 @@ const ProfileForm = ({}: Props) => {
         endIcon={<EditIcon />}
         hidden={!editable}
         onClick={() => setIsOpen(true)}
+        id="bEditProfile"
       >
         Edit Profile
       </PrimaryButton>

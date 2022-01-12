@@ -205,6 +205,7 @@ const SingleProposal = (props: Props) => {
                   fullWidth
                   type="submit"
                   endIcon={<CheckCircleIcon />}
+                  id="bStartWork"
                   onClick={() => {
                     setIsOpen(true);
                   }}

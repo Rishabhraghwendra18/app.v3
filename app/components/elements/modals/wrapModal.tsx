@@ -55,7 +55,7 @@ const WrapModal = ({
           value={amount}
           onChange={(evt) => setAmount(parseFloat(evt.target.value))}
           margin="dense"
-          id="name"
+          id="tAmount"
           label="Amount"
           type="number"
           fullWidth
@@ -66,7 +66,7 @@ const WrapModal = ({
               ? "Not enough Matic available"
               : "You need to wrap matic so it can be used in our platform"
           }
-          inputProps={{ step: 0.1 }}
+          // inputProps={{ step: 0.1 }}
           InputProps={{
             endAdornment: <InputAdornment position="end">Matic</InputAdornment>,
           }}
@@ -75,11 +75,11 @@ const WrapModal = ({
           <TextField
             value={balance}
             margin="dense"
-            id="name"
+            id="tBalance"
             label="Available Balance"
             type="number"
             fullWidth
-            variant="standard"
+            variant="filled"
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">Matic</InputAdornment>
@@ -133,6 +133,7 @@ const WrapModal = ({
           }}
           variant="outlined"
           disabled={amount > balance}
+          id="bWrap"
         >
           Wrap
         </Button>

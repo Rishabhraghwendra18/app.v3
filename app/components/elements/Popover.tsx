@@ -9,6 +9,7 @@ interface navbarItems {
   description?: string;
   icon?: React.ComponentType;
   authenticate?: number;
+  id?: string;
 }
 
 interface Props {
@@ -62,6 +63,7 @@ const NavbarPopover: React.FC<Props> = ({
                     <Link key={idx} href={item.href} passHref>
                       <div
                         className="flex items-center p-2 -m-3 transition duration-1000 ease-in-out rounded-lg hover:bg-grey-bluish focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 cursor-pointer"
+                        id={item.id}
                         onClick={() => {
                           setShow(false);
                           if (item.authenticate) {

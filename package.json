@@ -5,7 +5,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "synpress:run": "synpress run -b edge"
   },
   "dependencies": {
     "@date-io/dayjs": "^2.11.0",
@@ -16,6 +17,7 @@
     "@mui/lab": "^5.0.0-alpha.61",
     "@mui/material": "^5.2.5",
     "@mui/styles": "^5.2.3",
+    "@synthetixio/synpress": "https://github.com/avp1598/synpress/tarball/dev",
     "@walletconnect/web3-provider": "^1.7.0",
     "autoprefixer": "^10.4.0",
     "dayjs": "^1.10.7",
@@ -31,7 +33,7 @@
     "react-moralis": "^0.3.1",
     "react-quill": "^1.3.5",
     "react-scroll": "^1.8.4",
-    "tailwindcss": "^3.0.5"
+    "tailwindcss": "https://github.com/avp1598/tailwindcss/tarball/master"
   },
   "devDependencies": {
     "@types/node": "16.11.13",

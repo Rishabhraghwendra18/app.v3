@@ -206,7 +206,12 @@ export const GigHeading = (props: Props) => {
                 (gig.proposal.length &&
                   gig.proposal[0].freelancer ===
                     userInfo?.get("spectUsername"))) && (
-                <StyledTab label="Submissions" {...a11yProps(5)} value={5} />
+                <StyledTab
+                  label="Submissions"
+                  {...a11yProps(5)}
+                  value={5}
+                  id="bSubmissionTab"
+                />
               )}
             {[403].includes(gig.status) &&
               (gig.clientUsername === userInfo?.get("spectUsername") ||

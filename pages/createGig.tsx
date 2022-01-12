@@ -15,9 +15,9 @@ const CreateGig: NextPage<Props> = (props: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (!userInfo?.get("isInitialized")) {
-      setIsOpen(true);
-    }
+    // if (!userInfo?.get("isInitialized")) {
+    //   setIsOpen(true);
+    // }
   }, []);
 
   return (

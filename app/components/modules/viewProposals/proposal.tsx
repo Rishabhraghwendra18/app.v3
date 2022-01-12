@@ -134,6 +134,7 @@ const Proposal = ({ proposal }: Props) => {
           size="large"
           fullWidth
           type="submit"
+          id="bSelectProposal"
           endIcon={<CheckCircleIcon />}
           onClick={() => {
             setIsOpen(true);

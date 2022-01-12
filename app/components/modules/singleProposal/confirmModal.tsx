@@ -31,6 +31,7 @@ import { formatTimeLeft } from "app/utils/utils";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { useGig } from "pages/gig/[id]";
+import DepositModal from "app/components/elements/modals/despositModal";
 
 interface props {
   isOpen: boolean;
@@ -66,13 +67,12 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
 
   useEffect(() => {
     // updateUserStake(dispatch, user, contracts);
+    const unlockedDeposit =
+      (userStake?.deposit || 0) - (userStake?.collateral || 0);
     if (userStake?.balance !== undefined) {
       if (!userStake.allowance) {
         setActiveStep(0);
-      }
-      const unlockedDeposit =
-        (userStake?.deposit || 0) - (userStake?.collateral || 0);
-      if (proposal.lockedStake > unlockedDeposit) {
+      } else if (proposal.lockedStake > unlockedDeposit) {
         if (proposal.lockedStake - unlockedDeposit > userStake.balance) {
           setActiveStep(1);
           setRequired(
@@ -137,7 +137,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
               alignItems: "center",
             }}
           >
-            <CircularProgress color="inherit" />
+            <CircularProgress color="inherit" id="eLoader" />
             <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
               {loaderText}
             </Typography>
@@ -179,6 +179,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
                   variant="outlined"
                   endIcon={<ArrowCircleRightIcon />}
                   onClick={handleClose}
+                  id="bGotoGig"
                 >
                   Go to gig!
                 </Button>
@@ -209,98 +210,16 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
           />
         )}
         {activeStep === 2 && (
-          <React.Fragment>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                textAlign: "center",
-              }}
-            >
-              <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
-                You need to desposit {required} more Wrapped Matic(WMatic) to
-                proceed.
-              </Typography>
-              <TextField
-                autoFocus
-                value={amount}
-                onChange={(evt) => setAmount(parseFloat(evt.target.value))}
-                margin="dense"
-                id="name"
-                label="Amount"
-                type="number"
-                fullWidth
-                variant="standard"
-                error={amount > balance}
-                helperText={
-                  amount > balance
-                    ? "Not enough Matic available"
-                    : "You need to deposit matic for collateral"
-                }
-                inputProps={{ step: 0.1 }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">WMatic</InputAdornment>
-                  ),
-                }}
-              />
-              <div className="w-1/3 my-2">
-                <TextField
-                  value={userStake?.balance}
-                  margin="dense"
-                  id="name"
-                  label="Available Balance"
-                  type="number"
-                  fullWidth
-                  variant="standard"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">WMatic</InputAdornment>
-                    ),
-                    readOnly: true,
-                  }}
-                />
-              </div>
-            </Box>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Button
-                color="inherit"
-                onClick={handleClose}
-                sx={{ mr: 1, color: "#f45151" }}
-              >
-                Cancel
-              </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
-              <Button
-                onClick={() => {
-                  setLoaderText("Waiting for the transaction to complete");
-                  setLoading(true);
-                  addToStake(contracts?.userContract, amount)
-                    .then((res) => {
-                      setLoading(false);
-                      setActiveStep(3);
-                    })
-                    .catch((err) => {
-                      setLoading(false);
-                      toast.error(err.message, {
-                        position: "bottom-center",
-                        autoClose: 3000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                      });
-                      console.log(err);
-                    });
-                }}
-                variant="outlined"
-                disabled={amount > balance}
-              >
-                Deposit
-              </Button>
-            </Box>
-          </React.Fragment>
+          <DepositModal
+            setLoaderText={setLoaderText}
+            setLoading={setLoading}
+            handleNextStep={handleNextStep}
+            balance={balance}
+            amount={amount}
+            setAmount={setAmount}
+            required={required}
+            handleClose={handleClose}
+          />
         )}
         {activeStep === steps.length - 1 && (
           <React.Fragment>
@@ -328,6 +247,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
               </Button>
               <Box sx={{ flex: "1 1 auto" }} />
               <Button
+                id="bConfirm"
                 onClick={() => {
                   setLoaderText("Waiting for the transaction to complete");
                   setLoading(true);
@@ -354,7 +274,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
                 }}
                 variant="outlined"
               >
-                Start Work
+                Hell Yeah!
               </Button>
             </Box>
           </React.Fragment>

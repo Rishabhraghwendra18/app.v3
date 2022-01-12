@@ -87,6 +87,7 @@ const Submission = (props: Props) => {
                 fullWidth
                 type="submit"
                 endIcon={<CheckCircleIcon />}
+                id="bAcceptSubmission"
                 onClick={() => {
                   setIsOpen(true);
                 }}

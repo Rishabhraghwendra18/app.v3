@@ -163,6 +163,7 @@ const InitUserModal = ({ isOpen, setIsOpen }: props) => {
                   variant="outlined"
                   endIcon={<ArrowCircleRightIcon />}
                   onClick={(evt) => handleClose(evt, "success")}
+                  id="bInitModalProfile"
                 >
                   Go to your profile!
                 </Button>
@@ -185,7 +186,7 @@ const InitUserModal = ({ isOpen, setIsOpen }: props) => {
                     validateUsername(evt.target.value);
                   }}
                   margin="dense"
-                  id="username"
+                  id="tInitModalUsername"
                   label="Username"
                   fullWidth
                   variant="standard"
@@ -210,7 +211,7 @@ const InitUserModal = ({ isOpen, setIsOpen }: props) => {
                     setvalidEmail(validateEmail(evt.target.value));
                   }}
                   margin="dense"
-                  id="email"
+                  id="tInitModalEmail"
                   label="Email"
                   type={"email"}
                   fullWidth
@@ -235,6 +236,7 @@ const InitUserModal = ({ isOpen, setIsOpen }: props) => {
                     fullWidth
                     variant="outlined"
                     type="submit"
+                    id="bInitModalSubmit"
                     disabled={
                       isLoading ||
                       !validUsername ||
@@ -316,6 +318,7 @@ const InitUserModal = ({ isOpen, setIsOpen }: props) => {
                       fullWidth
                       variant="outlined"
                       type="submit"
+                      id="bInitModalYeah"
                       disabled={
                         isLoading ||
                         !validUsername ||

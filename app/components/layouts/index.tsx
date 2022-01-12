@@ -19,7 +19,7 @@ export const Layout = ({ children }: Props) => {
     if (isAuthenticated) {
       initContractsAndUserStake(dispatch, user, Moralis);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user]);
 
   return (
     <div className="relative min-h-screen flex flex-col w-full tracking-wide leading-normal antialiased bg-blue-darkbg layout text-grey-light transform transition-colors ease-in-out duration-1000 hidden md:flex">

@@ -111,6 +111,7 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
                       fullWidth
                       required
                       error={fieldState.error ? true : false}
+                      id="tProposalTitle"
                     />
                   </LightTooltip>
                 )}
@@ -127,6 +128,7 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
                     placeholder={
                       "Write a thorough description of your proposal"
                     }
+                    id="tProposalForm"
                   />
                 )}
               />
@@ -213,6 +215,7 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
               fullWidth
               type="submit"
               endIcon={<AssignmentTurnedInIcon />}
+              id="bSendProposal"
             >
               Send Proposal
             </PrimaryButton>

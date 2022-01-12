@@ -70,7 +70,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
               alignItems: "center",
             }}
           >
-            <CircularProgress color="inherit" />
+            <CircularProgress color="inherit" id="eLoader" />
             <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
               {loaderText}
             </Typography>
@@ -155,6 +155,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
               <Box sx={{ flex: "1 1 auto" }} />
               <Button
                 endIcon={<DoneIcon />}
+                id="bConfirmAcceptProposal"
                 onClick={() => {
                   setLoaderText(
                     "Uploading proposal metadata to IPFS, please wait"
