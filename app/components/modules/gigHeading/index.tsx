@@ -24,6 +24,10 @@ export const GigHeading = (props: Props) => {
     setTab(newValue);
   };
 
+  if (!gig || !gig.name) {
+    return <div></div>;
+  }
+
   return (
     <Fade in={!fetching} timeout={500}>
       <div>
@@ -33,7 +37,7 @@ export const GigHeading = (props: Props) => {
               <Link href={`/profile/`} passHref>
                 <HeadingAvatar
                   alt="Username"
-                  src={gig?.user[0].profilePicture}
+                  src={gig.user[0].profilePicture}
                 />
               </Link>
             </div>
