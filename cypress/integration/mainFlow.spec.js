@@ -1,5 +1,5 @@
 describe("Main Flow", () => {
-  const gig = 11;
+  const gig = new Date().getTime().toFixed(5);
   before(() => {
     cy.setupMetamask(
       "shuffle stay hair student wagon senior problem drama parrot creek enact pluck",
@@ -122,6 +122,7 @@ describe("Main Flow", () => {
     cy.get("#bGotoGig").click();
   });
   it(`Client Accepts proposal first confirmation`, () => {
+    cy.wait(1000);
     cy.get("#bNavbarExplore").click();
     cy.wait(1000);
     cy.changeAccount(1);
@@ -149,6 +150,7 @@ describe("Main Flow", () => {
     cy.get("#bGotoGig").click();
   });
   it(`Freelancer starts work and submits work`, () => {
+    cy.wait(1000);
     cy.get("#bNavbarExplore").click();
     cy.wait(1000);
     // connect account
@@ -208,6 +210,7 @@ describe("Main Flow", () => {
     cy.get("#bGotoGig").click();
   });
   it(`Client accepts work`, () => {
+    cy.wait(1000);
     cy.get("#bNavbarExplore").click();
     cy.wait(1000);
     cy.changeAccount(1);
