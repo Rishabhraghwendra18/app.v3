@@ -1,10 +1,12 @@
-name: Spect E2E on chrome
+name: Spect E2E on Edge
 on: [pull_request]
 jobs:
   cypress-run:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node14.10.1-edge88
     # let's make sure our tests pass on Chrome browser
-    name: E2E on Chrome
+    name: E2E on Edge
     steps:
       - uses: actions/checkout@v2
       - name: start cypress
