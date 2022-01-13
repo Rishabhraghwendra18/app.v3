@@ -1,7 +1,11 @@
 describe("Main Flow", () => {
   const gig = 11;
   before(() => {
-    cy.setupMetamask("", "kovan", "Tester@1234").then((setupFinished) => {
+    cy.setupMetamask(
+      "shuffle stay hair student wagon senior problem drama parrot creek enact pluck",
+      "kovan",
+      "Tester@1234"
+    ).then((setupFinished) => {
       expect(setupFinished).to.be.true;
     });
     cy.addMetamaskNetwork({
