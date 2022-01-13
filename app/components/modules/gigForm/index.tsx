@@ -24,7 +24,7 @@ import DateAdapter from "@mui/lab/AdapterDayjs";
 import dayjs from "dayjs";
 import Editor from "app/components/elements/richTextEditor/editor";
 import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ConfirmModal from "./confirmModal";
 import { LightTooltip } from "app/components/elements/styledComponents";
 
@@ -64,7 +64,6 @@ export const GigForm: React.FC<Props> = (props: Props) => {
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <div className="flex flex-col col-span-5 border-grey-normal border-l px-12">
       {isOpen && (
@@ -231,6 +230,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
               <Controller
                 name="deadline"
                 control={control}
+                defaultValue={dayjs().add(1, "day").startOf("day")}
                 render={({ field }) => (
                   <DateTimePicker
                     {...field}

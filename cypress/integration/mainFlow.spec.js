@@ -67,10 +67,11 @@ describe("Main Flow", () => {
       .click();
     cy.get("#tGigReward").type("0.01");
     cy.get("#tGigStake").type("0.01");
-    cy.get("#tGigDeadline").click();
-    cy.wait(1000);
-    cy.get(`[aria-label="Jan 14, 2022"]`).click();
-    cy.contains("OK").click();
+    // cy.get("#tGigDeadline").click();
+    // cy.get("#tGigDeadline").type("Jan 14, 2022");
+    // cy.wait(10000);
+    // cy.get(`[aria-label="Jan 14, 2022"]`).click();
+    // cy.contains("OK").click();
     cy.get("#tGigAcceptance").type("1");
     cy.get("#bCreateGig").click();
     cy.get("#bWrap").click();
