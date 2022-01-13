@@ -19,6 +19,8 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # pass GitHub token to allow accurately detecting a build vs a re-run build
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MORALIS_APPLICATION_ID: ${{ secrets.MORALIS_APPLICATION_ID }}
+          MORALIS_SERVER_ID: ${{ secrets.MORALIS_SERVER_ID }}
           CYPRESS_REMOTE_DEBUGGING_PORT: 9222
           SKIP_METAMASK_SETUP: 1
 
