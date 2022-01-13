@@ -4,7 +4,7 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     # let's make sure our tests pass on Chrome browser
-    name: E2E on Edge
+    name: E2E on Chrome
     steps:
       - uses: actions/checkout@v2
       - name: start cypress
