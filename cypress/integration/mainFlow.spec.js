@@ -1,5 +1,5 @@
 describe("Main Flow", () => {
-  const gig = new Date().getTime().toFixed(5);
+  const gig = new Date().getTime().toString().substring(-5);
   before(() => {
     cy.setupMetamask(
       "shuffle stay hair student wagon senior problem drama parrot creek enact pluck",
@@ -84,8 +84,8 @@ describe("Main Flow", () => {
       expect(confirmed).to.be.true;
     });
     cy.get("#eLoader", { timeout: 100000 }).should("not.be.visible");
+    cy.wait(3000);
     cy.get("#bGotoGig").click();
-    cy.wait(4000);
     // cy.contains("Client Brief", { timeout: 4000 });
     // cy.wait(2000);
   });
@@ -118,7 +118,7 @@ describe("Main Flow", () => {
     cy.get("#bSendProposal").click();
     cy.wait(1000);
     cy.get("#bConfirmProposal").click();
-    cy.wait(2000);
+    cy.wait(3000);
     cy.get("#bGotoGig").click();
   });
   it(`Client Accepts proposal first confirmation`, () => {
@@ -147,6 +147,7 @@ describe("Main Flow", () => {
       expect(confirmed).to.be.true;
     });
     cy.get("#eLoader", { timeout: 100000 }).should("not.be.visible");
+    cy.wait(3000);
     cy.get("#bGotoGig").click();
   });
   it(`Freelancer starts work and submits work`, () => {
@@ -193,6 +194,7 @@ describe("Main Flow", () => {
       expect(confirmed).to.be.true;
     });
     cy.get("#eLoader", { timeout: 100000 }).should("not.be.visible");
+    cy.wait(3000);
     cy.get("#bGotoGig").click();
     // submit work
     // cy.get("#bSubmissionTab").click();
@@ -207,6 +209,7 @@ describe("Main Flow", () => {
       expect(confirmed).to.be.true;
     });
     cy.get("#eLoader", { timeout: 100000 }).should("not.be.visible");
+    cy.wait(3000);
     cy.get("#bGotoGig").click();
   });
   it(`Client accepts work`, () => {
@@ -235,6 +238,7 @@ describe("Main Flow", () => {
       expect(confirmed).to.be.true;
     });
     cy.get("#eLoader", { timeout: 100000 }).should("not.be.visible");
+    cy.wait(3000);
     cy.get("#bGotoGig").click();
     cy.wait(1000);
     cy.get("#tGigStatus").contains("Completed");
