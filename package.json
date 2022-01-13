@@ -7,7 +7,7 @@
     "start": "next start",
     "lint": "next lint",
     "cy:open": "CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress open",
-    "test": "CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress run --headed --browser edge"
+    "test": "CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress run --headed --browser edge --record --key b2176ce4-d158-44a2-8de7-c51ac66ee801"
   },
   "dependencies": {
     "@date-io/dayjs": "^2.11.0",
