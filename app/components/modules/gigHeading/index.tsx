@@ -73,7 +73,10 @@ export const GigHeading = (props: Props) => {
                   {[203, 401, 402, 403].includes(gig.status) && (
                     <i className="fas fa-circle flex flex-col justify-center mr-1 text-red-400"></i>
                   )}
-                  <div className="flex flex-col items-center justify-center">
+                  <div
+                    className="flex flex-col items-center justify-center"
+                    id="tGigStatus"
+                  >
                     {gigStatusMapping[gig.status]}
                   </div>
                 </div>

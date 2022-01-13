@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 interface Props {}
 
 const MyGigsFilter: React.FC<Props> = (props: Props) => {
-  const [status, setStatus] = useState();
+  const [status, setStatus] = useState(100);
   const router = useRouter();
   const statusParam = router.query.status as string;
   const { filterMyGigs, setMyGigs, setLoaded } = useMyGigs();

@@ -16,9 +16,29 @@ export const Layout = ({ children }: Props) => {
   const { dispatch } = useGlobal();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      initContractsAndUserStake(dispatch, user, Moralis);
-    }
+    const checkNetworkAndInitialize = async () => {
+      if (isAuthenticated) {
+        if (window.ethereum.networkVersion !== "80001") {
+          try {
+            await window.ethereum.request({
+              method: "wallet_switchEthereumChain",
+              params: [
+                {
+                  chainId: "0x13881",
+                },
+              ],
+            });
+            initContractsAndUserStake(dispatch, user, Moralis);
+          } catch (err) {
+            alert("Network switch denied, please refresh to try again");
+            return;
+          }
+        } else {
+          initContractsAndUserStake(dispatch, user, Moralis);
+        }
+      }
+    };
+    checkNetworkAndInitialize();
   }, [isAuthenticated, user]);
 
   return (

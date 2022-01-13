@@ -131,6 +131,7 @@ export const ConfirmModal = ({
                   variant="outlined"
                   endIcon={<ArrowCircleRightIcon />}
                   onClick={handleClose}
+                  id="bGotoGig"
                 >
                   Go to gig!
                 </Button>

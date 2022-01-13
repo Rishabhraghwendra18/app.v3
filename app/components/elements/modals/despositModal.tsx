@@ -62,8 +62,8 @@ const DepositModal = ({
           error={amount > balance}
           helperText={
             amount > balance
-              ? "Not enough Matic available"
-              : "You need to deposit matic for collateral"
+              ? "Not enough WMatic available"
+              : "You need to deposit WMatic for collateral"
           }
           inputProps={{ step: 0.1 }}
           InputProps={{
@@ -80,7 +80,7 @@ const DepositModal = ({
             label="Available Balance"
             type="number"
             fullWidth
-            variant="standard"
+            variant="filled"
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">WMatic</InputAdornment>

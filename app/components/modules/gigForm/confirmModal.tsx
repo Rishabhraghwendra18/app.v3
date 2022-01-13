@@ -78,7 +78,6 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
         setBalance(parseInt(res.balance) / 10 ** 18);
       });
   }, []);
-  console.log(values.reward);
   const modalStyle = {
     position: "absolute" as "absolute",
     top: "50%",

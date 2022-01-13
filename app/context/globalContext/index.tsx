@@ -89,7 +89,7 @@ const initContractsAndUserStake = async (
     });
     dispatch({
       type: "SET_ALLOWANCE",
-      value: parseFloat(ethers.utils.formatEther(allowance)) !== 0,
+      value: parseInt(ethers.utils.formatEther(allowance)) !== 0,
     });
     dispatch({
       type: "SET_CONVERSION_RATE",

@@ -98,6 +98,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                   variant="outlined"
                   endIcon={<ArrowCircleRightIcon />}
                   onClick={handleClose}
+                  id="bGotoGig"
                 >
                   Go to gig!
                 </Button>
