@@ -13,6 +13,7 @@ jobs:
           start: yarn dev
           wait-on: 'http://localhost:3000'
           browser: chrome
+          headless: false
           record: true
           env: CYPRESS_REMOTE_DEBUGGING_PORT=9222
         env:
