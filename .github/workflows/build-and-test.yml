@@ -1,10 +1,8 @@
-name: Spect E2E on Edge
+name: Spect E2E on Chrome
 on: [pull_request]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    container:
-      image: cypress/browsers:node14.10.1-edge88
     # let's make sure our tests pass on Chrome browser
     name: E2E on Edge
     steps:
@@ -14,7 +12,9 @@ jobs:
         with:
           start: yarn dev
           wait-on: 'http://localhost:3000'
-          browser: edge
+          browser: chrome
+          headed: true
+          headless: false
           record: true
           env: CYPRESS_REMOTE_DEBUGGING_PORT=9222
         env:
