@@ -24,7 +24,7 @@ import DateAdapter from "@mui/lab/AdapterDayjs";
 import dayjs from "dayjs";
 import Editor from "app/components/elements/richTextEditor/editor";
 import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ConfirmModal from "./confirmModal";
 import { LightTooltip } from "app/components/elements/styledComponents";
 
@@ -64,7 +64,6 @@ export const GigForm: React.FC<Props> = (props: Props) => {
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <div className="flex flex-col col-span-5 border-grey-normal border-l px-12">
       {isOpen && (
@@ -104,6 +103,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                     fullWidth
                     required
                     error={fieldState.error ? true : false}
+                    id="tGigName"
                   />
                 </LightTooltip>
               )}
@@ -118,6 +118,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                   value={field.value}
                   onChange={field.onChange}
                   placeholder={"Write a thorough description of the gig"}
+                  id="tGigDescription"
                 />
               )}
             />
@@ -134,7 +135,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                 >
                   <Autocomplete
                     multiple
-                    id="tags-standard"
+                    id="tGigSkills"
                     options={skillOptions}
                     getOptionLabel={(option) => option.label}
                     onChange={(e, data) => field.onChange(data)}
@@ -181,6 +182,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                       ),
                     }}
                     fullWidth
+                    id="tGigReward"
                   />
                 </LightTooltip>
               )}
@@ -215,6 +217,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                       ),
                     }}
                     fullWidth
+                    id="tGigStake"
                   />
                 </LightTooltip>
               )}
@@ -227,6 +230,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
               <Controller
                 name="deadline"
                 control={control}
+                defaultValue={dayjs().add(1, "day").startOf("day")}
                 render={({ field }) => (
                   <DateTimePicker
                     {...field}
@@ -245,6 +249,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                           helperText={
                             params.error && "Enter a date later than now"
                           }
+                          id="tGigDeadline"
                         />
                       </LightTooltip>
                     )}
@@ -283,6 +288,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                       ),
                     }}
                     inputProps={{ min: 0 }}
+                    id="tGigAcceptance"
                   />
                 </LightTooltip>
               )}
@@ -297,6 +303,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
             fullWidth
             type="submit"
             endIcon={<AssignmentTurnedInIcon />}
+            id="bCreateGig"
           >
             Create Gig
           </PrimaryButton>

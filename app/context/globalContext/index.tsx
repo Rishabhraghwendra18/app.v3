@@ -87,10 +87,9 @@ const initContractsAndUserStake = async (
       type: "SET_COLLATERAL",
       value: parseFloat(ethers.utils.formatEther(collateral)),
     });
-
     dispatch({
       type: "SET_ALLOWANCE",
-      value: parseFloat(ethers.utils.formatEther(collateral)) !== 0,
+      value: parseInt(ethers.utils.formatEther(allowance)) !== 0,
     });
     dispatch({
       type: "SET_CONVERSION_RATE",

@@ -136,12 +136,18 @@ const ProfileInfo = (props: Props) => {
             </div>
           </div>
           <div className="text-base mt-4">
-            <ReactQuill
-              value={userInfo?.get("description") || ""}
-              readOnly={true}
-              theme={"bubble"}
-            />
+            {userInfo?.get("description") && (
+              <ReactQuill
+                value={userInfo?.get("description")}
+                readOnly={true}
+                theme={"bubble"}
+              />
+            )}
           </div>
+          {!userInfo?.get("description") &&
+            !userInfo?.get("descriptionTitle") && (
+              <div className="text-xl">You have not added your bio yet!</div>
+            )}
         </div>
       </div>
       <Portfolio />

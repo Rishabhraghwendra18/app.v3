@@ -1,13 +1,25 @@
-import { Layout } from "app/components/layouts";
 import { GigForm } from "app/components/modules/gigForm";
 import { NextPage } from "next";
 import Head from "next/head";
-import { motion } from "framer-motion";
 import AnimatedLayout from "app/components/layouts/animatedLayout";
+import { useEffect, useState } from "react";
+import { useGlobal } from "app/context/globalContext";
+import InitUserModal from "app/components/elements/modals/initUserModal";
 
 interface Props {}
 
 const CreateGig: NextPage<Props> = (props: Props) => {
+  const {
+    state: { userInfo },
+  } = useGlobal();
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    // if (!userInfo?.get("isInitialized")) {
+    //   setIsOpen(true);
+    // }
+  }, []);
+
   return (
     <div>
       <Head>
@@ -15,6 +27,7 @@ const CreateGig: NextPage<Props> = (props: Props) => {
         <meta name="description" content="Create Gig" />
       </Head>
       <AnimatedLayout>
+        {isOpen && <InitUserModal isOpen={isOpen} setIsOpen={setIsOpen} />}
         <div className="px-12">
           <div className="grid gap-1 grid-cols-6 mt-8">
             <div></div>

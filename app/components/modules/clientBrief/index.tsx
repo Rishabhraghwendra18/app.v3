@@ -185,6 +185,7 @@ const ClientBrief = (props: Props) => {
                     onClick={() => {
                       setTab(2);
                     }}
+                    id="bSubmitProposal"
                   >
                     Submit Proposal
                   </PrimaryButton>

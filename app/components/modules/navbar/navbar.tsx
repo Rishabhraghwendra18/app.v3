@@ -36,7 +36,10 @@ export const Navbar = (props: Props) => {
             <div className="text-sm flex-grow flex font-bold">
               <div className="flex flex-col justify-center">
                 <Link href="/" passHref>
-                  <button className="hidden md:flex flex-col justify-center transform transition-colors ease-in-out duration-1000 rounded-l-full px-3 lg:px-5 bg-blue-lighter text-black-normal hover:text-white hover:bg-blue-bright border-r-1 border-gray-400 font-bold py-2">
+                  <button
+                    className="hidden md:flex flex-col justify-center transform transition-colors ease-in-out duration-1000 rounded-l-full px-3 lg:px-5 bg-blue-lighter text-black-normal hover:text-white hover:bg-blue-bright border-r-1 border-gray-400 font-bold py-2"
+                    id="bNavbarExplore"
+                  >
                     Explore
                   </button>
                 </Link>
@@ -45,6 +48,7 @@ export const Navbar = (props: Props) => {
                 <Link href="/createGig" passHref>
                   <button
                     className="hidden md:flex flex-col justify-center transform transition-colors ease-in-out duration-1000 rounded-r-full px-2 lg:px-5 bg-blue-lighter text-black-normal hover:text-white hover:bg-blue-bright border-gray-400 font-bold py-2"
+                    id="bNavbarCreateGig"
                     onClick={() => {
                       if (!isAuthenticated) {
                         authenticate();
@@ -120,7 +124,10 @@ export const Navbar = (props: Props) => {
                 documentation={false}
                 PopoverButton={() => {
                   return (
-                    <button className="hidden md:flex flex-row rounded-full bg-blue-100 hover:text-white hover:bg-blue-bright font-bold transform transition-colors ease-in-out duration-1000">
+                    <button
+                      className="hidden md:flex flex-row rounded-full bg-blue-100 hover:text-white hover:bg-blue-bright font-bold transform transition-colors ease-in-out duration-1000"
+                      id="bConnectWallet"
+                    >
                       <div className="flex flex-col justify-center items-center mt-2 text-sm block justify-end px-4 my-2 text-black-normal">
                         <span>
                           {!isAuthenticating
@@ -141,7 +148,10 @@ export const Navbar = (props: Props) => {
                 small={true}
                 PopoverButton={() => {
                   return (
-                    <button className="hidden md:flex flex-row rounded-full bg-blue-100 hover:text-white hover:bg-blue-bright font-bold transform transition-colors ease-in-out duration-1000">
+                    <button
+                      className="hidden md:flex flex-row rounded-full bg-blue-100 hover:text-white hover:bg-blue-bright font-bold transform transition-colors ease-in-out duration-1000"
+                      id="bAddressInfo"
+                    >
                       <NavbarAvatar src={userInfo?.get("profilePicture")} />
                       <div className="flex flex-col justify-center items-center mt-2 text-sm block justify-end px-4 mb-1 text-black-normal">
                         {smartTrim(user?.get("ethAddress"), 10)}

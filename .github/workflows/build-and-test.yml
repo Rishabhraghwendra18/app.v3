@@ -1,0 +1,26 @@
+name: Spect E2E on Chrome
+on: [pull_request]
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    # let's make sure our tests pass on Chrome browser
+    name: E2E on Chrome
+    steps:
+      - uses: actions/checkout@v2
+      - name: start cypress
+        uses: cypress-io/github-action@v2
+        with:
+          start: yarn dev
+          wait-on: 'http://localhost:3000'
+          command: yarn test
+        env:
+          # pass the Dashboard record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass GitHub token to allow accurately detecting a build vs a re-run build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MORALIS_APPLICATION_ID: ${{ secrets.MORALIS_APPLICATION_ID }}
+          MORALIS_SERVER_ID: ${{ secrets.MORALIS_SERVER_ID }}
+          CYPRESS_REMOTE_DEBUGGING_PORT: 9222
+          SKIP_METAMASK_SETUP: 1
+
+          

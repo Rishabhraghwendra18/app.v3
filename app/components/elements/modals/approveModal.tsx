@@ -43,6 +43,7 @@ const ApproveModal = ({
             variant="outlined"
             onClick={() => handleClose()}
             sx={{ mr: 1, color: "#f45151" }}
+            id="bCancel"
           >
             Cancel
           </Button>
@@ -66,7 +67,7 @@ const ApproveModal = ({
                 });
             }}
             variant="outlined"
-            disabled={amount > balance}
+            id="bApprove"
           >
             Approve
           </Button>

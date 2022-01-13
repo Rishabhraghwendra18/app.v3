@@ -6,12 +6,14 @@ export const gigs = [
     description: "Check out your created gigs which are yet to start",
     href: "myGigs?status=myCreated",
     icon: IconOne,
+    id: "bMyCreatedGigs",
   },
   {
     name: "In progress",
     description: "See your gigs that have started",
     href: "myGigs?status=myActive",
     icon: IconThree,
+    id: "bMyInProgressGigs",
   },
   {
     name: "In Review",
@@ -40,11 +42,13 @@ export const profile = [
   {
     name: "Profile",
     href: "/profile",
+    id: "bProfile",
   },
   {
     name: "Logout",
     href: "/",
     authenticate: 3,
+    id: "bLogout",
   },
 ];
 
@@ -55,6 +59,7 @@ export const wallets = [
     description: "The most common wallet used",
     authenticate: 1,
     href: "",
+    id: "bMetamaskConnect",
   },
   {
     name: "WalletConnect",

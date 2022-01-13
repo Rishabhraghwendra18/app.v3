@@ -110,7 +110,7 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                     <TextField
                       {...field}
                       label="Username"
-                      variant="standard"
+                      variant="filled"
                       helperText={
                         fieldState.error?.type === "minLength" &&
                         "Gig title too short. Please make it more understandable."
@@ -141,7 +141,7 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                     <TextField
                       {...field}
                       label="Email"
-                      variant="standard"
+                      variant="filled"
                       helperText={
                         fieldState.error?.type === "minLength" &&
                         "Gig title too short. Please make it more understandable."
@@ -178,7 +178,7 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                         <TextField
                           {...params}
                           variant="standard"
-                          label="Required Skills"
+                          label="Skills"
                         />
                       )}
                     />

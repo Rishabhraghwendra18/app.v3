@@ -35,7 +35,7 @@ const Notifications = (props: Props) => {
       {({ open }) => (
         <>
           <Popover.Button
-            className="hidden md:flex flex flex-row font-bold justify-center items-center ml-5 px-2 text-gray-400 rounded-full bg-transparent"
+            className="hidden md:flex flex flex-row font-bold justify-center items-center ml-5 px-2 text-gray-400 rounded-full bg-transparent bNotifications"
             onMouseEnter={() => setShow(true)}
           >
             {show === true && (

@@ -16,10 +16,30 @@ export const Layout = ({ children }: Props) => {
   const { dispatch } = useGlobal();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      initContractsAndUserStake(dispatch, user, Moralis);
-    }
-  }, [isAuthenticated]);
+    const checkNetworkAndInitialize = async () => {
+      if (isAuthenticated) {
+        if (window.ethereum.networkVersion !== "80001") {
+          try {
+            await window.ethereum.request({
+              method: "wallet_switchEthereumChain",
+              params: [
+                {
+                  chainId: "0x13881",
+                },
+              ],
+            });
+            initContractsAndUserStake(dispatch, user, Moralis);
+          } catch (err) {
+            alert("Network switch denied, please refresh to try again");
+            return;
+          }
+        } else {
+          initContractsAndUserStake(dispatch, user, Moralis);
+        }
+      }
+    };
+    checkNetworkAndInitialize();
+  }, [isAuthenticated, user]);
 
   return (
     <div className="relative min-h-screen flex flex-col w-full tracking-wide leading-normal antialiased bg-blue-darkbg layout text-grey-light transform transition-colors ease-in-out duration-1000 hidden md:flex">

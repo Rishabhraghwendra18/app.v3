@@ -40,6 +40,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
   const [required, setRequired] = useState(0);
   const [balance, setBalance] = useState(0);
   const [loaderText, setLoaderText] = useState("");
+  const [reward, setReward] = useState(0);
   const {
     state: { contracts, userStake },
     dispatch,
@@ -53,21 +54,20 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
 
   useEffect(() => {
     updateUserStake(dispatch, user, contracts);
-    values.reward =
+    const totalReward =
       parseFloat(values.reward.toString()) +
       parseFloat((0.02 * values.reward).toString());
-
+    setReward(totalReward);
     if (userStake?.balance !== undefined) {
       if (!userStake.allowance) {
         setActiveStep(0);
-      }
-      if (values.reward > userStake?.balance) {
+      } else if (totalReward > userStake?.balance) {
         setActiveStep(1);
       } else {
         setActiveStep(2);
       }
-      setRequired(values.reward - userStake?.balance);
-      setAmount(values.reward - userStake?.balance);
+      setRequired(totalReward - userStake?.balance);
+      setAmount(totalReward - userStake?.balance);
     }
     Moralis.Web3API.account
       .getNativeBalance({
@@ -78,7 +78,6 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
         setBalance(parseInt(res.balance) / 10 ** 18);
       });
   }, []);
-
   const modalStyle = {
     position: "absolute" as "absolute",
     top: "50%",
@@ -118,7 +117,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
               alignItems: "center",
             }}
           >
-            <CircularProgress color="inherit" />
+            <CircularProgress color="inherit" id="eLoader" />
             <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
               {loaderText}
             </Typography>
@@ -151,6 +150,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                   variant="outlined"
                   endIcon={<ArrowCircleRightIcon />}
                   onClick={handleClose}
+                  id="bGotoGig"
                 >
                   Go to gig!
                 </Button>
@@ -195,8 +195,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                 Are you sure you want to create the gig?
               </Typography>
               <Typography sx={{ color: "#eaeaea" }}>
-                {values.reward.toFixed(3)} WMatic will be escrowed from your
-                wallet.
+                {reward.toFixed(3)} WMatic will be escrowed from your wallet.
               </Typography>
             </Box>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
@@ -212,6 +211,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
               <Box sx={{ flex: "1 1 auto" }} />
               <Button
                 variant="outlined"
+                id="bCreateGigConfirm"
                 endIcon={<CheckCircleIcon />}
                 onClick={() => {
                   setLoaderText("Uploading metatdata on IPFS please wait....");

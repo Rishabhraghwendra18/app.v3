@@ -98,6 +98,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                   variant="outlined"
                   endIcon={<ArrowCircleRightIcon />}
                   onClick={handleClose}
+                  id="bGotoGig"
                 >
                   Go to gig!
                 </Button>
@@ -153,6 +154,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                 }}
                 sx={{ mr: 1, textTransform: "none" }}
                 variant="outlined"
+                id="bConfirmProposal"
               >
                 Hell yeah!
               </Button>

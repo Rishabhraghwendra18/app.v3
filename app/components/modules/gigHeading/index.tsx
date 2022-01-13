@@ -24,6 +24,10 @@ export const GigHeading = (props: Props) => {
     setTab(newValue);
   };
 
+  if (!gig || !gig.name) {
+    return <div></div>;
+  }
+
   return (
     <Fade in={!fetching} timeout={500}>
       <div>
@@ -33,7 +37,7 @@ export const GigHeading = (props: Props) => {
               <Link href={`/profile/`} passHref>
                 <HeadingAvatar
                   alt="Username"
-                  src={gig?.user[0].profilePicture}
+                  src={gig.user[0].profilePicture}
                 />
               </Link>
             </div>
@@ -73,7 +77,10 @@ export const GigHeading = (props: Props) => {
                   {[203, 401, 402, 403].includes(gig.status) && (
                     <i className="fas fa-circle flex flex-col justify-center mr-1 text-red-400"></i>
                   )}
-                  <div className="flex flex-col items-center justify-center">
+                  <div
+                    className="flex flex-col items-center justify-center"
+                    id="tGigStatus"
+                  >
                     {gigStatusMapping[gig.status]}
                   </div>
                 </div>
@@ -206,7 +213,12 @@ export const GigHeading = (props: Props) => {
                 (gig.proposal.length &&
                   gig.proposal[0].freelancer ===
                     userInfo?.get("spectUsername"))) && (
-                <StyledTab label="Submissions" {...a11yProps(5)} value={5} />
+                <StyledTab
+                  label="Submissions"
+                  {...a11yProps(5)}
+                  value={5}
+                  id="bSubmissionTab"
+                />
               )}
             {[403].includes(gig.status) &&
               (gig.clientUsername === userInfo?.get("spectUsername") ||
