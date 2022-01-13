@@ -12,11 +12,7 @@ jobs:
         with:
           start: yarn dev
           wait-on: 'http://localhost:3000'
-          browser: chrome
-          headed: true
-          headless: false
-          record: true
-          env: CYPRESS_REMOTE_DEBUGGING_PORT=9222
+          command: CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress run --browser --headed chrome --record --key b2176ce4-d158-44a2-8de7-c51ac66ee801
         env:
           # pass the Dashboard record key as an environment variable
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
