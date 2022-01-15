@@ -191,6 +191,9 @@ const SubmissionForm = (props: Props) => {
               </div>
             );
           })}
+          <div className="my-4 w-1/5">
+            <FileInput name="file" control={control} />
+          </div>
           <div className="my-4 w-1/2">
             <Controller
               name="comments"
@@ -209,10 +212,6 @@ const SubmissionForm = (props: Props) => {
               )}
             />
           </div>
-          <div className="my-4 w-1/5">
-            <FileInput name="file" control={control} />
-          </div>
-
           <div className="w-1/4 my-4">
             <PrimaryButton
               variant="outlined"

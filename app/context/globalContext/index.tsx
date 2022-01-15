@@ -2,24 +2,13 @@ import React, { createContext, useReducer, useContext } from "react";
 import { State, initialState } from "./initalstate";
 import { Action, reducer } from "./reducer";
 import { ethers } from "ethers";
-
-import mumbaiUserAddress from "../../constants/contracts/mumbai/user-address.json";
-import mumbaiJobAddress from "../../constants/contracts/mumbai/job-address.json";
-import mumbaiOracleAddress from "../../constants/contracts/mumbai/oracle-address.json";
-import mumbaiWmaticAddress from "../../constants/contracts/mumbai/wmatic-address.json";
-
-import polygonUserAddress from "../../constants/contracts/polygon/user-address.json";
-import polygonJobAddress from "../../constants/contracts/polygon/job-address.json";
-import polygonOracleAddress from "../../constants/contracts/polygon/oracle-address.json";
-import polygonWmaticAddress from "../../constants/contracts/polygon/wmatic-address.json";
-
-import userABI from "../../constants/contracts/mumbai/User.json";
-import dealABI from "../../constants/contracts/mumbai/Deal.json";
-import oracleABI from "../../constants/contracts/mumbai/Oracle.json";
-import wmaticABI from "../../constants/contracts/mumbai/Wmatic.json";
 import Moralis from "moralis/types";
 import { Contracts } from "app/types";
 import { getUser } from "app/utils/moralis";
+import {
+  initializeMumbaiContracts,
+  initializePolygonContracts,
+} from "app/utils/contracts";
 
 declare global {
   interface Window {
@@ -37,29 +26,22 @@ const initContractsAndUserStake = async (
   user: Moralis.User | null,
   moralis: Moralis
 ) => {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
   dispatch({ type: "START_ASYNC" });
   try {
-    let dealContract = new ethers.Contract(
-      mumbaiJobAddress.Deal,
-      dealABI.abi,
-      provider.getSigner()
-    );
-    let userContract = new ethers.Contract(
-      mumbaiUserAddress.User,
-      userABI.abi,
-      provider.getSigner()
-    );
-    let tokenContract = new ethers.Contract(
-      mumbaiWmaticAddress.Wmatic,
-      wmaticABI.abi,
-      provider.getSigner()
-    );
-    let oracleContract = new ethers.Contract(
-      mumbaiOracleAddress.Oracle,
-      oracleABI,
-      provider.getSigner()
-    );
+    let oracleContract, tokenContract, userContract, dealContract;
+    if (process.env.NETWORK_CHAIN === "polygon") {
+      const { deal, user, token, oracle } = initializePolygonContracts();
+      dealContract = deal;
+      userContract = user;
+      tokenContract = token;
+      oracleContract = oracle;
+    } else {
+      const { deal, user, token, oracle } = initializeMumbaiContracts();
+      dealContract = deal;
+      userContract = user;
+      tokenContract = token;
+      oracleContract = oracle;
+    }
     const conversionRate = await oracleContract.latestRoundData();
     const balance = await tokenContract.balanceOf(user?.get("ethAddress"));
     const deposit = await userContract.getDeposit(user?.get("ethAddress"));

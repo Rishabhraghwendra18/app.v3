@@ -64,6 +64,10 @@ export const GigForm: React.FC<Props> = (props: Props) => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const validateDate = (date: dayjs.Dayjs) => {
+    return date >= dayjs().add(1, "day").startOf("day");
+  };
   return (
     <div className="flex flex-col col-span-5 border-grey-normal border-l px-12">
       {isOpen && (
@@ -231,6 +235,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                 name="deadline"
                 control={control}
                 defaultValue={dayjs().add(1, "day").startOf("day")}
+                rules={{ validate: validateDate }}
                 render={({ field }) => (
                   <DateTimePicker
                     {...field}

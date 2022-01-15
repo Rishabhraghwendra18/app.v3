@@ -25,10 +25,6 @@ const SortButton = ({
   array,
   setArray,
 }: Props) => {
-  useEffect(() => {
-    console.log(`Name: ${name} currentSort: ${currentSort}`);
-  }, []);
-
   return (
     <div>
       <Button

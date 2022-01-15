@@ -37,7 +37,6 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
   } = useGlobal();
   const { Moralis, user } = useMoralis();
   const onSubmit: SubmitHandler<IInfoFormInput> = async (values) => {
-    console.log(values);
     setLoading(true);
     userInfo?.set("descriptionTitle", values.title);
     userInfo?.set("name", values.name);

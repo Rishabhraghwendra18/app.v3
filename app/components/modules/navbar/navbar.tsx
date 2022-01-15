@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import NavbarPopover from "app/components/elements/Popover";
 import { gigs, profile, proposals, wallets } from "app/constants/constants";
 import { smartTrim } from "app/utils/utils";
@@ -29,9 +30,11 @@ export const Navbar = (props: Props) => {
         role="navigation"
       >
         <div className="grid gap-1 grid-cols-6 w-full">
-          <div className="flex flex-shrink-0 col-span-1">
-            <Image src={Logo} alt="logo" height="48" width="140" />
-          </div>
+          <a href="/">
+            <div className="flex flex-shrink-0 col-span-1">
+              <Image src={Logo} alt="logo" height="48" width="140" />
+            </div>
+          </a>
           <div className="hidden md:flex w-full flex-grow items-center pr-8 col-span-5">
             <div className="text-sm flex-grow flex font-bold">
               <div className="flex flex-col justify-center">
