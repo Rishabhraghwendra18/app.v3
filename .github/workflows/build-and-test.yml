@@ -11,7 +11,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           start: yarn dev
-          wait-on: 'http://localhost:3000'
+          wait-on: "http://localhost:3000"
           command: yarn test
         env:
           # pass the Dashboard record key as an environment variable
@@ -22,5 +22,4 @@ jobs:
           MORALIS_SERVER_ID: ${{ secrets.MORALIS_SERVER_ID }}
           CYPRESS_REMOTE_DEBUGGING_PORT: 9222
           SKIP_METAMASK_SETUP: 1
-
-          
+          NETWORK_CHAIN: ${{ secrets.NETWORK_CHAIN }}
