@@ -179,7 +179,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                     type="number"
                     required
                     error={fieldState.error ? true : false}
-                    inputProps={{ min: 0, step: 0.01 }}
+                    inputProps={{ min: 0, step: 1 }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="start">WMatic</InputAdornment>
@@ -214,7 +214,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                     type="number"
                     required
                     error={fieldState.error ? true : false}
-                    inputProps={{ min: 0, step: 0.01 }}
+                    inputProps={{ min: 0, step: 1 }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="start">WMatic</InputAdornment>

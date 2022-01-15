@@ -158,7 +158,7 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
                       type="number"
                       required
                       error={fieldState.error ? true : false}
-                      inputProps={{ min: gig.minStake, step: 0.01 }}
+                      inputProps={{ min: gig.minStake, step: 1 }}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="start">
