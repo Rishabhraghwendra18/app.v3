@@ -124,7 +124,7 @@ const GigSummary = ({ gig }: Props) => {
                     }}
                   >
                     <PersonIcon sx={{ fontSize: "1rem" }} />
-                    {gig.numApplicants} Applicants
+                    {gig.numApplicants || 0} Applicants
                   </Typography>
                 </div>
               </Box>

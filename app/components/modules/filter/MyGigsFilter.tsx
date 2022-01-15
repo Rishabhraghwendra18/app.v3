@@ -14,7 +14,7 @@ const MyGigsFilter: React.FC<Props> = (props: Props) => {
   const { filterMyGigs, setMyGigs, setLoaded } = useMyGigs();
   useEffect(() => {
     if (statusParam) {
-      setStatus(statusToStatusIdMap[statusParam]);
+      setStatus(statusToStatusIdMap[statusParam] || 100);
       setLoaded(false);
       filterMyGigs({
         onSuccess: (res) => {

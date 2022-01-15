@@ -4,27 +4,27 @@ export const gigs = [
   {
     name: "Created",
     description: "Check out your created gigs which are yet to start",
-    href: "myGigs?status=myCreated",
+    href: "/myGigs?status=myCreated",
     icon: IconOne,
     id: "bMyCreatedGigs",
   },
   {
     name: "In progress",
     description: "See your gigs that have started",
-    href: "myGigs?status=myActive",
+    href: "/myGigs?status=myActive",
     icon: IconThree,
     id: "bMyInProgressGigs",
   },
   {
     name: "In Review",
     description: "Check gigs waiting for your review",
-    href: "myGigs?status=myInReview",
+    href: "/myGigs?status=myInReview",
     icon: IconTwo,
   },
   {
     name: "Completed",
     description: "Check out your completed gigs",
-    href: "myGigs?status=myCompleted",
+    href: "/myGigs?status=myCompleted",
     icon: IconOne,
   },
 ];
@@ -216,13 +216,13 @@ export const statusToStatusIdMap = {
 };
 
 export const statusIdToStatusMap = {
-  100: "all",
   101: "myCreated",
   201: "myActive",
   202: "myInReview",
   203: "myCompleted",
   402: "myViolations",
   403: "myDisputed",
+  401: "myDelisted",
 };
 
 export const proposalStatusIdToStatusMap = {
