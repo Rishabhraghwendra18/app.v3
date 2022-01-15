@@ -264,3 +264,24 @@ export const animationVariant = {
     },
   },
 };
+
+export const chainIdMapping = {
+  mumbai: "0x13881",
+  polygon: "0x89",
+};
+
+export const chainIdMappingDecimal = {
+  mumbai: "80001",
+  polygon: "137",
+};
+
+export const chainRPC = {
+  mumbai:
+    "https://speedy-nodes-nyc.moralis.io/f84f46508f22a737cbbdb355/polygon/mumbai",
+  polygon: "https://polygon-rpc.com/",
+};
+
+export const chainNameMapping = {
+  mumbai: "Polygon Mumbai testnet",
+  polygon: "Polygon Mainnet",
+};

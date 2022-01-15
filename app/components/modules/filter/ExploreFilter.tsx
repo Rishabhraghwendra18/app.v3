@@ -72,26 +72,26 @@ const ExploreFilter: React.FC<Props> = (props: Props) => {
           checked={collateralOptionSelected === 1}
           option={1}
           setOptionSelected={setCollateralOptionSelected}
-          text={"100 or lower"}
+          text={"10 or lower"}
           minFilter={0}
-          maxFilter={0.01}
+          maxFilter={10}
           groupName="collateral"
         />
         <OptionFilter
           checked={collateralOptionSelected === 2}
           option={2}
           setOptionSelected={setCollateralOptionSelected}
-          text={"100 - 500"}
-          minFilter={0.02}
-          maxFilter={1}
+          text={"10 - 50"}
+          minFilter={10}
+          maxFilter={50}
           groupName="collateral"
         />
         <OptionFilter
           checked={collateralOptionSelected === 3}
           option={3}
           setOptionSelected={setCollateralOptionSelected}
-          text={"Above 500"}
-          minFilter={1}
+          text={"Above 50"}
+          minFilter={50}
           maxFilter={Number.MAX_SAFE_INTEGER}
           groupName="collateral"
         />
@@ -111,7 +111,7 @@ const ExploreFilter: React.FC<Props> = (props: Props) => {
           checked={deadlineOptionSelected === 0}
           option={0}
           setOptionSelected={setDeadlineOptionSelected}
-          text={"None"}
+          text={"Show All"}
           minFilter={0}
           maxFilter={365}
           groupName="deadline"

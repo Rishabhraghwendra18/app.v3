@@ -83,31 +83,25 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
                 }}
                 defaultValue={userInfo?.get("github")}
                 render={({ field, fieldState }) => (
-                  <LightTooltip
-                    arrow
-                    placement="right"
-                    title={gigHelperTexts["name"]}
-                  >
-                    <TextField
-                      {...field}
-                      label="Gitub"
-                      variant="standard"
-                      helperText={
-                        fieldState.error?.type === "pattern" &&
-                        "Invalid URL. Please provide the correct URL."
-                      }
-                      fullWidth
-                      error={fieldState.error ? true : false}
-                      placeholder="https://github.com/john-smith"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <i className="fab fa-github" />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </LightTooltip>
+                  <TextField
+                    {...field}
+                    label="Gitub"
+                    variant="standard"
+                    helperText={
+                      fieldState.error?.type === "pattern" &&
+                      "Invalid URL. Please provide the correct URL."
+                    }
+                    fullWidth
+                    error={fieldState.error ? true : false}
+                    placeholder="https://github.com/john-smith"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <i className="fab fa-github" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
                 )}
               />
             </div>
@@ -121,31 +115,25 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
                 }}
                 defaultValue={userInfo?.get("linkedIn")}
                 render={({ field, fieldState }) => (
-                  <LightTooltip
-                    arrow
-                    placement="right"
-                    title={gigHelperTexts["name"]}
-                  >
-                    <TextField
-                      {...field}
-                      label="LinkedIn"
-                      variant="standard"
-                      helperText={
-                        fieldState.error?.type === "pattern" &&
-                        "Invalid URL. Please provide the correct URL."
-                      }
-                      fullWidth
-                      error={fieldState.error ? true : false}
-                      placeholder="https://linkedIn.com/john-smith"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <i className="fab fa-linkedin" />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </LightTooltip>
+                  <TextField
+                    {...field}
+                    label="LinkedIn"
+                    variant="standard"
+                    helperText={
+                      fieldState.error?.type === "pattern" &&
+                      "Invalid URL. Please provide the correct URL."
+                    }
+                    fullWidth
+                    error={fieldState.error ? true : false}
+                    placeholder="https://linkedIn.com/john-smith"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <i className="fab fa-linkedin" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
                 )}
               />
             </div>
@@ -159,31 +147,25 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
                 }}
                 defaultValue={userInfo?.get("twitter")}
                 render={({ field, fieldState }) => (
-                  <LightTooltip
-                    arrow
-                    placement="right"
-                    title={gigHelperTexts["name"]}
-                  >
-                    <TextField
-                      {...field}
-                      label="Twitter"
-                      variant="standard"
-                      helperText={
-                        fieldState.error?.type === "pattern" &&
-                        "Invalid URL. Please provide the correct URL."
-                      }
-                      fullWidth
-                      error={fieldState.error ? true : false}
-                      placeholder="https://twitter.com/john-smith"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <i className="fab fa-twitter" />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </LightTooltip>
+                  <TextField
+                    {...field}
+                    label="Twitter"
+                    variant="standard"
+                    helperText={
+                      fieldState.error?.type === "pattern" &&
+                      "Invalid URL. Please provide the correct URL."
+                    }
+                    fullWidth
+                    error={fieldState.error ? true : false}
+                    placeholder="https://twitter.com/john-smith"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <i className="fab fa-twitter" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
                 )}
               />
             </div>
@@ -197,31 +179,25 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
                 }}
                 defaultValue={userInfo?.get("instagram")}
                 render={({ field, fieldState }) => (
-                  <LightTooltip
-                    arrow
-                    placement="right"
-                    title={gigHelperTexts["name"]}
-                  >
-                    <TextField
-                      {...field}
-                      label="Instagram"
-                      variant="standard"
-                      helperText={
-                        fieldState.error?.type === "pattern" &&
-                        "Invalid URL. Please provide the correct URL."
-                      }
-                      fullWidth
-                      error={fieldState.error ? true : false}
-                      placeholder="https://instagram.com/john-smith"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <i className="fab fa-instagram" />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </LightTooltip>
+                  <TextField
+                    {...field}
+                    label="Instagram"
+                    variant="standard"
+                    helperText={
+                      fieldState.error?.type === "pattern" &&
+                      "Invalid URL. Please provide the correct URL."
+                    }
+                    fullWidth
+                    error={fieldState.error ? true : false}
+                    placeholder="https://instagram.com/john-smith"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <i className="fab fa-instagram" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
                 )}
               />
             </div>
@@ -234,31 +210,25 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
                 }}
                 defaultValue={userInfo?.get("discord")}
                 render={({ field, fieldState }) => (
-                  <LightTooltip
-                    arrow
-                    placement="right"
-                    title={gigHelperTexts["name"]}
-                  >
-                    <TextField
-                      {...field}
-                      label="Discord"
-                      variant="standard"
-                      helperText={
-                        fieldState.error?.type === "pattern" &&
-                        "Wrong discord username. Please provide the correct username."
-                      }
-                      fullWidth
-                      error={fieldState.error ? true : false}
-                      placeholder="john.smith#1111"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <i className="fab fa-discord"></i>
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </LightTooltip>
+                  <TextField
+                    {...field}
+                    label="Discord"
+                    variant="standard"
+                    helperText={
+                      fieldState.error?.type === "pattern" &&
+                      "Wrong discord username. Please provide the correct username."
+                    }
+                    fullWidth
+                    error={fieldState.error ? true : false}
+                    placeholder="john.smith#1111"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <i className="fab fa-discord"></i>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
                 )}
               />
             </div>
@@ -272,31 +242,25 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
                     /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/,
                 }}
                 render={({ field, fieldState }) => (
-                  <LightTooltip
-                    arrow
-                    placement="right"
-                    title={gigHelperTexts["name"]}
-                  >
-                    <TextField
-                      {...field}
-                      label="Behance"
-                      variant="standard"
-                      helperText={
-                        fieldState.error?.type === "pattern" &&
-                        "Invalid URL. Please provide the correct URL."
-                      }
-                      fullWidth
-                      error={fieldState.error ? true : false}
-                      placeholder="https://behance.net/john-smith"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <i className="fab fa-behance" />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </LightTooltip>
+                  <TextField
+                    {...field}
+                    label="Behance"
+                    variant="standard"
+                    helperText={
+                      fieldState.error?.type === "pattern" &&
+                      "Invalid URL. Please provide the correct URL."
+                    }
+                    fullWidth
+                    error={fieldState.error ? true : false}
+                    placeholder="https://behance.net/john-smith"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <i className="fab fa-behance" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
                 )}
               />
             </div>
@@ -310,31 +274,25 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
                 }}
                 defaultValue={userInfo?.get("website")}
                 render={({ field, fieldState }) => (
-                  <LightTooltip
-                    arrow
-                    placement="right"
-                    title={gigHelperTexts["name"]}
-                  >
-                    <TextField
-                      {...field}
-                      label="Website"
-                      variant="standard"
-                      helperText={
-                        fieldState.error?.type === "pattern" &&
-                        "Invalid URL. Please provide the correct URL."
-                      }
-                      fullWidth
-                      error={fieldState.error ? true : false}
-                      placeholder="https://john-smith.com/"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <i className="fab fa-firefox-browser"></i>
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </LightTooltip>
+                  <TextField
+                    {...field}
+                    label="Website"
+                    variant="standard"
+                    helperText={
+                      fieldState.error?.type === "pattern" &&
+                      "Invalid URL. Please provide the correct URL."
+                    }
+                    fullWidth
+                    error={fieldState.error ? true : false}
+                    placeholder="https://john-smith.com/"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <i className="fab fa-firefox-browser"></i>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
                 )}
               />
             </div>
