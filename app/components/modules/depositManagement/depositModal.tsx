@@ -75,7 +75,7 @@ const DepositModal = ({ step }: Props) => {
     setActiveStep(step);
     Moralis.Web3API.account
       .getNativeBalance({
-        chain: "mumbai",
+        chain: process.env.NETWORK_CHAIN as any,
         address: user?.get("ethAddress"),
       })
       .then((res) => {

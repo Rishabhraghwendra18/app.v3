@@ -19,7 +19,6 @@ const ViewProposals = (props: Props) => {
   useEffect(() => {
     if (router.query?.proposal) {
       const index = proposals
-        .reverse()
         .map((e) => e.objectId)
         .indexOf(router.query.proposal as string);
       setSelected(index);

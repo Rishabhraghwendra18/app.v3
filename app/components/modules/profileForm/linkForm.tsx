@@ -38,7 +38,6 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
   } = useGlobal();
   const { Moralis, user } = useMoralis();
   const onSubmit: SubmitHandler<ILinkFormInput> = async (values) => {
-    console.log(values);
     setLoading(true);
     userInfo?.set("github", values.github);
     userInfo?.set("twitter", values.twitter);

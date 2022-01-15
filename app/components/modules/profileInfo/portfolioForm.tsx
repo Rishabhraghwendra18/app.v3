@@ -83,10 +83,6 @@ const PortfolioForm = ({}: Props) => {
     control,
   });
 
-  useEffect(() => {
-    console.log(userInfo?.get("portfolio"));
-  }, []);
-
   const onSubmit = (values) => {
     setLoaderText("Updating metadata...");
     setLoading(true);

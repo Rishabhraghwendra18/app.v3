@@ -62,7 +62,6 @@ const InitUserModal = ({ isOpen, setIsOpen }: props) => {
   const validateUsername = (username: string) => {
     checkUsername({
       onSuccess: (res) => {
-        console.log(res);
         setValidUsername(res as boolean);
       },
       params: {

@@ -18,15 +18,14 @@ interface Props {
 }
 
 export const Layout = ({ children }: Props) => {
-  const { isAuthenticated, user, Moralis } = useMoralis();
+  const { isAuthenticated, user, Moralis, isInitialized } = useMoralis();
   const { dispatch } = useGlobal();
 
   useEffect(() => {
-    const checkNetworkAndInitialize = async () => {
+    const checkNetworkAndAdd = async () => {
       if (
-        isAuthenticated &&
         window.ethereum.networkVersion !==
-          chainIdMappingDecimal[process.env.NETWORK_CHAIN as string]
+        chainIdMappingDecimal[process.env.NETWORK_CHAIN as string]
       ) {
         try {
           // check if the chain to connect to is installed
@@ -61,12 +60,15 @@ export const Layout = ({ children }: Props) => {
           } else {
             alert("Network Switch denied please refresh");
           }
-          console.error(error);
         }
+      } else {
+        initContractsAndUserStake(dispatch, user, Moralis);
       }
     };
-    checkNetworkAndInitialize();
-  }, [isAuthenticated, user, Moralis, dispatch]);
+    if (isAuthenticated && isInitialized) {
+      checkNetworkAndAdd();
+    }
+  }, [isAuthenticated, isInitialized, Moralis, dispatch, user]);
 
   return (
     <div className="relative min-h-screen flex flex-col w-full tracking-wide leading-normal antialiased bg-blue-darkbg layout text-grey-light transform transition-colors ease-in-out duration-1000 hidden md:flex">

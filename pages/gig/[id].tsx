@@ -53,7 +53,6 @@ const GigPage: NextPage<Props> = (props: Props) => {
     if (!loading && isAuthenticated) {
       context.getGig({
         onSuccess: (res: Gig[]) => {
-          console.log(res);
           context.setGig(res[0]);
           if (res[0]) {
             const status = res[0].status;
@@ -75,8 +74,8 @@ const GigPage: NextPage<Props> = (props: Props) => {
               promises.push(
                 context.getMyProposals({
                   onSuccess: (res: Proposal[]) => {
-                    console.log(res);
-                    context.setProposals(res.reverse());
+                    res = res.slice().reverse();
+                    context.setProposals(res);
                   },
                   params: {
                     dealId: id,
@@ -88,11 +87,9 @@ const GigPage: NextPage<Props> = (props: Props) => {
               );
             }
             if (status === 403) {
-              console.log("403");
               promises.push(
                 fetchFromIPFS(res[0].evidence).then((res) => {
                   context.setEvidence(res);
-                  console.log(res);
                 })
               );
             }
@@ -121,6 +118,7 @@ const GigPage: NextPage<Props> = (props: Props) => {
       <Head>
         <title>Gig</title>
         <meta name="description" content="Gig" />
+        <link rel="icon" href="/logo2.svg" />
       </Head>
       <AnimatedLayout>
         <GigContext.Provider value={context}>

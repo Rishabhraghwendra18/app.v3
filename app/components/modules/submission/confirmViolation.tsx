@@ -93,7 +93,7 @@ export const ConfirmViolationModal = ({ isOpen, setIsOpen }: props) => {
             </DialogContent>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2, px: 1 }}>
               <a
-                href={`https://mumbai.polygonscan.com/tx/${hash}`}
+                href={`https://polygonscan.com/tx/${hash}`}
                 target="_blank"
                 rel="noreferrer"
               >

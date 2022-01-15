@@ -71,7 +71,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
     }
     Moralis.Web3API.account
       .getNativeBalance({
-        chain: "mumbai",
+        chain: process.env.NETWORK_CHAIN as any,
         address: user?.get("ethAddress"),
       })
       .then((res) => {
@@ -132,7 +132,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <a
-                href={`https://mumbai.polygonscan.com/tx/${hash}`}
+                href={`https://polygonscan.com/tx/${hash}`}
                 target="_blank"
                 rel="noreferrer"
               >
