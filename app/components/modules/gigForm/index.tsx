@@ -18,7 +18,11 @@ import {
   Backdrop,
   CircularProgress,
 } from "@mui/material";
-import { gigHelperTexts, skillOptions } from "app/constants/constants";
+import {
+  formStep,
+  gigHelperTexts,
+  skillOptions,
+} from "app/constants/constants";
 import { DateTimePicker, LocalizationProvider } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterDayjs";
 import dayjs from "dayjs";
@@ -179,7 +183,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                     type="number"
                     required
                     error={fieldState.error ? true : false}
-                    inputProps={{ min: 0, step: 1 }}
+                    inputProps={{ min: 0, step: formStep }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="start">WMatic</InputAdornment>
@@ -209,12 +213,12 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                     variant="standard"
                     helperText={
                       fieldState.error?.type === "min" &&
-                      "Gig collateral shoudl atleast be 1 WMatic"
+                      "Gig collateral should atleast be 1 WMatic"
                     }
                     type="number"
                     required
                     error={fieldState.error ? true : false}
-                    inputProps={{ min: 0, step: 1 }}
+                    inputProps={{ min: 0, step: formStep }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="start">WMatic</InputAdornment>

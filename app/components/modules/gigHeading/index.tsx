@@ -6,6 +6,7 @@ import { gigStatusMapping } from "app/constants/constants";
 import { Box } from "@mui/system";
 import { useGlobal } from "app/context/globalContext";
 import { StyledTab } from "app/components/elements/styledComponents";
+import { useMoralis } from "react-moralis";
 
 interface Props {}
 
@@ -20,6 +21,8 @@ export const GigHeading = (props: Props) => {
   const {
     state: { userInfo },
   } = useGlobal();
+  const { isAuthenticated } = useMoralis();
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
@@ -184,7 +187,8 @@ export const GigHeading = (props: Props) => {
               )}
             {[101].includes(gig.status) &&
               gig.clientUsername !== userInfo?.get("spectUsername") &&
-              !gig.proposal.length && (
+              !gig.proposal?.length &&
+              isAuthenticated && (
                 <StyledTab
                   label="Submit Proposal"
                   {...a11yProps(2)}
@@ -192,7 +196,7 @@ export const GigHeading = (props: Props) => {
                 />
               )}
             {[101, 102, 201, 202, 203].includes(gig.status) &&
-              gig.proposal.length &&
+              gig.proposal?.length &&
               gig.proposal[0].freelancer === userInfo?.get("spectUsername") && (
                 <StyledTab
                   label="Submitted Proposal"
@@ -210,7 +214,7 @@ export const GigHeading = (props: Props) => {
               )}
             {[201, 202, 203, 403].includes(gig.status) &&
               (gig.clientUsername === userInfo?.get("spectUsername") ||
-                (gig.proposal.length &&
+                (gig.proposal?.length &&
                   gig.proposal[0].freelancer ===
                     userInfo?.get("spectUsername"))) && (
                 <StyledTab
@@ -222,7 +226,7 @@ export const GigHeading = (props: Props) => {
               )}
             {[403].includes(gig.status) &&
               (gig.clientUsername === userInfo?.get("spectUsername") ||
-                (gig.proposal.length &&
+                (gig.proposal?.length &&
                   gig.proposal[0].freelancer ===
                     userInfo?.get("spectUsername"))) && (
                 <StyledTab label="Dispute" {...a11yProps(6)} value={6} />

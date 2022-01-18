@@ -17,6 +17,7 @@ import dynamic from "next/dynamic";
 import { DeleteConfirmModal } from "./deleteConfirmModal";
 import FmdBadIcon from "@mui/icons-material/FmdBad";
 import { ViolationConfirmModal } from "./violationConfirmModal";
+import { useMoralis } from "react-moralis";
 
 interface Props {}
 
@@ -27,6 +28,8 @@ const ClientBrief = (props: Props) => {
   } = useGlobal();
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [isViolationConfirmOpen, setIsViolationConfirmOpen] = useState(false);
+
+  const { isAuthenticated } = useMoralis();
 
   if (!gig) {
     return <div></div>;
@@ -175,7 +178,8 @@ const ClientBrief = (props: Props) => {
               )}
             {[101].includes(gig.status) &&
               gig.clientUsername !== userInfo?.get("spectUsername") &&
-              !gig.proposal.length && (
+              !gig.proposal?.length &&
+              isAuthenticated && (
                 <div className="w-1/4">
                   <PrimaryButton
                     variant="outlined"

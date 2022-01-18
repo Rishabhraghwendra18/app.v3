@@ -33,7 +33,7 @@ export const proposals = [
   {
     name: "Submitted",
     description: "Check out your sent proposals",
-    href: "myProposals?status=open",
+    href: "/myProposals?status=open",
     icon: IconOne,
   },
 ];
@@ -64,8 +64,8 @@ export const wallets = [
   {
     name: "WalletConnect",
     icon: walletConnect,
-    description: "The new age wallet",
-    authenticate: 2,
+    description: "Coming soon",
+    // authenticate: 2,
     href: "",
   },
 ];
@@ -285,3 +285,5 @@ export const chainNameMapping = {
   mumbai: "Polygon Mumbai testnet",
   polygon: "Polygon Mainnet",
 };
+
+export const formStep = 0.01;

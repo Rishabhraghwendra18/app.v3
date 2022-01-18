@@ -1,6 +1,6 @@
 import { Popover, Transition } from "@headlessui/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 
 interface navbarItems {
@@ -26,7 +26,11 @@ const NavbarPopover: React.FC<Props> = ({
   small = false,
 }) => {
   const [show, setShow] = useState(false);
-  const { authenticate, logout } = useMoralis();
+  const { authenticate, logout, Moralis } = useMoralis();
+
+  // useEffect(() => {
+  //   console.log(Moralis.Web3.c);
+  // }, []);
 
   return (
     <Popover
