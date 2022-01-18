@@ -53,7 +53,7 @@ const ProfileTemplate = (props: Props) => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
-  const { Moralis } = useMoralis();
+  const { Moralis, isInitialized } = useMoralis();
   const { dispatch } = useGlobal();
   useEffect(() => {
     if (editable && !userInfo.get("isInitialized")) {
@@ -68,7 +68,7 @@ const ProfileTemplate = (props: Props) => {
         className="banner"
         style={{
           backgroundImage:
-            userInfo.get("spectUsername").length % 2 === 0
+            userInfo.get && userInfo.get("spectUsername").length % 2 === 0
               ? `url(${banner3.src})`
               : `url(${cover2.src})`,
         }}
