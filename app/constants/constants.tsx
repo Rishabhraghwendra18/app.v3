@@ -286,4 +286,4 @@ export const chainNameMapping = {
   polygon: "Polygon Mainnet",
 };
 
-export const formStep = 0.01;
+export const formStep = 1;
