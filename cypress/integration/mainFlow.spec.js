@@ -171,7 +171,7 @@ describe("Main Flow", () => {
     cy.wait(3000);
     // get on the gig page
     cy.get(".bNotifications").click();
-    cy.contains(`accepted your proposal on ${gig}`).click();
+    cy.contains(`accepted your proposal Proposal gig ${gig}`).click();
     cy.get("#bStartWork").click();
     // confirm modal start work
     // cy.get("#bApprove").click();
