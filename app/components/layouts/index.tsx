@@ -50,6 +50,11 @@ export const Layout = ({ children }: Props) => {
                     rpcUrls: [chainRPC[process.env.NETWORK_CHAIN as string]],
                     chainName:
                       chainNameMapping[process.env.NETWORK_CHAIN as string],
+                    nativeCurrency: {
+                      name: "MATIC",
+                      symbol: "MATIC", // 2-6 characters long
+                      decimals: 18,
+                    },
                   },
                 ],
               });
@@ -71,10 +76,18 @@ export const Layout = ({ children }: Props) => {
   }, [isAuthenticated, isInitialized, Moralis, dispatch, user]);
 
   return (
-    <div className="relative min-h-screen flex flex-col w-full tracking-wide leading-normal antialiased bg-blue-darkbg layout text-grey-light transform transition-colors ease-in-out duration-1000 hidden md:flex">
-      <Navbar />
-      <main className="flex-grow text-2xl">{children}</main>
-      <Footer />
+    <div className="bg-blue-darkbg">
+      <div className="relative min-h-screen flex-col w-full tracking-wide leading-normal antialiased  layout text-grey-light transform transition-colors ease-in-out duration-1000 hidden md:flex">
+        <Navbar />
+        <main className="flex-grow text-2xl">{children}</main>
+        <Footer />
+      </div>
+      <div className="relative min-h-screen flex-col w-full tracking-wide leading-normal antialiased  layout text-grey-light transform transition-colors ease-in-out duration-1000 md:hidden flex">
+        <span className="flex-grow text-xl mt-32 mx-4">
+          We currently do not support mobile, please use desktop version
+        </span>
+        <Footer />
+      </div>
     </div>
   );
 };

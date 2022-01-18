@@ -8,6 +8,7 @@ import {
   Tabs,
 } from "@mui/material";
 import cover2 from "app/images/cover2.jpg";
+import banner3 from "app/images/banner3.jpg";
 import { a11yProps } from "app/utils/utils";
 import { AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
@@ -52,13 +53,13 @@ const ProfileTemplate = (props: Props) => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
-  const { Moralis } = useMoralis();
+  const { Moralis, isInitialized } = useMoralis();
   const { dispatch } = useGlobal();
   useEffect(() => {
     if (editable && !userInfo.get("isInitialized")) {
       setIsOpen(true);
     }
-  }, [editable]);
+  }, [editable, userInfo]);
 
   return (
     <div className="flex-grow p-0 overflow-hidden mb-16">
@@ -66,7 +67,10 @@ const ProfileTemplate = (props: Props) => {
       <div
         className="banner"
         style={{
-          backgroundImage: `url(${cover2.src})`,
+          backgroundImage:
+            userInfo.get && userInfo.get("spectUsername").length % 2 === 0
+              ? `url(${banner3.src})`
+              : `url(${cover2.src})`,
         }}
       />
       <div className="mx-32">

@@ -45,14 +45,15 @@ const GigPage: NextPage<Props> = (props: Props) => {
   const {
     state: { loading, contracts },
   } = useGlobal();
-  const { isAuthenticated } = useMoralis();
+  const { isInitialized, isInitializing } = useMoralis();
 
   useEffect(() => {
     const promises: Array<any> = [];
     context.setFetching(true);
-    if (!loading && isAuthenticated) {
+    if (!loading && isInitialized && !isInitializing) {
       context.getGig({
         onSuccess: (res: Gig[]) => {
+          console.log(res);
           context.setGig(res[0]);
           if (res[0]) {
             const status = res[0].status;
@@ -111,13 +112,13 @@ const GigPage: NextPage<Props> = (props: Props) => {
         },
       });
     }
-  }, [loading, isAuthenticated, router.query.tab]);
+  }, [loading, isInitialized, router.query.tab, isInitializing]);
 
   return (
     <div>
       <Head>
-        <title>Gig</title>
-        <meta name="description" content="Gig" />
+        <title>Spect.network Gig</title>
+        <meta name="description" content={`Decentralized gig economy`} />
         <link rel="icon" href="/logo2.svg" />
       </Head>
       <AnimatedLayout>

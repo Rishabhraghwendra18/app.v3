@@ -20,7 +20,10 @@ const Portfolio = (props: Props) => {
             <a href={value.link} target="_blank" rel="noreferrer">
               <img
                 className="w-full h-4/5 object-cover rounded-t-lg"
-                src={value.ipfs}
+                src={
+                  value.ipfs ||
+                  "https://ipfs.moralis.io:2053/ipfs/QmUA9MBY5Fh9JVRGQv9Zy2f4DtCYnvdxnQ4k2oS7CxT6Nm"
+                }
                 alt="Portfolio1"
               />
             </a>

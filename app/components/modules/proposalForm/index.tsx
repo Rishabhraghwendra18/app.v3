@@ -8,7 +8,11 @@ import {
   tooltipClasses,
   styled,
 } from "@mui/material";
-import { animationVariant, proposalHelperTexts } from "app/constants/constants";
+import {
+  animationVariant,
+  formStep,
+  proposalHelperTexts,
+} from "app/constants/constants";
 import { DateTimePicker, LocalizationProvider } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterDayjs";
 import dayjs from "dayjs";
@@ -158,7 +162,7 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
                       type="number"
                       required
                       error={fieldState.error ? true : false}
-                      inputProps={{ min: gig.minStake, step: 1 }}
+                      inputProps={{ min: gig.minStake, step: formStep }}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="start">
