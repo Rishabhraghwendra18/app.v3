@@ -26,11 +26,7 @@ const NavbarPopover: React.FC<Props> = ({
   small = false,
 }) => {
   const [show, setShow] = useState(false);
-  const { authenticate, logout, Moralis } = useMoralis();
-
-  // useEffect(() => {
-  //   console.log(Moralis.Web3.c);
-  // }, []);
+  const { authenticate, logout } = useMoralis();
 
   return (
     <Popover

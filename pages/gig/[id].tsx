@@ -118,10 +118,7 @@ const GigPage: NextPage<Props> = (props: Props) => {
     <div>
       <Head>
         <title>Spect.network Gig</title>
-        <meta
-          name="description"
-          content={`Decentralized gig economy ${context.gig.name}`}
-        />
+        <meta name="description" content={`Decentralized gig economy`} />
         <link rel="icon" href="/logo2.svg" />
       </Head>
       <AnimatedLayout>
