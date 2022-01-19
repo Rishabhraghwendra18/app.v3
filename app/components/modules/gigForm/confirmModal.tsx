@@ -49,7 +49,10 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
   const [dealId, setDealId] = useState(0);
   const { Moralis, user } = useMoralis();
 
-  const handleClose = () => setIsOpen(false);
+  const handleClose = (event, reason) => {
+    if (reason && reason == "backdropClick") return;
+    setIsOpen(false);
+  };
   const handleNextStep = () => setActiveStep(activeStep + 1);
 
   useEffect(() => {
@@ -149,7 +152,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                 <Button
                   variant="outlined"
                   endIcon={<ArrowCircleRightIcon />}
-                  onClick={handleClose}
+                  onClick={(evt) => handleClose(evt, "Gig")}
                   id="bGotoGig"
                 >
                   Go to gig!
@@ -202,7 +205,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
               <Button
                 color="inherit"
                 variant="outlined"
-                onClick={handleClose}
+                onClick={(evt) => handleClose(evt, "Nevermind")}
                 sx={{ mr: 1, color: "#f45151" }}
                 endIcon={<ClearIcon />}
               >
@@ -226,6 +229,8 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                       .toDate()
                       .toUTCString(),
                     desiredCollateral: values.minStake,
+                    desiredRevisions: values.revisions,
+                    desiredTimeToRevise: values.timeToRevise,
                   }).then((res) => {
                     const ipfsUrlArray = res.path.split("/");
                     setLoaderText("Waiting for the transaction to complete");

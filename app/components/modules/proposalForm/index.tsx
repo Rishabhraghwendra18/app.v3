@@ -47,6 +47,8 @@ export interface IProposalFormInput {
   description: any; // fix
   minStake: number;
   deadline: any;
+  revisions: number;
+  timeToRevise: number;
 }
 export const ProposalForm: React.FC<Props> = (props: Props) => {
   const {
@@ -157,7 +159,7 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
                       variant="standard"
                       helperText={
                         fieldState.error?.type === "min" &&
-                        "Gig collateral shoudl atleast be 1 WMatic"
+                        "Gig collateral should atleast be 1 WMatic"
                       }
                       type="number"
                       required
@@ -210,6 +212,69 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
                 />
               </div>
             </LocalizationProvider>
+          </div>
+          <div className="flex flex-col pb-4">
+            <div className="w-1/3 mb-4">
+              <Controller
+                name="revisions"
+                control={control}
+                rules={{ min: gig.revisions }}
+                defaultValue={gig.revisions}
+                render={({ field, fieldState }) => (
+                  <LightTooltip
+                    arrow
+                    placement="right"
+                    title={proposalHelperTexts["revisions"]}
+                  >
+                    <TextField
+                      {...field}
+                      label="Revisions"
+                      variant="standard"
+                      helperText={
+                        fieldState.error?.type === "min" && "Minimum revisions"
+                      }
+                      type="number"
+                      required
+                      error={fieldState.error ? true : false}
+                      inputProps={{ min: gig.revisions, step: 1 }}
+                      fullWidth
+                    />
+                  </LightTooltip>
+                )}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col pb-4">
+            <div className="w-1/3 mb-4">
+              <Controller
+                name="timeToRevise"
+                control={control}
+                defaultValue={gig.timeToRevise}
+                render={({ field, fieldState }) => (
+                  <LightTooltip
+                    arrow
+                    placement="right"
+                    title={proposalHelperTexts["timeToRevise"]}
+                  >
+                    <TextField
+                      {...field}
+                      label="Time to revise"
+                      variant="standard"
+                      type="number"
+                      required
+                      error={fieldState.error ? true : false}
+                      inputProps={{ min: 1, step: 1 }}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="start">Days</InputAdornment>
+                        ),
+                      }}
+                      fullWidth
+                    />
+                  </LightTooltip>
+                )}
+              />
+            </div>
           </div>
 
           <div className="w-1/4 my-4">

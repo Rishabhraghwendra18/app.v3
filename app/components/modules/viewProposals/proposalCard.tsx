@@ -47,7 +47,7 @@ const ProposalCard = ({ proposal, isSelected, setSelected, index }: Props) => {
               <div className="font-bold text-xl text-grey-light text-left">
                 {proposal.freelancer}
               </div>
-              <div className="text-xs text-gray-400 flex flex-row mr-8 mt-1">
+              <div className="text-xs text-gray-400 flex flex-row mt-1">
                 <div className="mr-4">
                   Active since{" "}
                   {monthMap[proposal?.user[0]?._created_at.getMonth()]}{" "}

@@ -49,7 +49,8 @@ export interface Gig {
   name: string;
   numApplicants: number;
   objectId: string;
-  revisions?: number;
+  revisions: number;
+  timeToRevise: number;
   reward: number;
   status: GigStatus;
   tags: Array;
@@ -73,7 +74,8 @@ export interface Proposal {
   freelancer: string;
   freelancerAddress: string;
   lockedStake: number;
-  numRevisions?: number;
+  revisions: number;
+  timeToRevise: number;
   objectId: string;
   proposalText: object;
   status: ProposalStatus;

@@ -37,7 +37,10 @@ const style = {
 };
 
 export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
-  const handleClose = () => setIsOpen(false);
+  const handleClose = (event, reason) => {
+    if (reason && reason == "backdropClick") return;
+    setIsOpen(false);
+  };
   const [loading, setLoading] = useState(false);
   const [finished, setFinished] = useState(false);
   const { gig } = useGig();
@@ -97,7 +100,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                 <Button
                   variant="outlined"
                   endIcon={<ArrowCircleRightIcon />}
-                  onClick={handleClose}
+                  onClick={(evt) => handleClose(evt, "Nevermind")}
                   id="bGotoGig"
                 >
                   Go to gig!
@@ -126,7 +129,7 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
             >
               <Button
                 color="inherit"
-                onClick={handleClose}
+                onClick={(evt) => handleClose(evt, "Nevermind")}
                 variant="outlined"
                 sx={{ mr: 1, color: "#f45151", textTransform: "none" }}
                 endIcon={<ClearIcon />}
@@ -149,6 +152,8 @@ export const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                       proposalText: values?.description,
                       lockedStake: values.minStake,
                       deadline: new Date(values.deadline).toUTCString(),
+                      revisions: values.revisions,
+                      timeToRevise: values.timeToRevise,
                     },
                   });
                 }}

@@ -130,6 +130,10 @@ export const gigHelperTexts = {
     "Describe the gig thoroughly. You can use images, embed videos etc. Make it as clear as possible.",
   skills:
     "Skills the freelancer would need to have to complete the gig successfully.",
+  revisions:
+    "How many minimum number of revisions do you expect from the freelancer",
+  timeToRevise:
+    "How much time do you want to give the freelancer to submit a new revision",
 };
 
 export const proposalHelperTexts = {
@@ -138,6 +142,9 @@ export const proposalHelperTexts = {
     "Collateral is locked by you to ensure high quality of work. Client will be compensated from this amount in case the gig is failed.",
   deadline:
     "The date by which you can submit the work. This deadline can be earlier or later than client preferred deadline.",
+  revisions: "How many number of revisions do you want to offer",
+  timeToRevise:
+    "How much time will you take to submit a new revision after it is requested from the client",
 };
 
 export const submissionHelperTexts = {
@@ -286,4 +293,4 @@ export const chainNameMapping = {
   polygon: "Polygon Mainnet",
 };
 
-export const formStep = 1;
+export const formStep = 0.01;

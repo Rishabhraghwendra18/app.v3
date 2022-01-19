@@ -25,6 +25,7 @@ const CreateGig: NextPage<Props> = (props: Props) => {
       <Head>
         <title>Create gig</title>
         <meta name="description" content="Create Gig" />
+        <link rel="icon" href="/logo2.svg" />
       </Head>
       <AnimatedLayout>
         {isOpen && <InitUserModal isOpen={isOpen} setIsOpen={setIsOpen} />}

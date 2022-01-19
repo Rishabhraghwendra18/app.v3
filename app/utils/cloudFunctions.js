@@ -116,15 +116,15 @@ Moralis.Cloud.afterSave("Bounty", async (request) => {
   logger.info(`request object ${JSON.stringify(request.object)}`);
 
   const status = request.object.get("status");
-  if (status === 101) {
+  if (status === 0) {
     await sendEmail("createBounty", request.object);
-  } else if (status === 202) {
+  } else if (status === 2) {
     await sendEmail("workSubmitted", request.object);
-  } else if (status === 203) {
+  } else if (status === 3) {
     await sendEmail("workAccepted", request.object);
-  } else if (status === 402) {
+  } else if (status === -1) {
     await sendEmail("deadlineViolationCalled", request.object);
-  } else if (status === 403) {
+  } else if (status === 4) {
     await sendEmail("dispute", request.object);
   }
 });
@@ -134,7 +134,7 @@ Moralis.Cloud.afterSave("Proposal", async (request) => {
   logger.info(`request object ${JSON.stringify(request.object)}`);
 
   const status = request.object.get("status");
-  if (status === 102) {
+  if (status === 2) {
     await sendEmail("acceptProposal", request.object);
   }
 });
@@ -176,6 +176,10 @@ Moralis.Cloud.afterSave("ListedGig", async (request) => {
     bounty.set("minStake", parseFloat(gig.desiredCollateral));
     bounty.set("deadline", new Date(gig.desiredSubmissionDeadline));
     bounty.set("tags", gig.tags);
+    bounty.set("teamAddress", gig.team);
+    bounty.set("revisions", gig.desiredRevisions);
+    bounty.set("timeToRevise", gig.desiredTimeToRevise);
+
     try {
       await bounty.save(null, { useMasterKey: true });
     } catch (err) {
@@ -231,6 +235,7 @@ Moralis.Cloud.afterSave("ClientConfirmation", async (request) => {
     const canUpdate = await validateStatusChange(bounty.get("status"), 102);
     if (canUpdate) {
       bounty.set("status", 102);
+      bounty.set("deadline", new Date(request.object.get("deadline") * 1000));
 
       // Create notification object
       const notification = await getNotificationObject(
@@ -302,6 +307,7 @@ Moralis.Cloud.afterSave("FreelancerConfirmation", async (request) => {
     bountyQuery.equalTo("dealId", request.object.get("dealId"));
     const bounty = await bountyQuery.first();
     const canUpdate = await validateStatusChange(bounty.get("status"), 201);
+    logger.info(JSON.stringify(request.object));
     if (canUpdate) {
       const freelancerUsername = await getUsernameFromAddress(
         request.object.get("freelancer")
@@ -364,13 +370,18 @@ Moralis.Cloud.afterSave("SubmittedWork", async (request) => {
   }
 });
 
-async function fulfill(dealId) {
+async function fulfill(dealId, feedback) {
   const bountyQuery = new Moralis.Query("Bounty");
   bountyQuery.equalTo("dealId", dealId);
   const bounty = await bountyQuery.first();
   const canUpdate = await validateStatusChange(bounty.get("status"), 203);
   if (canUpdate) {
     bounty.set("status", 203);
+    if (feedback) {
+      const feedbackObject = await fetchIPFSDoc(feedback);
+      bounty.set("rating", feedbackObject.rating);
+      bounty.set("review", feedbackObject.review);
+    }
     const notification = await getNotificationObject(
       dealId,
       bounty.get("freelancer"),
@@ -393,7 +404,7 @@ Moralis.Cloud.afterSave("FulfilledGig", async (request) => {
   const logger = Moralis.Cloud.getLogger();
 
   try {
-    await fulfill(request.object.get("dealId"));
+    await fulfill(request.object.get("dealId"), request.object.get("feedback"));
   } catch (err) {
     logger.error(`Error while fulfilling work ${err}`);
   }
@@ -436,7 +447,7 @@ Moralis.Cloud.beforeConsume("AcceptanceDeadlineViolation", async (event) => {
 Moralis.Cloud.afterSave("AcceptanceDeadlineViolation", async (request) => {
   const logger = Moralis.Cloud.getLogger();
   try {
-    await fulfill(request.object.get("dealId"));
+    await fulfill(request.object.get("dealId"), null);
     await Moralis.Object.saveAll([bounty, notification], {
       useMasterKey: true,
     });
@@ -491,9 +502,9 @@ Moralis.Cloud.afterSave("ResolvedDispute", async (request) => {
     const bountyQuery = new Moralis.Query("Bounty");
     bountyQuery.equalTo("dealId", request.object.get("dealId"));
     const bounty = await bountyQuery.first();
-    const canUpdate = await validateStatusChange(bounty.get("status"), 203);
+    const canUpdate = await validateStatusChange(bounty.get("status"), 3);
     if (canUpdate) {
-      bounty.set("status", 203);
+      bounty.set("status", 3);
       const notificationForFreelancer = await getNotificationObject(
         request.object.get("dealId"),
         bounty.get("freelancer"),
@@ -778,6 +789,21 @@ Moralis.Cloud.define(
     fields: {},
   }
 );
+
+Moralis.Cloud.define("getUserFeedback", async (request) => {
+  var bountyQuery = new Moralis.Query("Bounty");
+  bountyQuery.equalTo("freelancer", request.user.get("ethAddress"));
+  bountyQuery.select(
+    "freelancer",
+    "clientUsername",
+    "dealId",
+    "review",
+    "rating"
+  );
+  const bounties = await bountyQuery.find();
+
+  return bounties;
+});
 
 Moralis.Cloud.define("createProposal", async (request) => {
   const logger = Moralis.Cloud.getLogger();
