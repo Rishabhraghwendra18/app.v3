@@ -134,7 +134,9 @@ const ClientBrief = (props: Props) => {
               </div> */}
               <div className="flex flex-col my-8">
                 <div className="text-sm text-blue-light">
-                  Revisions required
+                  {[201, 202, 204, 403].includes(gig.status)
+                    ? "Revision left"
+                    : "Revisions required"}
                 </div>
                 <div className="flex flex-row">
                   <div className="text-lg font-bold ">{gig.revisions}</div>
@@ -144,7 +146,9 @@ const ClientBrief = (props: Props) => {
                 <div className="text-sm text-blue-light">Time to Revise</div>
                 <div className="flex flex-row items-baseline">
                   <div className="text-xl mt-1 font-bold ">
-                    {gig.timeToRevise}
+                    {[201, 202, 204, 403].includes(gig.status)
+                      ? contractGig.numRevisionsRemaining
+                      : gig.timeToRevise}
                   </div>
                   <div className="text-sm text-grey-normal ml-1 mb-1 ">
                     Days

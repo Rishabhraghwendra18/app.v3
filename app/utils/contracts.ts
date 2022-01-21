@@ -198,3 +198,8 @@ export async function callDispute(dealId, dispute, contract) {
   const tx = await contract.callDispute(dealId, dispute);
   return tx.wait();
 }
+
+export async function revise(dealId, instructions, contract) {
+  const tx = await contract.revise(dealId, instructions);
+  return tx.wait();
+}

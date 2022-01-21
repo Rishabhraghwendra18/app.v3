@@ -60,7 +60,9 @@ export interface Gig {
   user: Array<User>;
   verifiableBounty?: Moralis.Object;
   submissionTransaction?: Moralis.Object;
+  submissions: string[];
   proposal: Array<Proposal>;
+  revisionInstructions: string[];
 }
 
 type ProposalStatus = 101 | 102 | 103 | 401;
@@ -94,8 +96,8 @@ export interface ContractGig {
   deadline: Array<object | string> | any;
   freelancer: string;
   gigCid: string;
-  inDispute: false;
-  numRevisionsRemaining: false;
+  inDispute: ConstrainBoolean;
+  numRevisionsRemaining: number;
   reward: BigNumber;
   submission: string;
   timeToAcceptInMinuted: number;

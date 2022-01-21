@@ -18,6 +18,7 @@ import { ConfirmModal } from "./confirmModal";
 import { useGig } from "pages/gig/[id]";
 
 interface Props {}
+
 export interface ISubmissionFormInput {
   comments: any; // fix
   links: {
@@ -97,9 +98,6 @@ const SubmissionForm = (props: Props) => {
       )}
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
         <div className="flex flex-col my-8">
-          <span className="text-blue-bright font-bold w-1/2 mb-4">
-            Submission 01
-          </span>
           <div>
             <Button
               sx={{ color: "#99ccff" }}

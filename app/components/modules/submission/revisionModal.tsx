@@ -14,7 +14,8 @@ import {
 } from "@mui/material";
 import {
   addToStake,
-  listBounty,
+  callDispute,
+  revise,
   secondConfirmation,
   wrapMatic,
 } from "app/utils/contracts";
@@ -32,74 +33,39 @@ import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { useGig } from "pages/gig/[id]";
 import DepositModal from "app/components/elements/modals/despositModal";
+import { toIPFS } from "app/utils/moralis";
+import { modules } from "app/constants/constants";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface props {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  proposal: Proposal;
 }
 
-const steps = [
-  "Approve",
-  "Wrap enough Matic",
-  "Deposit collateral",
-  "Start Work",
-];
+const steps = ["Revision comments", "Confirm"];
 
-const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
+const RevisionModal = ({ isOpen, setIsOpen }: props) => {
   const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [amount, setAmount] = useState(0);
-  const [required, setRequired] = useState(0);
-  const [balance, setBalance] = useState(0);
   const [loaderText, setLoaderText] = useState("");
+  const [revisionText, setRevisionText] = useState("");
+  const [hash, setHash] = useState("");
+
   const {
     state: { contracts, userStake },
     dispatch,
   } = useGlobal();
-  const [hash, setHash] = useState("");
-  const [dealId, setDealId] = useState(0);
+
+  const { gig } = useGig();
   const { Moralis, user } = useMoralis();
 
-  const handleClose = (event, reason) => {
-    if (reason && reason == "backdropClick") return;
-    setIsOpen(false);
-  };
+  const handleClose = () => setIsOpen(false);
 
   const handleNextStep = () => setActiveStep(activeStep + 1);
+  const handlePreviousStep = () => setActiveStep(activeStep - 1);
 
-  useEffect(() => {
-    // updateUserStake(dispatch, user, contracts);
-    const unlockedDeposit =
-      (userStake?.deposit || 0) - (userStake?.collateral || 0);
-    if (userStake?.balance !== undefined) {
-      if (!userStake.allowance) {
-        setActiveStep(0);
-      } else if (proposal.lockedStake > unlockedDeposit) {
-        if (proposal.lockedStake - unlockedDeposit > userStake.balance) {
-          setActiveStep(1);
-          setRequired(
-            proposal.lockedStake - unlockedDeposit - userStake.balance
-          );
-          setAmount(proposal.lockedStake - unlockedDeposit - userStake.balance);
-        } else {
-          setActiveStep(2);
-          setRequired(proposal.lockedStake - unlockedDeposit);
-          setAmount(proposal.lockedStake - unlockedDeposit);
-        }
-      } else {
-        setActiveStep(3);
-      }
-    }
-    Moralis.Web3API.account
-      .getNativeBalance({
-        chain: process.env.NETWORK_CHAIN as any,
-        address: user?.get("ethAddress"),
-      })
-      .then((res) => {
-        setBalance(parseInt(res.balance) / 10 ** 18);
-      });
-  }, []);
+  useEffect(() => {}, []);
 
   const modalStyle = {
     position: "absolute" as "absolute",
@@ -110,12 +76,14 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
+    overflow: "auto",
+    maxHeight: "90%",
     p: 4,
   };
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <Box sx={modalStyle}>
-        <Stepper activeStep={activeStep}>
+        <Stepper activeStep={activeStep} sx={{ mb: 2 }}>
           {steps.map((label, index) => {
             const stepProps: { completed?: boolean } = {};
             const labelProps: {
@@ -140,7 +108,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
               alignItems: "center",
             }}
           >
-            <CircularProgress color="inherit" id="eLoader" />
+            <CircularProgress color="inherit" />
             <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
               {loaderText}
             </Typography>
@@ -150,8 +118,8 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
         {activeStep === steps.length && (
           <React.Fragment>
             <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
-              Work Started succesfully!. You have{" "}
-              {formatTimeLeft(proposal.deadline)} left to submit work.
+              Revision requested succesfully!. You can expect the revision
+              submission in about {gig.proposal[0].timeToRevise} days.
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <a
@@ -170,19 +138,18 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
               <Box sx={{ flex: "1 1 auto" }} />
               <Link
                 href={{
-                  pathname: `/gig/${proposal.dealId}`,
+                  pathname: `/gig/${gig.dealId}`,
                   query: {
-                    tab: 5,
+                    tab: 4,
                   },
                 }}
-                as={`/gig/${proposal.dealId}`}
+                as={`/gig/${gig.dealId}`}
                 passHref
               >
                 <Button
                   variant="outlined"
                   endIcon={<ArrowCircleRightIcon />}
-                  onClick={(evt) => handleClose(evt, "Gig")}
-                  id="bGotoGig"
+                  onClick={handleClose}
                 >
                   Go to gig!
                 </Button>
@@ -191,40 +158,6 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
           </React.Fragment>
         )}
         {activeStep === 0 && (
-          <ApproveModal
-            setLoaderText={setLoaderText}
-            setLoading={setLoading}
-            setActiveStep={setActiveStep}
-            balance={balance}
-            amount={amount}
-            handleClose={handleClose}
-          />
-        )}
-        {activeStep === 1 && (
-          <WrapModal
-            setLoaderText={setLoaderText}
-            setLoading={setLoading}
-            handleNextStep={handleNextStep}
-            balance={balance}
-            amount={amount}
-            setAmount={setAmount}
-            required={required}
-            handleClose={handleClose}
-          />
-        )}
-        {activeStep === 2 && (
-          <DepositModal
-            setLoaderText={setLoaderText}
-            setLoading={setLoading}
-            handleNextStep={handleNextStep}
-            balance={balance}
-            amount={amount}
-            setAmount={setAmount}
-            required={required}
-            handleClose={handleClose}
-          />
-        )}
-        {activeStep === steps.length - 1 && (
           <React.Fragment>
             <Box
               sx={{
@@ -235,47 +168,108 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
                 textAlign: "center",
               }}
             >
-              <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
-                Are you sure you want to start work? {proposal.lockedStake}{" "}
-                WMatic will be locked from your wallet.
-              </Typography>
+              <div className="mt-4 text-grey-light">
+                <ReactQuill
+                  onChange={(value, delta, user, editor) => {
+                    setRevisionText(editor.getContents() as any);
+                  }}
+                  theme="snow"
+                  modules={modules}
+                  defaultValue={revisionText}
+                  placeholder={"Describe the revision you want in detail"}
+                />
+              </div>
             </Box>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Button
                 color="inherit"
-                onClick={(evt) => handleClose(evt, "Nvm")}
+                onClick={handleClose}
                 sx={{ mr: 1, color: "#f45151" }}
               >
                 Nevermind
               </Button>
               <Box sx={{ flex: "1 1 auto" }} />
-              <Button
-                id="bConfirm"
-                onClick={() => {
-                  setLoaderText("Waiting for the transaction to complete");
-                  setLoading(true);
-                  secondConfirmation(proposal.dealId, contracts?.dealContract)
-                    .then((res) => {
-                      const hash = res.transactionHash;
-                      setHash(hash);
-                      setLoading(false);
-                      setActiveStep(4);
-                    })
-                    .catch((err) => {
-                      setLoading(false);
-                      toast.error(err.message, {
-                        position: "bottom-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        className: "text-sm text-grey-spect border-blue-500",
-                      });
-                    });
+              <Button variant="outlined" onClick={handleNextStep}>
+                Next
+              </Button>
+            </Box>
+          </React.Fragment>
+        )}
+        {activeStep === 1 && (
+          <React.Fragment>
+            <Box sx={{ m: 2 }}>
+              <span className="text-xl text-blue-bright w-full text-left">
+                Comments
+              </span>
+              <div className="mt-2 text-grey-light">
+                <ReactQuill
+                  readOnly={true}
+                  theme={"bubble"}
+                  modules={modules}
+                  defaultValue={revisionText}
+                />
+              </div>
+              <Typography
+                sx={{
+                  mt: 2,
+                  mb: 1,
+                  color: "#eaeaea",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
                 }}
+              >
+                Are you sure you want to request the revision? You have{" "}
+                {gig.proposal[0].revisions} revisions left!
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Button
+                color="inherit"
+                onClick={handlePreviousStep}
+                sx={{ mr: 1, color: "#f45151" }}
+              >
+                Go back
+              </Button>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button
                 variant="outlined"
+                onClick={() => {
+                  setLoaderText(
+                    "Uploading revision instructions to IPFS, please wait"
+                  );
+                  setLoading(true);
+                  toIPFS(Moralis, "object", {
+                    revisionComments: revisionText,
+                  }).then((res) => {
+                    const ipfsUrlArray = res.path.split("/");
+                    setLoaderText("Waiting for the transaction to complete");
+                    revise(
+                      gig.dealId,
+                      ipfsUrlArray[ipfsUrlArray.length - 1],
+                      contracts?.dealContract
+                    )
+                      .then((res) => {
+                        setHash(res.transactionHash);
+                        setLoading(false);
+                        setActiveStep(activeStep + 1);
+                      })
+                      .catch((err) => {
+                        setLoading(false);
+                        toast.error(err.message, {
+                          position: "bottom-center",
+                          autoClose: 5000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                        });
+                      });
+                  });
+                }}
               >
                 Hell Yeah!
               </Button>
@@ -286,4 +280,4 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
     </Modal>
   );
 };
-export default ConfirmModal;
+export default RevisionModal;

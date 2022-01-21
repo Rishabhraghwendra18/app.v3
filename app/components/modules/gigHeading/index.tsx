@@ -74,7 +74,7 @@ export const GigHeading = (props: Props) => {
                   Posted {formatTimeAgo(Date.parse(gig.createdAt))} ago
                 </div>
                 <div className="text-xs flex flex-row mr-8">
-                  {[101, 102, 201, 202].includes(gig.status) && (
+                  {[101, 102, 201, 202, 204].includes(gig.status) && (
                     <i className="fas fa-circle flex flex-col justify-center mr-1 text-green-400 animate-pulse"></i>
                   )}
                   {[203, 401, 402, 403].includes(gig.status) && (
@@ -195,7 +195,7 @@ export const GigHeading = (props: Props) => {
                   value={2}
                 />
               )}
-            {[101, 102, 201, 202, 203].includes(gig.status) &&
+            {[101, 102, 201, 202, 203, 204].includes(gig.status) &&
               gig.proposal?.length &&
               gig.proposal[0].freelancer === userInfo?.get("spectUsername") && (
                 <StyledTab
@@ -204,7 +204,7 @@ export const GigHeading = (props: Props) => {
                   value={3}
                 />
               )}
-            {[102, 201, 202, 203, 403, 403].includes(gig.status) &&
+            {[102, 201, 202, 203, 204, 403, 403].includes(gig.status) &&
               gig.clientUsername === userInfo?.get("spectUsername") && (
                 <StyledTab
                   label="Selected Proposal"
@@ -212,7 +212,7 @@ export const GigHeading = (props: Props) => {
                   value={4}
                 />
               )}
-            {[201, 202, 203, 403].includes(gig.status) &&
+            {[201, 202, 203, 204, 403].includes(gig.status) &&
               (gig.clientUsername === userInfo?.get("spectUsername") ||
                 (gig.proposal?.length &&
                   gig.proposal[0].freelancer ===
