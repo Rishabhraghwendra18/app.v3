@@ -143,4 +143,13 @@ export interface Notification {
   user: User[];
 }
 
+export interface Organization {
+  createdAt?: string;
+  name: string;
+  objectId: string;
+  picture?: string;
+  updatedAt?: string;
+  website?: string;
+}
+
 export type Moralis = Moralis;

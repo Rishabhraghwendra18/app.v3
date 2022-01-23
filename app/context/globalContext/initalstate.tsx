@@ -1,4 +1,4 @@
-import { Contracts, UserStake } from "app/types";
+import { Contracts, Organization, UserStake } from "app/types";
 import Moralis from "moralis/types";
 
 export interface State {
@@ -8,7 +8,7 @@ export interface State {
   contracts?: Contracts;
   conversionRate?: number;
   userInfo?: Moralis.Object;
-  organizations?: Moralis.Object;
+  organizations?: Organization[];
 }
 
 export const initialState: State = {
