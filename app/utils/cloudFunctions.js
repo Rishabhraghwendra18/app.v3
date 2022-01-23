@@ -51,7 +51,7 @@ Moralis.Cloud.beforeSave("UserInfo", async (request) => {
       throw "Cannot set user stats from client";
     }
   }
-  if (request.object.get("organizationId")) {
+  if (request.object.get("organizationId") !== existingUser.get("organizationId")) {
     request.object.set("organizationVerified", false);
   }
 });
@@ -526,7 +526,6 @@ Moralis.Cloud.afterSave("RevisionRequests", async (request) => {
     const instructions = await bounty.get("revisionInstructions");
     if (canUpdate) {
       bounty.set("status", 204);
-      logger.info("revision sync");
       if (instructions) {
         instructions.push(request.object.get("instruction"));
         bounty.set("revisionInstructions", instructions);
@@ -772,7 +771,7 @@ Moralis.Cloud.define("getOrganizations", async (request) => {
 
   const query = new Moralis.Query("Organization");
 
-  return await query.find(pipeline);
+  return await query.aggregate(pipeline);
 });
 Moralis.Cloud.define(
   "getUser",
