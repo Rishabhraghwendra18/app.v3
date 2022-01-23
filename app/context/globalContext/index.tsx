@@ -4,11 +4,8 @@ import { Action, reducer } from "./reducer";
 import { ethers } from "ethers";
 import Moralis from "moralis/types";
 import { Contracts } from "app/types";
-import { getUser } from "app/utils/moralis";
-import {
-  initializeMumbaiContracts,
-  initializePolygonContracts,
-} from "app/utils/contracts";
+import { getUser, getOrganizations } from "app/utils/moralis";
+import { initializeMumbaiContracts, initializePolygonContracts } from "app/utils/contracts";
 
 declare global {
   interface Window {
@@ -45,14 +42,10 @@ const initContractsAndUserStake = async (
     const conversionRate = await oracleContract.latestRoundData();
     const balance = await tokenContract.balanceOf(user?.get("ethAddress"));
     const deposit = await userContract.getDeposit(user?.get("ethAddress"));
-    const collateral = await userContract.getCollateral(
-      user?.get("ethAddress")
-    );
-    const allowance = await tokenContract.allowance(
-      user?.get("ethAddress"),
-      userContract.address
-    );
+    const collateral = await userContract.getCollateral(user?.get("ethAddress"));
+    const allowance = await tokenContract.allowance(user?.get("ethAddress"), userContract.address);
     const userInfo = await getUser(moralis);
+    const organizations = await getOrganizations(moralis);
     dispatch({
       type: "SET_USERINFO",
       value: userInfo,
@@ -81,6 +74,7 @@ const initContractsAndUserStake = async (
     dispatch({ type: "SET_USER_CONTRACT", contract: userContract });
     dispatch({ type: "SET_TOKEN_CONTRACT", contract: tokenContract });
     dispatch({ type: "SET_ORACLE_CONTRACT", contract: oracleContract });
+    dispatch({ type: "SET_ORGANIZATIONS", value: organizations });
     dispatch({ type: "END_ASYNC" });
   } catch (error) {
     console.log(error);
@@ -88,26 +82,13 @@ const initContractsAndUserStake = async (
   }
 };
 
-const updateUserStake = async (
-  dispatch: React.Dispatch<Action>,
-  user: Moralis.User | null,
-  contracts?: Contracts
-) => {
+const updateUserStake = async (dispatch: React.Dispatch<Action>, user: Moralis.User | null, contracts?: Contracts) => {
   dispatch({ type: "START_ASYNC" });
   try {
-    const balance = await contracts?.tokenContract.balanceOf(
-      user?.get("ethAddress")
-    );
-    const deposit = await contracts?.userContract.getDeposit(
-      user?.get("ethAddress")
-    );
-    const collateral = await contracts?.userContract.getCollateral(
-      user?.get("ethAddress")
-    );
-    const allowance = await contracts?.tokenContract.allowance(
-      user?.get("ethAddress"),
-      contracts.userContract.address
-    );
+    const balance = await contracts?.tokenContract.balanceOf(user?.get("ethAddress"));
+    const deposit = await contracts?.userContract.getDeposit(user?.get("ethAddress"));
+    const collateral = await contracts?.userContract.getCollateral(user?.get("ethAddress"));
+    const allowance = await contracts?.tokenContract.allowance(user?.get("ethAddress"), contracts.userContract.address);
 
     dispatch({
       type: "SET_BALANCE",
@@ -135,9 +116,7 @@ const updateUserStake = async (
 const GlobalContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const value = { state, dispatch };
-  return (
-    <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>
-  );
+  return <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>;
 };
 
 const useGlobal = () => useContext(GlobalContext);

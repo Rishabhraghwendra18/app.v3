@@ -117,23 +117,17 @@ export const modules = {
 
 export const gigHelperTexts = {
   name: "The gig name (duh!)",
-  reward:
-    "Reward will be escrowed while the gig is listed and paid to freelancer on completion.",
+  reward: "Reward will be escrowed while the gig is listed and paid to freelancer on completion.",
   minStake:
     "Collateral is locked by freelancer to ensure high quality of work. You will be compensated from this amount in case the gig is failed.",
   deadline:
     "The tentative date by which you want the submission. This deadline is finalized after you accept a proposal.",
-  acceptanceDays:
-    "The number of days after the submission deadline you need to review the work.",
+  acceptanceDays: "The number of days after the submission deadline you need to review the work.",
   tags: "Skills the freelancer would need to have to complete the gig successfully.",
-  description:
-    "Describe the gig thoroughly. You can use images, embed videos etc. Make it as clear as possible.",
-  skills:
-    "Skills the freelancer would need to have to complete the gig successfully.",
-  revisions:
-    "How many minimum number of revisions do you expect from the freelancer",
-  timeToRevise:
-    "How much time do you want to give the freelancer to submit a new revision",
+  description: "Describe the gig thoroughly. You can use images, embed videos etc. Make it as clear as possible.",
+  skills: "Skills the freelancer would need to have to complete the gig successfully.",
+  revisions: "How many minimum number of revisions do you expect from the freelancer",
+  timeToRevise: "How much time do you want to give the freelancer to submit a new revision",
 };
 
 export const proposalHelperTexts = {
@@ -143,8 +137,7 @@ export const proposalHelperTexts = {
   deadline:
     "The date by which you can submit the work. This deadline can be earlier or later than client preferred deadline.",
   revisions: "How many number of revisions do you want to offer",
-  timeToRevise:
-    "How much time will you take to submit a new revision after it is requested from the client",
+  timeToRevise: "How much time will you take to submit a new revision after it is requested from the client",
 };
 
 export const submissionHelperTexts = {
@@ -155,8 +148,7 @@ export const submissionHelperTexts = {
 
 export const exploreHelperTexts = {
   skills: "Filter gigs based on the skills required to complete them",
-  minStake:
-    "Collateral is locked by you before starting gig to ensure high quality of work.",
+  minStake: "Collateral is locked by you before starting gig to ensure high quality of work.",
   deadline: "The date by which you have to submit work.",
 };
 
@@ -165,9 +157,9 @@ export const profileHelperTexts = {
   username: "This is your username",
   email: "This is the email where we will send you notifications",
   skills: "Add the skills you have which will be seen by potential clients",
-  title: "Your designation/ title of work",
-  minStake:
-    "Collateral is locked by you before starting gig to ensure high quality of work",
+  title: "A role in an organization or in life that describes you the best",
+  organization: "The gigs you post will be from this organization once your membership is verified",
+  minStake: "Collateral is locked by you before starting gig to ensure high quality of work",
   deposit: "The total WMatic deposited on our platform",
   available: "Available Wmatic free to deposit",
   unlocked: "Total WMatic available for you to withdraw",
@@ -283,8 +275,7 @@ export const chainIdMappingDecimal = {
 };
 
 export const chainRPC = {
-  mumbai:
-    "https://speedy-nodes-nyc.moralis.io/f84f46508f22a737cbbdb355/polygon/mumbai",
+  mumbai: "https://speedy-nodes-nyc.moralis.io/f84f46508f22a737cbbdb355/polygon/mumbai",
   polygon: "https://polygon-rpc.com/",
 };
 

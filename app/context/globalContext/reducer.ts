@@ -50,6 +50,10 @@ export type Action =
       value: State["userInfo"];
     }
   | {
+      type: "SET_ORGANIZATIONS";
+      value: State["organizations"];
+    }
+  | {
       type: "END_ASYNC";
     };
 
@@ -156,6 +160,12 @@ export const reducer = (state: State, action: Action) => {
       return {
         ...state,
         userInfo: action.value,
+      };
+    }
+    case "SET_ORGANIZATIONS": {
+      return {
+        ...state,
+        organizations: action.value,
       };
     }
     default:

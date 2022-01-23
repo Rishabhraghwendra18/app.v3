@@ -30,6 +30,9 @@ export interface User {
   sucessRate: number;
   profilePicture: string;
   skills: Array<object>;
+  organizationId: string;
+  organizationName: string;
+  organizationVerified: boolean;
   _createdAt: object;
   _id: string;
   _updatedAt: object;

@@ -1,10 +1,6 @@
 import { Autocomplete, Button, TextField } from "@mui/material";
 import { LightTooltip } from "app/components/elements/styledComponents";
-import {
-  animationVariant,
-  profileHelperTexts,
-  skillOptions,
-} from "app/constants/constants";
+import { animationVariant, profileHelperTexts, skillOptions } from "app/constants/constants";
 import React, { useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import SaveIcon from "@mui/icons-material/Save";
@@ -23,6 +19,7 @@ export interface IInfoFormInput {
   email: string;
   skills: Array<{ label: string }>;
   title: string;
+  organization: string;
 }
 
 const InfoForm = ({ handleNext, setLoading }: Props) => {
@@ -35,12 +32,17 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
     state: { userInfo },
     dispatch,
   } = useGlobal();
+  const {
+    state: { organizations },
+  } = useGlobal();
   const { Moralis, user } = useMoralis();
   const onSubmit: SubmitHandler<IInfoFormInput> = async (values) => {
     setLoading(true);
     userInfo?.set("descriptionTitle", values.title);
     userInfo?.set("name", values.name);
     userInfo?.set("skills", values.skills);
+    userInfo?.set("organizationId", values.organization?.objectId);
+    userInfo?.set("organizationName", values.organization?.name);
     Moralis.Object.saveAll([userInfo as any])
       .then(([userInfo]) => {
         setLoading(false);
@@ -57,12 +59,7 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
       });
   };
   return (
-    <motion.main
-      initial="hidden"
-      animate="enter"
-      exit="exit"
-      variants={animationVariant}
-    >
+    <motion.main initial="hidden" animate="enter" exit="exit" variants={animationVariant}>
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="ml-4 mr-32 my-8">
@@ -73,18 +70,13 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                 defaultValue={userInfo?.get("name") || ""}
                 rules={{ minLength: 2 }}
                 render={({ field, fieldState }) => (
-                  <LightTooltip
-                    arrow
-                    placement="right"
-                    title={profileHelperTexts["name"]}
-                  >
+                  <LightTooltip arrow placement="right" title={profileHelperTexts["name"]}>
                     <TextField
                       {...field}
                       label="Name"
                       variant="standard"
                       helperText={
-                        fieldState.error?.type === "minLength" &&
-                        "Name too short. Please make it more understandable."
+                        fieldState.error?.type === "minLength" && "Name too short. Please make it more understandable."
                       }
                       fullWidth
                       required
@@ -101,11 +93,7 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                 defaultValue={userInfo?.get("spectUsername") || ""}
                 rules={{ minLength: 5 }}
                 render={({ field, fieldState }) => (
-                  <LightTooltip
-                    arrow
-                    placement="right"
-                    title={profileHelperTexts["username"]}
-                  >
+                  <LightTooltip arrow placement="right" title={profileHelperTexts["username"]}>
                     <TextField
                       {...field}
                       label="Username"
@@ -132,11 +120,7 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                 defaultValue={user?.get("email") || ""}
                 rules={{ minLength: 5 }}
                 render={({ field, fieldState }) => (
-                  <LightTooltip
-                    arrow
-                    placement="right"
-                    title={profileHelperTexts["email"]}
-                  >
+                  <LightTooltip arrow placement="right" title={profileHelperTexts["email"]}>
                     <TextField
                       {...field}
                       label="Email"
@@ -161,11 +145,7 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                 name="skills"
                 control={control}
                 render={({ field }) => (
-                  <LightTooltip
-                    arrow
-                    placement="right"
-                    title={profileHelperTexts["skills"]}
-                  >
+                  <LightTooltip arrow placement="right" title={profileHelperTexts["skills"]}>
                     <Autocomplete
                       multiple
                       id="tags-standard"
@@ -173,18 +153,13 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                       getOptionLabel={(option) => option.label}
                       onChange={(e, data) => field.onChange(data)}
                       defaultValue={userInfo?.get("skills")}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="standard"
-                          label="Skills"
-                        />
-                      )}
+                      renderInput={(params) => <TextField {...params} variant="standard" label="Skills" />}
                     />
                   </LightTooltip>
                 )}
               />
             </div>
+
             <div className="my-2">
               <Controller
                 name="title"
@@ -192,14 +167,10 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                 defaultValue={userInfo?.get("descriptionTitle") || ""}
                 rules={{ minLength: 5 }}
                 render={({ field, fieldState }) => (
-                  <LightTooltip
-                    arrow
-                    placement="right"
-                    title={profileHelperTexts["title"]}
-                  >
+                  <LightTooltip arrow placement="right" title={profileHelperTexts["title"]}>
                     <TextField
                       {...field}
-                      label="Title/ Designation"
+                      label="Role"
                       variant="standard"
                       helperText={
                         fieldState.error?.type === "minLength" &&
@@ -213,15 +184,34 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                 )}
               />
             </div>
+            <div className="my-2">
+              <Controller
+                name="organization"
+                control={control}
+                defaultValue={userInfo?.get("organizationName") || ""}
+                rules={{ minLength: 5 }}
+                render={({ field, fieldState }) => (
+                  <LightTooltip arrow placement="right" title={profileHelperTexts["organization"]}>
+                    <Autocomplete
+                      id="orgs-standard"
+                      options={organizations}
+                      getOptionLabel={(option) => option.name}
+                      onChange={(e, data) => {
+                        field.onChange(data);
+                      }}
+                      defaultValue={{
+                        name: userInfo?.get("organizationName"),
+                        objectId: userInfo?.get("organizationId"),
+                      }}
+                      renderInput={(params) => <TextField {...params} variant="standard" label="Organization" />}
+                    />
+                  </LightTooltip>
+                )}
+              />
+            </div>
           </div>
           <div className="m-4">
-            <Button
-              variant="contained"
-              endIcon={<SaveIcon />}
-              fullWidth
-              type="submit"
-              disabled={!isDirty}
-            >
+            <Button variant="contained" endIcon={<SaveIcon />} fullWidth type="submit" disabled={!isDirty}>
               Save
             </Button>
           </div>

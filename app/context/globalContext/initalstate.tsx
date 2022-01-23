@@ -8,6 +8,7 @@ export interface State {
   contracts?: Contracts;
   conversionRate?: number;
   userInfo?: Moralis.Object;
+  organizations?: Moralis.Object;
 }
 
 export const initialState: State = {

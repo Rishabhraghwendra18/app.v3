@@ -7,6 +7,10 @@ export function getUser(Moralis, username?: string) {
   } else return Moralis.Cloud.run("getUser");
 }
 
+export function getOrganizations(Moralis) {
+  return Moralis.Cloud.run("getOrganizations");
+}
+
 export async function uploadFile(Moralis, data) {
   const file = new Moralis.File(data.name, data);
   return file.saveIPFS();
