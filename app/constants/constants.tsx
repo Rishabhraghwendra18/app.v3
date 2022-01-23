@@ -1,31 +1,38 @@
-import { IconOne, IconThree, IconTwo, metamask, walletConnect } from "./icons";
+import {
+  CompletedIcon,
+  InProgressIcon,
+  InReviewIcon,
+  CreatedIcon,
+  metamask,
+  walletConnect,
+} from "./icons";
 
 export const gigs = [
   {
     name: "Created",
     description: "Check out your created gigs which are yet to start",
     href: "/myGigs?status=myCreated",
-    icon: IconOne,
+    icon: CreatedIcon,
     id: "bMyCreatedGigs",
   },
   {
     name: "In progress",
     description: "See your gigs that have started",
     href: "/myGigs?status=myActive",
-    icon: IconThree,
+    icon: InProgressIcon,
     id: "bMyInProgressGigs",
   },
   {
     name: "In Review",
     description: "Check gigs waiting for your review",
     href: "/myGigs?status=myInReview",
-    icon: IconTwo,
+    icon: InReviewIcon,
   },
   {
     name: "Completed",
     description: "Check out your completed gigs",
     href: "/myGigs?status=myCompleted",
-    icon: IconOne,
+    icon: CompletedIcon,
   },
 ];
 
@@ -34,7 +41,7 @@ export const proposals = [
     name: "Submitted",
     description: "Check out your sent proposals",
     href: "/myProposals?status=open",
-    icon: IconOne,
+    icon: CreatedIcon,
   },
 ];
 

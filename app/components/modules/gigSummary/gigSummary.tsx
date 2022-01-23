@@ -105,7 +105,7 @@ const GigSummary = ({ gig }: Props) => {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "end",
-                      mx: 1,
+                      mx: 0,
                       mb: 0.5,
                     }}
                   >

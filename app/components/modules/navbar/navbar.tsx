@@ -133,9 +133,7 @@ export const Navbar = (props: Props) => {
                     >
                       <div className="flex flex-col justify-center items-center mt-2 text-sm block justify-end px-4 my-2 text-black-normal">
                         <span>
-                          {!isAuthenticating
-                            ? "Connect Wallet"
-                            : "Authenticating"}
+                          {!isAuthenticating ? "Connect Wallet" : "..........."}
                         </span>
                       </div>
                     </button>

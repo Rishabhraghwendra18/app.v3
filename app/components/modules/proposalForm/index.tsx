@@ -155,7 +155,7 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
                   >
                     <TextField
                       {...field}
-                      label="Minimum Collateral Required"
+                      label="Collateral"
                       variant="standard"
                       helperText={
                         fieldState.error?.type === "min" &&

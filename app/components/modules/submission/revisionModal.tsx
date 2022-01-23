@@ -57,7 +57,7 @@ const RevisionModal = ({ isOpen, setIsOpen }: props) => {
     dispatch,
   } = useGlobal();
 
-  const { gig } = useGig();
+  const { gig, contractGig } = useGig();
   const { Moralis, user } = useMoralis();
 
   const handleClose = () => setIsOpen(false);
@@ -222,7 +222,7 @@ const RevisionModal = ({ isOpen, setIsOpen }: props) => {
                 }}
               >
                 Are you sure you want to request the revision? You have{" "}
-                {gig.proposal[0].revisions} revisions left!
+                {contractGig.numRevisionsRemaining} revisions left!
               </Typography>
             </Box>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>

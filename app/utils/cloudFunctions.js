@@ -526,6 +526,7 @@ Moralis.Cloud.afterSave("RevisionRequests", async (request) => {
     const instructions = await bounty.get("revisionInstructions");
     if (canUpdate) {
       bounty.set("status", 204);
+      logger.info("revision sync");
       if (instructions) {
         instructions.push(request.object.get("instruction"));
         bounty.set("revisionInstructions", instructions);
