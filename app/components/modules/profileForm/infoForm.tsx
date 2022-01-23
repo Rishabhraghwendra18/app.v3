@@ -200,8 +200,8 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                         field.onChange(data);
                       }}
                       defaultValue={{
-                        name: userInfo?.get("organizationName"),
-                        objectId: userInfo?.get("organizationId"),
+                        name: userInfo?.get("organizationName") || "",
+                        objectId: userInfo?.get("organizationId") || "",
                       }}
                       renderInput={(params) => <TextField {...params} variant="standard" label="Organization" />}
                     />
