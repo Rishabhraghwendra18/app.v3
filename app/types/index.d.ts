@@ -33,6 +33,7 @@ export interface User {
   organizationId: string;
   organizationName: string;
   organizationVerified: boolean;
+  organizationPicture: string;
   _createdAt: object;
   _id: string;
   _updatedAt: object;
