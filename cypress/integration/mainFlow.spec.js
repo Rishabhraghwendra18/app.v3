@@ -67,6 +67,8 @@ describe("Main Flow", () => {
       .click();
     cy.get("#tGigReward").type("0.01");
     cy.get("#tGigStake").type("0.01");
+    cy.get("#tGigRevisions").type("2");
+    cy.get("#tGigTimeToRevise").type("3");
     // cy.get("#tGigDeadline").click();
     // cy.get("#tGigDeadline").type("Jan 14, 2022");
     // cy.wait(10000);

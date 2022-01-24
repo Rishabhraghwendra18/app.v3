@@ -40,7 +40,7 @@ export const GigHeading = (props: Props) => {
               <Link href={`/profile/`} passHref>
                 <HeadingAvatar
                   alt="Username"
-                  src={gig.user[0].profilePicture}
+                  src={gig.user[0].organizationVerified ? gig.user[0].organizationPicture : gig.user[0].profilePicture}
                 />
               </Link>
             </div>
@@ -70,28 +70,21 @@ export const GigHeading = (props: Props) => {
                     />
                   );
                 })}
-                <div className="hidden md:flex text-xs mx-8">
-                  Posted {formatTimeAgo(Date.parse(gig.createdAt))} ago
-                </div>
+                <div className="hidden md:flex text-xs mx-8">Posted {formatTimeAgo(Date.parse(gig.createdAt))} ago</div>
                 <div className="text-xs flex flex-row mr-8">
-                  {[101, 102, 201, 202].includes(gig.status) && (
+                  {[101, 102, 201, 202, 204].includes(gig.status) && (
                     <i className="fas fa-circle flex flex-col justify-center mr-1 text-green-400 animate-pulse"></i>
                   )}
                   {[203, 401, 402, 403].includes(gig.status) && (
                     <i className="fas fa-circle flex flex-col justify-center mr-1 text-red-400"></i>
                   )}
-                  <div
-                    className="flex flex-col items-center justify-center"
-                    id="tGigStatus"
-                  >
+                  <div className="flex flex-col items-center justify-center" id="tGigStatus">
                     {gigStatusMapping[gig.status]}
                   </div>
                 </div>
                 <div className="text-xs  flex flex-row mr-8">
                   <i className="fas fa-user flex flex-col justify-center mr-1"></i>
-                  <div className="flex flex-col items-center justify-center">
-                    {gig.numApplicants || 0} Applicants
-                  </div>
+                  <div className="flex flex-col items-center justify-center">{gig.numApplicants || 0} Applicants</div>
                 </div>
               </div>
               <div className="flex flex-row pt-4">
@@ -116,9 +109,7 @@ export const GigHeading = (props: Props) => {
                     <div className="flex flex-col">
                       <a
                         className="text-center text-xs"
-                        href={`https://polygonscan.com/tx/${gig.verifiableBounty?.get(
-                          "transaction_hash"
-                        )}`}
+                        href={`https://polygonscan.com/tx/${gig.verifiableBounty?.get("transaction_hash")}`}
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -148,9 +139,7 @@ export const GigHeading = (props: Props) => {
                     <div className="flex flex-col ">
                       <a
                         className="text-center text-xs "
-                        href={`https://polygonscan.com/tx/${gig.submissionTransaction?.get(
-                          "transaction_hash"
-                        )}`}
+                        href={`https://polygonscan.com/tx/${gig.submissionTransaction?.get("transaction_hash")}`}
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -164,12 +153,8 @@ export const GigHeading = (props: Props) => {
           </div>
           {gig.status < 203 && (
             <div className="flex flex-col pt-4 w-1/4 text-right">
-              <span className="text-base text-blue-light">
-                Gig Submission Closes in
-              </span>
-              <span className="text-xl font-bold">
-                {formatTimeLeft(gig.deadline)}
-              </span>
+              <span className="text-base text-blue-light">Gig Submission Closes in</span>
+              <span className="text-xl font-bold">{formatTimeLeft(gig.deadline)}</span>
             </div>
           )}
         </div>
@@ -181,54 +166,30 @@ export const GigHeading = (props: Props) => {
         >
           <Tabs value={tab} onChange={handleChange}>
             <StyledTab label="Client Brief" {...a11yProps(0)} value={0} />
-            {[101].includes(gig.status) &&
-              gig.clientUsername === userInfo?.get("spectUsername") && (
-                <StyledTab label="Proposals" {...a11yProps(1)} value={1} />
-              )}
+            {[101].includes(gig.status) && gig.clientUsername === userInfo?.get("spectUsername") && (
+              <StyledTab label="Proposals" {...a11yProps(1)} value={1} />
+            )}
             {[101].includes(gig.status) &&
               gig.clientUsername !== userInfo?.get("spectUsername") &&
               !gig.proposal?.length &&
-              isAuthenticated && (
-                <StyledTab
-                  label="Submit Proposal"
-                  {...a11yProps(2)}
-                  value={2}
-                />
-              )}
-            {[101, 102, 201, 202, 203].includes(gig.status) &&
+              isAuthenticated && <StyledTab label="Submit Proposal" {...a11yProps(2)} value={2} />}
+            {[101, 102, 201, 202, 203, 204].includes(gig.status) &&
               gig.proposal?.length &&
               gig.proposal[0].freelancer === userInfo?.get("spectUsername") && (
-                <StyledTab
-                  label="Submitted Proposal"
-                  {...a11yProps(3)}
-                  value={3}
-                />
+                <StyledTab label="Submitted Proposal" {...a11yProps(3)} value={3} />
               )}
-            {[102, 201, 202, 203, 403, 403].includes(gig.status) &&
+            {[102, 201, 202, 203, 204, 403, 403].includes(gig.status) &&
               gig.clientUsername === userInfo?.get("spectUsername") && (
-                <StyledTab
-                  label="Selected Proposal"
-                  {...a11yProps(4)}
-                  value={4}
-                />
+                <StyledTab label="Selected Proposal" {...a11yProps(4)} value={4} />
               )}
-            {[201, 202, 203, 403].includes(gig.status) &&
+            {[201, 202, 203, 204, 403].includes(gig.status) &&
               (gig.clientUsername === userInfo?.get("spectUsername") ||
-                (gig.proposal?.length &&
-                  gig.proposal[0].freelancer ===
-                    userInfo?.get("spectUsername"))) && (
-                <StyledTab
-                  label="Submissions"
-                  {...a11yProps(5)}
-                  value={5}
-                  id="bSubmissionTab"
-                />
+                (gig.proposal?.length && gig.proposal[0].freelancer === userInfo?.get("spectUsername"))) && (
+                <StyledTab label="Submissions" {...a11yProps(5)} value={5} id="bSubmissionTab" />
               )}
             {[403].includes(gig.status) &&
               (gig.clientUsername === userInfo?.get("spectUsername") ||
-                (gig.proposal?.length &&
-                  gig.proposal[0].freelancer ===
-                    userInfo?.get("spectUsername"))) && (
+                (gig.proposal?.length && gig.proposal[0].freelancer === userInfo?.get("spectUsername"))) && (
                 <StyledTab label="Dispute" {...a11yProps(6)} value={6} />
               )}
           </Tabs>

@@ -11,6 +11,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import { useGlobal } from "app/context/globalContext";
 import { useMoralis } from "react-moralis";
 import { motion } from "framer-motion";
+import { Organization } from "app/types";
 
 interface Props {
   handleNext: () => void;
@@ -23,6 +24,7 @@ export interface IInfoFormInput {
   email: string;
   skills: Array<{ label: string }>;
   title: string;
+  organization: Organization;
 }
 
 const InfoForm = ({ handleNext, setLoading }: Props) => {
@@ -32,15 +34,18 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
     formState: { errors, isDirty },
   } = useForm<IInfoFormInput>();
   const {
-    state: { userInfo },
+    state: { userInfo, organizations },
     dispatch,
   } = useGlobal();
+  console.log(organizations);
   const { Moralis, user } = useMoralis();
   const onSubmit: SubmitHandler<IInfoFormInput> = async (values) => {
     setLoading(true);
     userInfo?.set("descriptionTitle", values.title);
     userInfo?.set("name", values.name);
     userInfo?.set("skills", values.skills);
+    userInfo?.set("organizationId", values.organization?.objectId);
+    userInfo?.set("organizationName", values.organization?.name);
     Moralis.Object.saveAll([userInfo as any])
       .then(([userInfo]) => {
         setLoading(false);
@@ -185,6 +190,7 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                 )}
               />
             </div>
+
             <div className="my-2">
               <Controller
                 name="title"
@@ -199,7 +205,7 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                   >
                     <TextField
                       {...field}
-                      label="Title/ Designation"
+                      label="Role"
                       variant="standard"
                       helperText={
                         fieldState.error?.type === "minLength" &&
@@ -208,6 +214,41 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                       fullWidth
                       required
                       error={fieldState.error ? true : false}
+                    />
+                  </LightTooltip>
+                )}
+              />
+            </div>
+            <div className="my-2">
+              <Controller
+                name="organization"
+                control={control}
+                defaultValue={userInfo?.get("organizationName") || ""}
+                rules={{ minLength: 5 }}
+                render={({ field, fieldState }) => (
+                  <LightTooltip
+                    arrow
+                    placement="right"
+                    title={profileHelperTexts["organization"]}
+                  >
+                    <Autocomplete
+                      id="orgs-standard"
+                      options={organizations as Organization[]} // fix
+                      getOptionLabel={(option) => option.name}
+                      onChange={(e, data) => {
+                        field.onChange(data);
+                      }}
+                      defaultValue={{
+                        name: userInfo?.get("organizationName") || "",
+                        objectId: userInfo?.get("organizationId") || "",
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="standard"
+                          label="Organization"
+                        />
+                      )}
                     />
                   </LightTooltip>
                 )}

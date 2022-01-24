@@ -7,95 +7,83 @@ import {
   Step,
   StepLabel,
   Typography,
+  TextField,
+  InputAdornment,
   Backdrop,
   CircularProgress,
 } from "@mui/material";
-import { listBounty } from "app/utils/contracts";
+import {
+  addToStake,
+  callDispute,
+  revise,
+  secondConfirmation,
+  wrapMatic,
+} from "app/utils/contracts";
 import { updateUserStake, useGlobal } from "app/context/globalContext";
-import { IGigFormInput } from "app/components/modules/gigForm";
-import { toIPFS } from "app/utils/moralis";
 import { useMoralis } from "react-moralis";
+import { ethers } from "ethers";
 import { ToastContainer, toast } from "material-react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import ApproveModal from "app/components/elements/modals/approveModal";
 import WrapModal from "app/components/elements/modals/wrapModal";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import ClearIcon from "@mui/icons-material/Clear";
+import { Proposal } from "app/types";
+import { formatTimeLeft } from "app/utils/utils";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import { useGig } from "pages/gig/[id]";
+import DepositModal from "app/components/elements/modals/despositModal";
+import { toIPFS } from "app/utils/moralis";
+import { modules } from "app/constants/constants";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface props {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  values: IGigFormInput;
 }
 
-const steps = ["Approve", "Wrap enough Matic", "Confirm Gig"];
+const steps = ["Revision comments", "Confirm"];
 
-const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
+const RevisionModal = ({ isOpen, setIsOpen }: props) => {
   const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [amount, setAmount] = useState(0);
-  const [required, setRequired] = useState(0);
-  const [balance, setBalance] = useState(0);
   const [loaderText, setLoaderText] = useState("");
-  const [reward, setReward] = useState(0);
+  const [revisionText, setRevisionText] = useState("");
+  const [hash, setHash] = useState("");
+
   const {
     state: { contracts, userStake },
     dispatch,
   } = useGlobal();
-  const [hash, setHash] = useState("");
-  const [dealId, setDealId] = useState(0);
+
+  const { gig, contractGig } = useGig();
   const { Moralis, user } = useMoralis();
 
-  const handleClose = (event, reason) => {
-    if (reason && reason == "backdropClick") return;
-    setIsOpen(false);
-  };
-  const handleNextStep = () => setActiveStep(activeStep + 1);
+  const handleClose = () => setIsOpen(false);
 
-  useEffect(() => {
-    updateUserStake(dispatch, user, contracts);
-    const totalReward =
-      parseFloat(values.reward.toString()) +
-      parseFloat((0.02 * values.reward).toString());
-    setReward(totalReward);
-    if (userStake?.balance !== undefined) {
-      if (!userStake.allowance) {
-        setActiveStep(0);
-      } else if (totalReward > userStake?.balance) {
-        setActiveStep(1);
-      } else {
-        setActiveStep(2);
-      }
-      setRequired(totalReward - userStake?.balance);
-      setAmount(totalReward - userStake?.balance);
-    }
-    Moralis.Web3API.account
-      .getNativeBalance({
-        chain: process.env.NETWORK_CHAIN as any,
-        address: user?.get("ethAddress"),
-      })
-      .then((res) => {
-        setBalance(parseInt(res.balance) / 10 ** 18);
-      });
-  }, []);
+  const handleNextStep = () => setActiveStep(activeStep + 1);
+  const handlePreviousStep = () => setActiveStep(activeStep - 1);
+
+  useEffect(() => {}, []);
+
   const modalStyle = {
     position: "absolute" as "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: "40rem",
+    width: "50rem",
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
+    overflow: "auto",
+    maxHeight: "90%",
     p: 4,
   };
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <Box sx={modalStyle}>
-        <Stepper activeStep={activeStep}>
+        <Stepper activeStep={activeStep} sx={{ mb: 2 }}>
           {steps.map((label, index) => {
             const stepProps: { completed?: boolean } = {};
             const labelProps: {
@@ -109,7 +97,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
           })}
         </Stepper>
         <Backdrop
-          sx={{ color: "#eaeaea", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={loading}
         >
           <Box
@@ -120,7 +108,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
               alignItems: "center",
             }}
           >
-            <CircularProgress color="inherit" id="eLoader" />
+            <CircularProgress color="inherit" />
             <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
               {loaderText}
             </Typography>
@@ -130,8 +118,8 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
         {activeStep === steps.length && (
           <React.Fragment>
             <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
-              Gig created succesfully! You cannot edit it now, delist it if you
-              wish to make changes or to get your escrow back!
+              Revision requested succesfully!. You can expect the revision
+              submission in about {gig.proposal[0].timeToRevise} days.
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <a
@@ -148,12 +136,20 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                 </Button>
               </a>
               <Box sx={{ flex: "1 1 auto" }} />
-              <Link href={`/gig/${dealId}`} passHref>
+              <Link
+                href={{
+                  pathname: `/gig/${gig.dealId}`,
+                  query: {
+                    tab: 4,
+                  },
+                }}
+                as={`/gig/${gig.dealId}`}
+                passHref
+              >
                 <Button
                   variant="outlined"
                   endIcon={<ArrowCircleRightIcon />}
-                  onClick={(evt) => handleClose(evt, "Gig")}
-                  id="bGotoGig"
+                  onClick={handleClose}
                 >
                   Go to gig!
                 </Button>
@@ -162,28 +158,6 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
           </React.Fragment>
         )}
         {activeStep === 0 && (
-          <ApproveModal
-            setLoaderText={setLoaderText}
-            setLoading={setLoading}
-            setActiveStep={setActiveStep}
-            balance={balance}
-            handleClose={handleClose}
-            amount={amount}
-          />
-        )}
-        {activeStep === 1 && (
-          <WrapModal
-            setLoaderText={setLoaderText}
-            setLoading={setLoading}
-            handleNextStep={handleNextStep}
-            balance={balance}
-            amount={amount}
-            setAmount={setAmount}
-            required={required}
-            handleClose={handleClose}
-          />
-        )}
-        {activeStep === steps.length - 1 && (
           <React.Fragment>
             <Box
               sx={{
@@ -194,71 +168,100 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                 textAlign: "center",
               }}
             >
-              <Typography sx={{ mt: 2, color: "#eaeaea" }}>
-                Are you sure you want to create the gig?
-              </Typography>
-              <Typography sx={{ color: "#eaeaea" }}>
-                {reward.toFixed(3)} WMatic will be escrowed from your wallet.
+              <div className="mt-4 text-grey-light">
+                <ReactQuill
+                  onChange={(value, delta, user, editor) => {
+                    setRevisionText(editor.getContents() as any);
+                  }}
+                  theme="snow"
+                  modules={modules}
+                  defaultValue={revisionText}
+                  placeholder={"Describe the revision you want in detail"}
+                />
+              </div>
+            </Box>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Button
+                color="inherit"
+                onClick={handleClose}
+                sx={{ mr: 1, color: "#f45151" }}
+              >
+                Nevermind
+              </Button>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button variant="outlined" onClick={handleNextStep}>
+                Next
+              </Button>
+            </Box>
+          </React.Fragment>
+        )}
+        {activeStep === 1 && (
+          <React.Fragment>
+            <Box sx={{ m: 2 }}>
+              <span className="text-xl text-blue-bright w-full text-left">
+                Comments
+              </span>
+              <div className="mt-2 text-grey-light">
+                <ReactQuill
+                  readOnly={true}
+                  theme={"bubble"}
+                  modules={modules}
+                  defaultValue={revisionText}
+                />
+              </div>
+              <Typography
+                sx={{
+                  mt: 2,
+                  mb: 1,
+                  color: "#eaeaea",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                Are you sure you want to request the revision? You have{" "}
+                {contractGig.numRevisionsRemaining} revisions left!
               </Typography>
             </Box>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Button
                 color="inherit"
-                variant="outlined"
-                onClick={(evt) => handleClose(evt, "Nevermind")}
+                onClick={handlePreviousStep}
                 sx={{ mr: 1, color: "#f45151" }}
-                endIcon={<ClearIcon />}
               >
-                Nevermind
+                Go back
               </Button>
               <Box sx={{ flex: "1 1 auto" }} />
               <Button
                 variant="outlined"
-                id="bCreateGigConfirm"
-                endIcon={<CheckCircleIcon />}
                 onClick={() => {
-                  setLoaderText("Uploading metatdata on IPFS please wait....");
+                  setLoaderText(
+                    "Uploading revision instructions to IPFS, please wait"
+                  );
                   setLoading(true);
-                  let tags: Array<string> = [];
-                  values.skills?.filter((a) => tags.push(a.label));
                   toIPFS(Moralis, "object", {
-                    name: values.name,
-                    description: values.description,
-                    tags: tags,
-                    desiredSubmissionDeadline: values.deadline
-                      .toDate()
-                      .toUTCString(),
-                    desiredCollateral: values.minStake,
-                    desiredRevisions: values.revisions,
-                    desiredTimeToRevise: values.timeToRevise,
+                    revisionComments: revisionText,
                   }).then((res) => {
                     const ipfsUrlArray = res.path.split("/");
                     setLoaderText("Waiting for the transaction to complete");
-                    listBounty(
-                      contracts?.dealContract,
-                      values.reward,
-                      values.acceptanceDays,
-                      ipfsUrlArray[ipfsUrlArray.length - 1]
+                    revise(
+                      gig.dealId,
+                      ipfsUrlArray[ipfsUrlArray.length - 1],
+                      contracts?.dealContract
                     )
                       .then((res) => {
-                        const hash = res.transactionHash;
-                        let dealId;
-                        for (const event of res.events) {
-                          if (event.event && event.event === "ListGig") {
-                            dealId = event.args[1];
-                          }
-                        }
-                        setHash(hash);
-                        setDealId(dealId);
+                        setHash(res.transactionHash);
                         setLoading(false);
-                        setActiveStep(3);
+                        setActiveStep(activeStep + 1);
                       })
                       .catch((err) => {
                         setLoading(false);
                         toast.error(err.message, {
                           position: "bottom-center",
-                          autoClose: 3000,
-                          hideProgressBar: true,
+                          autoClose: 5000,
+                          hideProgressBar: false,
                           closeOnClick: true,
                           pauseOnHover: true,
                           draggable: true,
@@ -268,7 +271,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                   });
                 }}
               >
-                Create Gig
+                Hell Yeah!
               </Button>
             </Box>
           </React.Fragment>
@@ -277,4 +280,4 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
     </Modal>
   );
 };
-export default ConfirmModal;
+export default RevisionModal;

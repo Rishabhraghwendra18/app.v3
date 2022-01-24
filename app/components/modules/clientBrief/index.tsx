@@ -55,7 +55,7 @@ const ClientBrief = (props: Props) => {
             />
           )}
           <div className="flex flex-row">
-            <div className="grid grid-cols-5 w-3/4">
+            <div className="grid grid-cols-6 w-full">
               <div className="flex flex-col my-8">
                 <div className="text-sm text-grey- dark:text-blue-light">
                   Gig Reward
@@ -119,13 +119,39 @@ const ClientBrief = (props: Props) => {
                   <div className="text-xl mt-1 font-bold ">
                     {gig.timeToAcceptInDays}
                   </div>
+                  <div className="text-sm text-grey-normal ml-1 mb-1 ">
+                    Days
+                  </div>
                 </div>
               </div>
-              <div className="flex flex-col my-8">
+              {/* <div className="flex flex-col my-8">
                 <div className="text-sm text-blue-light">Gig Status</div>
                 <div className="flex flex-row">
                   <div className="text-lg font-bold ">
                     {gigStatusMapping[gig.status]}
+                  </div>
+                </div>
+              </div> */}
+              <div className="flex flex-col my-8">
+                <div className="text-sm text-blue-light">
+                  {[201, 202, 204, 403].includes(gig.status)
+                    ? "Revision left"
+                    : "Revisions required"}
+                </div>
+                <div className="flex flex-row">
+                  <div className="text-lg font-bold ">{gig.revisions}</div>
+                </div>
+              </div>
+              <div className="flex flex-col my-8">
+                <div className="text-sm text-blue-light">Time to Revise</div>
+                <div className="flex flex-row items-baseline">
+                  <div className="text-xl mt-1 font-bold ">
+                    {[201, 202, 204, 403].includes(gig.status)
+                      ? contractGig.numRevisionsRemaining
+                      : gig.timeToRevise}
+                  </div>
+                  <div className="text-sm text-grey-normal ml-1 mb-1 ">
+                    Days
                   </div>
                 </div>
               </div>

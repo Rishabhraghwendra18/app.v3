@@ -56,7 +56,10 @@ export const ConfirmModal = ({
   finishText2,
   confirmType,
 }: props) => {
-  const handleClose = () => setIsOpen(false);
+  const handleClose = (event, reason) => {
+    if (reason && reason == "backdropClick") return;
+    setIsOpen(false);
+  };
   const [loading, setLoading] = useState(false);
   const [finished, setFinished] = useState(false);
   const [loaderText, setLoaderText] = useState("");
@@ -130,7 +133,7 @@ export const ConfirmModal = ({
                 <Button
                   variant="outlined"
                   endIcon={<ArrowCircleRightIcon />}
-                  onClick={handleClose}
+                  onClick={(evt) => handleClose(evt, "Gig")}
                   id="bGotoGig"
                 >
                   Go to gig!
@@ -159,7 +162,7 @@ export const ConfirmModal = ({
             >
               <Button
                 color="inherit"
-                onClick={handleClose}
+                onClick={(evt) => handleClose(evt, "Nvm")}
                 variant="outlined"
                 sx={{ mr: 1, color: "#f45151", textTransform: "none" }}
                 endIcon={<ClearIcon />}
@@ -234,6 +237,7 @@ export const ConfirmModal = ({
                           setLoading(false);
                         })
                         .catch((err) => {
+                          setLoading(false);
                           toast.error(err.message, {
                             position: "bottom-center",
                             autoClose: 3000,

@@ -25,16 +25,16 @@ const GigTemplate = (props: Props) => {
         ) : (
           tab === 0 && <ClientBrief key={0} />
         )}
-        {tab === 1 && !fetching && <ViewProposals key={1} />}
+        {tab === 1 && !fetching && gig && <ViewProposals key={1} />}
         {tab === 2 && !fetching && <ProposalForm key={2} />}
-        {tab === 3 && !fetching && gig.proposal?.length && (
+        {tab === 3 && !fetching && gig && gig.proposal?.length && (
           <SingleProposal key={3} />
         )}
-        {tab === 4 && !fetching && gig.proposal?.length && (
+        {tab === 4 && !fetching && gig && gig.proposal?.length && (
           <SingleProposal key={4} />
         )}
-        {tab === 5 && !fetching && <Submission key={5} />}
-        {tab === 6 && !fetching && <Dispute key={6} />}
+        {tab === 5 && !fetching && gig && <Submission key={5} />}
+        {tab === 6 && !fetching && gig && <Dispute key={6} />}
       </AnimatePresence>
     </div>
   );

@@ -61,7 +61,10 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
   const [dealId, setDealId] = useState(0);
   const { Moralis, user } = useMoralis();
 
-  const handleClose = () => setIsOpen(false);
+  const handleClose = (event, reason) => {
+    if (reason && reason == "backdropClick") return;
+    setIsOpen(false);
+  };
 
   const handleNextStep = () => setActiveStep(activeStep + 1);
 
@@ -178,7 +181,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
                 <Button
                   variant="outlined"
                   endIcon={<ArrowCircleRightIcon />}
-                  onClick={handleClose}
+                  onClick={(evt) => handleClose(evt, "Gig")}
                   id="bGotoGig"
                 >
                   Go to gig!
@@ -240,7 +243,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Button
                 color="inherit"
-                onClick={handleClose}
+                onClick={(evt) => handleClose(evt, "Nvm")}
                 sx={{ mr: 1, color: "#f45151" }}
               >
                 Nevermind

@@ -24,7 +24,6 @@ const SingleProposal = (props: Props) => {
   const {
     state: { conversionRate, userInfo },
   } = useGlobal();
-  const { user } = useMoralis();
   const [deadline, setDeadline] = useState<Date>();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -122,14 +121,15 @@ const SingleProposal = (props: Props) => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col my-8">
+              {/* <div className="flex flex-col my-8">
                 <div className="text-sm text-blue-light">Completed Gigs</div>
                 <div className="flex flex-row items-baseline">
                   <div className="text-xl mt-1 font-bold">
                     {gig.proposal[0]?.completedJobs}
                   </div>
                 </div>
-              </div>
+              </div> */}
+
               <div className="flex flex-col my-8">
                 <div className="text-sm text-blue-light">Success Rate</div>
                 <div className="flex flex-row items-baseline">
@@ -141,17 +141,26 @@ const SingleProposal = (props: Props) => {
                   </div>
                 </div>
               </div>
-              {gig.proposal[0].status === 103 && (
-                <div className="flex flex-col my-8">
-                  <div className="text-sm text-blue-light">Revisions</div>
-                  <div className="flex flex-row items-baseline">
-                    <div className="text-xl mt-1 font-bold">
-                      {gig.verifiableBounty?.get("numRevisionsRemaining")}
-                    </div>
+              <div className="flex flex-col my-8">
+                <div className="text-sm text-blue-light">Revisions</div>
+                <div className="flex flex-row items-baseline">
+                  <div className="text-xl mt-1 font-bold">
+                    {gig.proposal[0].revisions ||
+                      gig.verifiableBounty?.get("numRevisionsRemaining")}
                   </div>
                 </div>
-              )}
-              {gig.proposal[0].freelancer === user?.get("Username") && (
+              </div>
+              <div className="flex flex-col my-8">
+                <div className="text-sm text-blue-light">Time to Revise</div>
+                <div className="flex flex-row items-baseline">
+                  <div className="text-xl mt-1 font-bold">
+                    {gig.proposal[0].timeToRevise}
+                  </div>
+                  <div className="text-sm text-grey-normal ml-1 mb-1">Days</div>
+                </div>
+              </div>
+              {gig.proposal[0].freelancer ===
+                userInfo?.get("spectUsername") && (
                 <div className="flex flex-col my-8">
                   <div className="text-sm text-blue-light">Proposal Status</div>
                   <div className="flex flex-row">
@@ -161,7 +170,8 @@ const SingleProposal = (props: Props) => {
                   </div>
                 </div>
               )}
-              {gig.proposal[0].freelancer !== user?.get("Username") && (
+              {gig.proposal[0].freelancer !==
+                userInfo?.get("spectUsername") && (
                 <div className="flex flex-col my-8">
                   <div className="text-sm text-blue-light">Created by</div>
                   <div className="text-lg flex flex-row">

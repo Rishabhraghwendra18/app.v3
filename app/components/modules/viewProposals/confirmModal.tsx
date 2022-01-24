@@ -168,7 +168,8 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
                     description: gig.description,
                     proposalTitle: proposal.title,
                     proposal: proposal.proposalText,
-                    revisions: proposal.numRevisions,
+                    revisions: proposal.revisions,
+                    timeToRevise: proposal.timeToRevise,
                   }).then((res) => {
                     setLoaderText("Waiting for the transaction to complete");
                     const ipfsUrlArray = res.path.split("/");
@@ -178,7 +179,9 @@ export const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
                       proposal.lockedStake,
                       gig.dealId,
                       ipfsUrlArray[ipfsUrlArray.length - 1],
-                      contracts?.dealContract
+                      contracts?.dealContract,
+                      proposal.revisions,
+                      proposal.timeToRevise
                     )
                       .then((res) => {
                         setHash(res.transactionHash);

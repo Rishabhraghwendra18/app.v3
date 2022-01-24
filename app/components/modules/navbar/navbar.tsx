@@ -143,8 +143,8 @@ export const Navbar = (props: Props) => {
                 }}
               />
             )}
-            {isAuthenticated && <Notifications />}
-            {isAuthenticated && (
+            {isAuthenticated && !loading && <Notifications />}
+            {isAuthenticated && !loading && (
               <NavbarPopover
                 items={profile}
                 documentation={false}

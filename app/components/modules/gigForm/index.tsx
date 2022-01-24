@@ -42,13 +42,11 @@ export interface IGigFormInput {
   minStake: number;
   deadline: any;
   acceptanceDays: number;
+  revisions: number;
+  timeToRevise: number;
 }
 export const GigForm: React.FC<Props> = (props: Props) => {
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<IGigFormInput>();
+  const { handleSubmit, control } = useForm<IGigFormInput>();
 
   const onError: SubmitErrorHandler<IGigFormInput> = () => handleClickOpen();
   const [open, setOpen] = useState(false);
@@ -165,7 +163,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
             <Controller
               name="reward"
               control={control}
-              rules={{ min: 0.01 }}
+              rules={{ min: formStep }}
               render={({ field, fieldState }) => (
                 <LightTooltip
                   arrow
@@ -200,7 +198,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
             <Controller
               name="minStake"
               control={control}
-              rules={{ min: 0.01 }}
+              rules={{ min: formStep }}
               render={({ field, fieldState }) => (
                 <LightTooltip
                   arrow
@@ -298,6 +296,72 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                     }}
                     inputProps={{ min: 0 }}
                     id="tGigAcceptance"
+                  />
+                </LightTooltip>
+              )}
+            />
+          </div>
+        </div>
+        <div className="flex flex-col border-b-1 border-blue-lighter pb-4 mb-4">
+          <div className="w-1/3 mb-4">
+            <Controller
+              name="revisions"
+              control={control}
+              rules={{ max: 10 }}
+              render={({ field, fieldState }) => (
+                <LightTooltip
+                  arrow
+                  placement="right"
+                  title={gigHelperTexts["revisions"]}
+                >
+                  <TextField
+                    {...field}
+                    label="Revisions"
+                    variant="standard"
+                    helperText={
+                      fieldState.error?.type === "max" &&
+                      "You cannot request for more than 10 revisions"
+                    }
+                    type="number"
+                    required
+                    error={fieldState.error ? true : false}
+                    inputProps={{ min: 0, max: 10, step: 1 }}
+                    fullWidth
+                    id="tGigRevisions"
+                  />
+                </LightTooltip>
+              )}
+            />
+          </div>
+          <div className="w-1/3 mb-4">
+            <Controller
+              name="timeToRevise"
+              control={control}
+              rules={{ min: 1 }}
+              render={({ field, fieldState }) => (
+                <LightTooltip
+                  arrow
+                  placement="right"
+                  title={gigHelperTexts["timeToRevise"]}
+                >
+                  <TextField
+                    {...field}
+                    label="Time to give for revision"
+                    variant="standard"
+                    helperText={
+                      fieldState.error?.type === "min" && "Minimum is 1 day"
+                    }
+                    type="number"
+                    error={fieldState.error ? true : false}
+                    inputProps={{ min: 1, step: 1 }}
+                    required
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">Days</InputAdornment>
+                      ),
+                    }}
+                    fullWidth
+                    id="tGigTimeToRevise"
                   />
                 </LightTooltip>
               )}

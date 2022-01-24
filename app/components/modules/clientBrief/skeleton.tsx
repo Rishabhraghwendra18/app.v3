@@ -14,7 +14,7 @@ const ClientBriefSkeleton = (props: Props) => {
           <Skeleton height={64} width={`50%`} />
         </div>
         <div className="flex flex-row w-full">
-          <div className="grid grid-cols-5 w-full">
+          <div className="grid grid-cols-6 w-full">
             <div className="flex flex-col my-8">
               <div className="text-sm text-blue-light">Gig Reward</div>
               <div className="flex flex-row items-baseline">
@@ -59,15 +59,16 @@ const ClientBriefSkeleton = (props: Props) => {
               </div>
             </div>
             <div className="flex flex-col my-8">
-              <div className="text-sm text-blue-light">Gig Status</div>
+              <div className="text-sm text-blue-light">Revisions</div>
               <div className="flex flex-row">
                 <Skeleton height={32} width={120} animation="wave" />
               </div>
             </div>
-          </div>
-          <div className="w-2/5 my-8">
-            <div className="flex flex-row justify-end mr-24">
-              {/* <Skeleton height={36} width={180} /> */}
+            <div className="flex flex-col my-8">
+              <div className="text-sm text-blue-light">Time to Revise</div>
+              <div className="flex flex-row">
+                <Skeleton height={32} width={120} animation="wave" />
+              </div>
             </div>
           </div>
         </div>

@@ -20,8 +20,8 @@ interface GigContextType {
   setContractGig: Function;
   verifiedGig: VerifiedGig;
   setVerifiedGig: Function;
-  submission?: Submission;
-  setSubmission: Function;
+  submissions?: Submission[];
+  setSubmissions: Function;
   proposals: Array<Proposal>;
   setProposals: Function;
   evidence?: {
@@ -34,6 +34,7 @@ interface GigContextType {
   setTab: Function;
   getGig: Function;
   getMyProposals: Function;
+  revisionInstructions?: any[];
 }
 
 export const GigContext = createContext<GigContextType>({} as GigContextType);
@@ -50,6 +51,9 @@ const GigPage: NextPage<Props> = (props: Props) => {
   useEffect(() => {
     const promises: Array<any> = [];
     context.setFetching(true);
+    let instructions: any[] = [];
+    let submissions: any[] = [];
+
     if (!loading && isInitialized && !isInitializing) {
       context.getGig({
         onSuccess: (res: Gig[]) => {
@@ -62,14 +66,20 @@ const GigPage: NextPage<Props> = (props: Props) => {
                 getDealMetadata(res[0].dealId, contracts?.dealContract).then(
                   (deal) => {
                     context.setContractGig(deal);
-                    if ([202, 203, 204, 403].includes(status)) {
-                      fetchFromIPFS(deal.submission).then((res) => {
-                        context.setSubmission(res);
-                      });
-                    }
                   }
                 )
               );
+            }
+            if ([202, 203, 204, 402, 403].includes(status)) {
+              console.log(res[0].submissions);
+              res[0].submissions.map((submission) => {
+                promises.push(
+                  fetchFromIPFS(submission).then((res) => {
+                    console.log(res);
+                    submissions.push(res);
+                  })
+                );
+              });
             }
             if (status === 101) {
               promises.push(
@@ -87,6 +97,17 @@ const GigPage: NextPage<Props> = (props: Props) => {
                 })
               );
             }
+            if (status === 204) {
+              console.log(res[0].revisionInstructions);
+              res[0].revisionInstructions.map((instruction) => {
+                promises.push(
+                  fetchFromIPFS(instruction).then((res) => {
+                    console.log(res);
+                    instructions.push(res);
+                  })
+                );
+              });
+            }
             if (status === 403) {
               promises.push(
                 fetchFromIPFS(res[0].evidence).then((res) => {
@@ -96,6 +117,9 @@ const GigPage: NextPage<Props> = (props: Props) => {
             }
             Promise.all(promises)
               .then(() => {
+                context.setRevisionInstructions(instructions);
+                context.setSubmissions(submissions);
+                console.log(submissions);
                 if (router.query.tab) {
                   context.setTab(parseInt(router.query.tab as string));
                 }
@@ -138,7 +162,10 @@ export function useProviderGig() {
   const [verifiedGig, setVerifiedGig] = useState<VerifiedGig>(
     {} as VerifiedGig
   );
-  const [submission, setSubmission] = useState<Submission>({} as Submission);
+  const [submissions, setSubmissions] = useState<Submission[]>(
+    {} as Submission[]
+  );
+  const [revisionInstructions, setRevisionInstructions] = useState<any[]>([]);
   const [proposals, setProposals] = useState<Array<Proposal>>([]);
   const [evidence, setEvidence] = useState();
   const [fetching, setFetching] = useState(true);
@@ -165,8 +192,8 @@ export function useProviderGig() {
     setContractGig,
     verifiedGig,
     setVerifiedGig,
-    submission,
-    setSubmission,
+    submissions,
+    setSubmissions,
     proposals,
     setProposals,
     evidence,
@@ -175,6 +202,8 @@ export function useProviderGig() {
     setFetching,
     tab,
     setTab,
+    revisionInstructions,
+    setRevisionInstructions,
     getGig,
     getMyProposals,
   };

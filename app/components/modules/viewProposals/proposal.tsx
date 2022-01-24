@@ -34,7 +34,7 @@ const Proposal = ({ proposal }: Props) => {
       )}
       <div className="">
         <div className="flex flex-row mb-4">
-          <div className="grid grid-cols-5 w-full">
+          <div className="grid grid-cols-4 w-full">
             <div className="flex flex-col">
               <div className="text-sm text-blue-light">Proposed deadline</div>
               <div className="flex flex-row items-baseline">
@@ -83,6 +83,23 @@ const Proposal = ({ proposal }: Props) => {
                     Gig
                   </div>
                 )}
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <div className="text-sm text-blue-light">Revisions</div>
+              <div className="flex flex-row items-baseline">
+                <div className="text-xl mt-1 font-bold">
+                  {proposal.revisions}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <div className="text-sm text-blue-light">Time to Revise</div>
+              <div className="flex flex-row items-baseline">
+                <div className="text-xl mt-1 font-bold">
+                  {proposal.timeToRevise}
+                </div>
+                <div className="text-sm text-grey-normal ml-1 mb-1">Days</div>
               </div>
             </div>
             <div className="flex flex-col ">

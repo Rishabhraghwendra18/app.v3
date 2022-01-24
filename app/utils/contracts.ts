@@ -101,11 +101,12 @@ export async function firstConfirmation(
   lockedStake,
   dealId,
   bountyCid,
-  contract
+  contract,
+  revisions,
+  timeToRevise
 ) {
   deadline = deadline.getTime() / 1000;
-  const revision = 0;
-  const timeToReviseInMinutes = 120;
+  const timeToReviseInMinutes = timeToRevise * 24 * 60;
   const tx = await contract.firstConfirmation(
     deadline,
     freelancer,
@@ -113,7 +114,7 @@ export async function firstConfirmation(
     dealId,
     bountyCid,
     timeToReviseInMinutes,
-    revision
+    revisions
   );
   return tx.wait();
 }
@@ -195,5 +196,10 @@ export async function callConfirmationDeadlineViolation(dealId, contract) {
 
 export async function callDispute(dealId, dispute, contract) {
   const tx = await contract.callDispute(dealId, dispute);
+  return tx.wait();
+}
+
+export async function revise(dealId, instructions, contract) {
+  const tx = await contract.revise(dealId, instructions);
   return tx.wait();
 }

@@ -30,6 +30,10 @@ export interface User {
   sucessRate: number;
   profilePicture: string;
   skills: Array<object>;
+  organizationId: string;
+  organizationName: string;
+  organizationVerified: boolean;
+  organizationPicture: string;
   _createdAt: object;
   _id: string;
   _updatedAt: object;
@@ -49,7 +53,8 @@ export interface Gig {
   name: string;
   numApplicants: number;
   objectId: string;
-  revisions?: number;
+  revisions: number;
+  timeToRevise: number;
   reward: number;
   status: GigStatus;
   tags: Array;
@@ -59,7 +64,9 @@ export interface Gig {
   user: Array<User>;
   verifiableBounty?: Moralis.Object;
   submissionTransaction?: Moralis.Object;
+  submissions: string[];
   proposal: Array<Proposal>;
+  revisionInstructions: string[];
 }
 
 type ProposalStatus = 101 | 102 | 103 | 401;
@@ -73,7 +80,8 @@ export interface Proposal {
   freelancer: string;
   freelancerAddress: string;
   lockedStake: number;
-  numRevisions?: number;
+  revisions: number;
+  timeToRevise: number;
   objectId: string;
   proposalText: object;
   status: ProposalStatus;
@@ -92,8 +100,8 @@ export interface ContractGig {
   deadline: Array<object | string> | any;
   freelancer: string;
   gigCid: string;
-  inDispute: false;
-  numRevisionsRemaining: false;
+  inDispute: ConstrainBoolean;
+  numRevisionsRemaining: number;
   reward: BigNumber;
   submission: string;
   timeToAcceptInMinuted: number;
@@ -133,6 +141,15 @@ export interface Notification {
   title: string;
   updatedAt: string;
   user: User[];
+}
+
+export interface Organization {
+  createdAt?: string;
+  name: string;
+  objectId: string;
+  picture?: string;
+  updatedAt?: string;
+  website?: string;
 }
 
 export type Moralis = Moralis;
