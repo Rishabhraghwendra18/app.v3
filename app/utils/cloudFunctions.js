@@ -43,10 +43,10 @@ Moralis.Cloud.beforeSave("UserInfo", async (request) => {
   }
   if (!request.master) {
     if (
-      request.object.get("createdBounties") ||
-      request.object.get("freelancedBounties") ||
-      request.object.get("completedBounties") ||
-      request.object.get("successRate")
+      request.object.get("createdBounties") !== existingUser.get("createdBounties") ||
+      request.object.get("freelancedBounties") !== existingUser.get("freelancedBounties") ||
+      request.object.get("completedBounties") !== existingUser.get("completedBounties") ||
+      request.object.get("successRate") !== existingUser.get("successRate")
     ) {
       throw "Cannot set user stats from client";
     }
