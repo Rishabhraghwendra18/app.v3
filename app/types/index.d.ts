@@ -67,6 +67,8 @@ export interface Gig {
   submissions: string[];
   proposal: Array<Proposal>;
   revisionInstructions: string[];
+  rating: number;
+  review: string;
 }
 
 type ProposalStatus = 101 | 102 | 103 | 401;

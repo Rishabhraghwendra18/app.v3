@@ -23,6 +23,7 @@ import { useGlobal } from "app/context/globalContext";
 import { uploadFile } from "app/utils/moralis";
 import { useMoralis } from "react-moralis";
 import EditIcon from "@mui/icons-material/Edit";
+import Reviews from "../modules/reviews";
 
 interface Props {}
 
@@ -235,11 +236,13 @@ const ProfileTemplate = (props: Props) => {
               value={1}
               hidden={!editable}
             />
+            <StyledTab label="Reviews" {...a11yProps(2)} value={2} />
           </Tabs>
         </Box>
         <AnimatePresence exitBeforeEnter initial={false}>
           {tab === 0 && <ProfileInfo key={0} />}
           {tab === 1 && <DepositManagement key={1} />}
+          {tab === 2 && <Reviews key={2} />}
         </AnimatePresence>
       </div>
     </div>

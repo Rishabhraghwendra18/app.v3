@@ -56,7 +56,6 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
   const handleNextStep = () => setActiveStep(activeStep + 1);
 
   useEffect(() => {
-    updateUserStake(dispatch, user, contracts);
     const totalReward =
       parseFloat(values.reward.toString()) +
       parseFloat((0.02 * values.reward).toString());
@@ -252,6 +251,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                         setDealId(dealId);
                         setLoading(false);
                         setActiveStep(3);
+                        updateUserStake(dispatch, user, contracts);
                       })
                       .catch((err) => {
                         setLoading(false);

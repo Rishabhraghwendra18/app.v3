@@ -173,9 +173,8 @@ export async function submitContract(dealId, submission, contract) {
   return tx.wait();
 }
 
-export async function accept(dealId, contract) {
-  const rating = 5;
-  const tx = await contract.accept(dealId, rating);
+export async function accept(dealId, contract, feedback) {
+  const tx = await contract.accept(dealId, feedback);
   return tx.wait();
 }
 
