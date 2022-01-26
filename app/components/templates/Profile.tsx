@@ -19,6 +19,7 @@ import ProfileInfo from "../modules/profileInfo";
 import ProfileForm from "../modules/profileForm";
 import { useProfile } from "pages/profile/[username]";
 import InitUserModal from "../elements/modals/initUserModal";
+import ChangeBannerModal from "../elements/modals/changeBannerModal";
 import { useGlobal } from "app/context/globalContext";
 import { uploadFile } from "app/utils/moralis";
 import { useMoralis } from "react-moralis";
@@ -50,6 +51,7 @@ const ProfileTemplate = (props: Props) => {
   const [tab, setTab] = useState(0);
   const { profileUser: userInfo, loading, editable } = useProfile();
   const [isOpen, setIsOpen] = useState(false);
+  const [isChangeBannerModalOpen, setIsChangeBannerModalOpen] = useState(false);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
@@ -64,8 +66,10 @@ const ProfileTemplate = (props: Props) => {
   return (
     <div className="flex-grow p-0 overflow-hidden mb-16">
       <InitUserModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <ChangeBannerModal isOpen={isChangeBannerModalOpen} setIsOpen={setIsChangeBannerModalOpen}/>
       <div
         className="banner"
+        onClick={()=>setIsChangeBannerModalOpen(true)}
         style={{
           backgroundImage:
             userInfo.get && userInfo.get("spectUsername").length % 2 === 0
