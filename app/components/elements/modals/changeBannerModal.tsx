@@ -26,6 +26,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import EmailIcon from "@mui/icons-material/Email";
 import { validateEmail } from "app/utils/utils";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import banner3 from "app/images/banner3.jpg";
+import banner1 from "app/images/banner1.svg";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Link from "next/link";
@@ -35,9 +37,8 @@ interface props {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const steps = ["Initalize User", "Confirm"];
-
 const ChangeBannerModal = ({ isOpen, setIsOpen }: props) => {
+  const [userBanner, setUserBanner] = useState();
   const handleClose = (event, reason) => {
     // for closing the modal this can be helpful
     if (reason && reason == "backdropClick") return;
@@ -80,19 +81,33 @@ const ChangeBannerModal = ({ isOpen, setIsOpen }: props) => {
             <RadioGroup
               row
               aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="female"
+              defaultValue="default"
               name="radio-buttons-group"
+              onChange={(e)=>setUserBanner(e.target.value)}
             >
-              <FormControlLabel
-                value="default"
-                control={<Radio />}
-                label="Default"
-              />
-              <FormControlLabel
-                value="newBanner"
-                control={<Radio />}
-                label="New Banner"
-              />
+              <Box sx={{
+                display:"grid",
+                gridTemplateColumns:"auto auto",
+                gap:"1vw",
+                backgroundColor:"#0c0c0c",
+                }}>
+              <Box>
+                <FormControlLabel control={<Radio/>} value="default" label="Default"/>
+                <img src={`${banner3.src}`} width={300} alt="" />
+              </Box>
+              <Box>
+                <FormControlLabel control={<Radio/>} value="newBanner1" label="New Banner1"/>
+                <img src={banner1.src} width={300} alt="" />
+              </Box>
+              <Box>
+                <FormControlLabel control={<Radio/>} value="newBanner2" label="New Banner2"/>
+                <img src={banner1.src} width={300} alt="" />
+              </Box>
+              <Box>
+                <FormControlLabel control={<Radio/>} value="newBanner3" label="New Banner3"/>
+                <img src={banner1.src} width={300} alt="" />
+              </Box>
+              </Box>
             </RadioGroup>
           </FormControl>
         <Box sx={{ display: "flex", flexDirection: "row", pt: 2,width:"100%" }}>
@@ -100,14 +115,14 @@ const ChangeBannerModal = ({ isOpen, setIsOpen }: props) => {
             color="inherit"
             variant="outlined"
             onClick={() => setIsOpen(false)}
-            sx={{ mr: 1, color: "#f45151" }}
+            sx={{ mr: "auto", color: "#f45151" }}
             id="bCancel"
           >
             Cancel
           </Button>
           <Button
             variant="outlined"
-            onClick={() => setIsOpen(false)}
+            onClick={() =>console.warn("user banner is: ",userBanner) }
             id="bApprove"
           >
             Save
