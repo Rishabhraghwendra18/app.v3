@@ -146,16 +146,13 @@ const InitUserModal = ({ isOpen, setIsOpen }: props) => {
               }}
             >
               <CircularProgress color="inherit" />
-              <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
-                {loaderText}
-              </Typography>
+              <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>{loaderText}</Typography>
             </Box>
           </Backdrop>
           {activeStep === steps.length && (
             <React.Fragment>
               <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
-                Profile initialized succesfully! Please verify your mail to
-                start receiving notifications!
+                Profile initialized succesfully! Please verify your mail to start receiving notifications!
               </Typography>
               <Link href={`/profile/${username}`} passHref>
                 <Button
@@ -217,11 +214,7 @@ const InitUserModal = ({ isOpen, setIsOpen }: props) => {
                   variant="standard"
                   value={email}
                   error={!validEmail}
-                  helperText={
-                    validEmail
-                      ? "This will the email where we send notifications"
-                      : "Invalid Email"
-                  }
+                  helperText={validEmail ? "This will the email where we send notifications" : "Invalid Email"}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -236,13 +229,7 @@ const InitUserModal = ({ isOpen, setIsOpen }: props) => {
                     variant="outlined"
                     type="submit"
                     id="bInitModalSubmit"
-                    disabled={
-                      isLoading ||
-                      !validUsername ||
-                      !validEmail ||
-                      !username ||
-                      !email
-                    }
+                    disabled={isLoading || !validUsername || !validEmail || !username || !email}
                     onClick={handleNextStep}
                   >
                     Submit
@@ -282,7 +269,7 @@ const InitUserModal = ({ isOpen, setIsOpen }: props) => {
                   id="email"
                   label="Email"
                   type={"email"}
-                  value={username}
+                  value={email}
                   fullWidth
                   variant="filled"
                   helperText={"This will the email where we send notifications"}
@@ -297,8 +284,7 @@ const InitUserModal = ({ isOpen, setIsOpen }: props) => {
                 />
                 <div className="mx-2 my-4">
                   <Typography sx={{ mt: 2, mb: 1, color: "#eaeaea" }}>
-                    Are you sure you want to proceed? You cannot change your
-                    username again!
+                    Are you sure you want to proceed? You cannot change your username again!
                   </Typography>
                   <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                     <Button
@@ -318,13 +304,7 @@ const InitUserModal = ({ isOpen, setIsOpen }: props) => {
                       variant="outlined"
                       type="submit"
                       id="bInitModalYeah"
-                      disabled={
-                        isLoading ||
-                        !validUsername ||
-                        !validEmail ||
-                        !username ||
-                        !email
-                      }
+                      disabled={isLoading || !validUsername || !validEmail || !username || !email}
                       onClick={() => submit()}
                     >
                       Hell Yeah

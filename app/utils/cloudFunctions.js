@@ -101,15 +101,15 @@ Moralis.Cloud.afterSave("Bounty", async (request) => {
   logger.info(`request object ${JSON.stringify(request.object)}`);
 
   const status = request.object.get("status");
-  if (status === 0) {
+  if (status === 101) {
     await sendEmail("createBounty", request.object);
-  } else if (status === 2) {
+  } else if (status === 202) {
     await sendEmail("workSubmitted", request.object);
-  } else if (status === 3) {
+  } else if (status === 203) {
     await sendEmail("workAccepted", request.object);
-  } else if (status === -1) {
+  } else if (status === 402) {
     await sendEmail("deadlineViolationCalled", request.object);
-  } else if (status === 4) {
+  } else if (status === 403) {
     await sendEmail("dispute", request.object);
   }
 });
@@ -119,7 +119,7 @@ Moralis.Cloud.afterSave("Proposal", async (request) => {
   logger.info(`request object ${JSON.stringify(request.object)}`);
 
   const status = request.object.get("status");
-  if (status === 2) {
+  if (status === 103) {
     await sendEmail("acceptProposal", request.object);
   }
 });
