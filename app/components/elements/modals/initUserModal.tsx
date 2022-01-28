@@ -78,10 +78,12 @@ const InitUserModal = ({ isOpen, setIsOpen }: props) => {
     user?.set("spectUsername", username);
     Moralis.Object.saveAll([user as any, userInfo])
       .then(([user, userInfo]) => {
+        dispatch({ type: "START_ASYNC" });
         dispatch({
           type: "SET_USERINFO",
           value: userInfo,
         });
+        dispatch({ type: "END_ASYNC" });
         setLoading(false);
         setActiveStep(activeStep + 1);
       })

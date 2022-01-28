@@ -88,6 +88,7 @@ export const skillOptions = [
   { label: "Gaming" },
   { label: "Go" },
   { label: "Graphic Design" },
+  { label: "Intro Gig" },
   { label: "Javascript" },
   { label: "Marketing" },
   { label: "Market Research" },
