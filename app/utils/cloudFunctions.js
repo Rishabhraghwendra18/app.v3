@@ -1239,16 +1239,17 @@ Moralis.Cloud.define("setNotifToInactive", async (request) => {
 
 Moralis.Cloud.define("clearNotifs", async (request) => {
   const logger = Moralis.Cloud.getLogger();
-
   const notifQuery = new Moralis.Query("Notification");
   let saveArray = [];
   notifQuery.equalTo("for", request.user.get("spectUsername"));
+  notifQuery.equalTo("cleared", false);
   try {
     const notifs = await notifQuery.find();
     for (var notif of notifs) {
       notif.set("cleared", true);
       saveArray.push(notif);
     }
+
     await Moralis.Object.saveAll(saveArray, { useMasterKey: true });
     return true;
   } catch (err) {
