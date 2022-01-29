@@ -24,6 +24,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ClearIcon from "@mui/icons-material/Clear";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import { Octokit } from "@octokit/rest";
 
 interface props {
   isOpen: boolean;
@@ -91,6 +92,10 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
     boxShadow: 24,
     p: 4,
   };
+  const octokit = new Octokit({
+    auth: process.env.GITHUB_BOT_AUTH,
+  });
+
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <Box sx={modalStyle}>
@@ -222,7 +227,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                   values.skills?.filter((a) => tags.push(a.label));
                   toIPFS(Moralis, "object", {
                     name: values.name,
-                    description: values.description,
+                    description: { html: values.description },
                     tags: tags,
                     desiredSubmissionDeadline: values.deadline
                       .toDate()
@@ -246,6 +251,25 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                           if (event.event && event.event === "ListGig") {
                             dealId = event.args[1];
                           }
+                        }
+                        if (values.issueLink) {
+                          const splitValues = (
+                            values.issueLink as string
+                          ).split("/");
+                          octokit.rest.issues
+                            .createComment({
+                              owner: splitValues[3],
+                              repo: splitValues[4],
+                              issue_number: parseInt(splitValues[6]),
+                              body: `Gig created on spect network at https://app.spect.network/gig/${dealId}`,
+                            })
+                            .then(({ data }) => {
+                              console.log(data);
+                            })
+                            .catch((err) => {
+                              setLoading(false);
+                              alert(err);
+                            });
                         }
                         setHash(hash);
                         setDealId(dealId);

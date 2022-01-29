@@ -164,7 +164,11 @@ const ClientBrief = (props: Props) => {
               </span>
               <div className="py-2">
                 <ReactQuill
-                  value={(gig?.description || "") as any}
+                  value={
+                    ((gig?.description.html
+                      ? gig?.description.html
+                      : gig?.description) || "") as any
+                  }
                   readOnly={true}
                   theme={"bubble"}
                 />

@@ -19,9 +19,9 @@ const Editor = ({ value, placeholder, onChange, id }: Props) => {
         theme="snow"
         modules={modules}
         onChange={(value, delta, user, editor) => {
-          onChange(editor.getContents());
+          onChange(value);
         }}
-        defaultValue={value}
+        value={value || ""}
         placeholder={placeholder}
         id={id}
       />
