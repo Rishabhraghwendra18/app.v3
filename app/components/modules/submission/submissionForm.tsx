@@ -205,6 +205,7 @@ const SubmissionForm = (props: Props) => {
                       "Write comments describing your submission and any instructions if needed"
                     }
                     id="tSubmissionComments"
+                    isHtml={false}
                   />
                 </div>
               )}

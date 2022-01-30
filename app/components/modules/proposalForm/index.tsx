@@ -135,6 +135,7 @@ export const ProposalForm: React.FC<Props> = (props: Props) => {
                       "Write a thorough description of your proposal"
                     }
                     id="tProposalForm"
+                    isHtml={false}
                   />
                 )}
               />

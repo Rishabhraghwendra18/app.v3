@@ -191,7 +191,7 @@ const WithdrawModal = ({ step }: Props) => {
                       label="Available Balance"
                       type="number"
                       fullWidth
-                      variant="standard"
+                      variant="filled"
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">Matic</InputAdornment>
@@ -308,7 +308,7 @@ const WithdrawModal = ({ step }: Props) => {
                       label="Available Balance"
                       type="number"
                       fullWidth
-                      variant="standard"
+                      variant="filled"
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">WMatic</InputAdornment>

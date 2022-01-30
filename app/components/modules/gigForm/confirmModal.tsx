@@ -25,6 +25,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { Octokit } from "@octokit/rest";
+import { round } from "app/utils/utils";
 
 interface props {
   isOpen: boolean;
@@ -69,8 +70,8 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
       } else {
         setActiveStep(2);
       }
-      setRequired(totalReward - userStake?.balance);
-      setAmount(totalReward - userStake?.balance);
+      setRequired(round(totalReward - userStake?.balance, 4));
+      setAmount(round(totalReward - userStake?.balance, 4));
     }
     Moralis.Web3API.account
       .getNativeBalance({

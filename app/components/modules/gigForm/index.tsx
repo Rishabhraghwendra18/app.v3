@@ -211,6 +211,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                   onChange={field.onChange}
                   placeholder={"Write a thorough description of the gig"}
                   id="tGigDescription"
+                  isHtml={true}
                 />
               )}
             />
