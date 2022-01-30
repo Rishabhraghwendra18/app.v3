@@ -23,7 +23,7 @@ export const Layout = ({ children }: Props) => {
   const { dispatch } = useGlobal();
 
   useEffect(() => {
-    if (isInitialized) {
+    if (isAuthenticated) {
       window.ethereum
         .request({ method: "eth_requestAccounts" })
         .then((address) => {
@@ -83,10 +83,10 @@ export const Layout = ({ children }: Props) => {
         initContractsAndUserStake(dispatch, user, Moralis);
       }
     };
-    if (isAuthenticated && isInitialized) {
+    if (isAuthenticated) {
       checkNetworkAndAdd();
     }
-  }, [isAuthenticated, isInitialized, Moralis, dispatch, user]);
+  }, [isAuthenticated, Moralis, dispatch, user, authenticate]);
 
   return (
     <div className="bg-blue-darkbg">
