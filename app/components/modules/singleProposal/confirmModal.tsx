@@ -27,7 +27,7 @@ import Link from "next/link";
 import ApproveModal from "app/components/elements/modals/approveModal";
 import WrapModal from "app/components/elements/modals/wrapModal";
 import { Proposal } from "app/types";
-import { formatTimeLeft } from "app/utils/utils";
+import { formatTimeLeft, round } from "app/utils/utils";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { useGig } from "pages/gig/[id]";
@@ -84,8 +84,8 @@ const ConfirmModal = ({ isOpen, setIsOpen, proposal }: props) => {
           setAmount(proposal.lockedStake - unlockedDeposit - userStake.balance);
         } else {
           setActiveStep(2);
-          setRequired(proposal.lockedStake - unlockedDeposit);
-          setAmount(proposal.lockedStake - unlockedDeposit);
+          setRequired(round(proposal.lockedStake - unlockedDeposit, 4));
+          setAmount(round(proposal.lockedStake - unlockedDeposit, 4));
         }
       } else {
         setActiveStep(3);

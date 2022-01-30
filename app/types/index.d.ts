@@ -47,7 +47,9 @@ export interface Gig {
   createdAt: string;
   deadline: Date;
   dealId: string;
-  description: object;
+  description: {
+    html: string;
+  };
   gigHash: string;
   minStake: number;
   name: string;
@@ -67,6 +69,8 @@ export interface Gig {
   submissions: string[];
   proposal: Array<Proposal>;
   revisionInstructions: string[];
+  rating: number;
+  review: string;
 }
 
 type ProposalStatus = 101 | 102 | 103 | 401;
@@ -150,6 +154,20 @@ export interface Organization {
   picture?: string;
   updatedAt?: string;
   website?: string;
+}
+
+export interface GithubIssue {
+  assignee: string;
+  assignees: string[];
+  body: string;
+  comments: number;
+  created_at: string;
+  labels: string[];
+  repository_url: string;
+  state: string;
+  title: string;
+  updated_at: string;
+  url: string;
 }
 
 export type Moralis = Moralis;

@@ -24,6 +24,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ClearIcon from "@mui/icons-material/Clear";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import { Octokit } from "@octokit/rest";
+import { round } from "app/utils/utils";
 
 interface props {
   isOpen: boolean;
@@ -56,7 +58,6 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
   const handleNextStep = () => setActiveStep(activeStep + 1);
 
   useEffect(() => {
-    updateUserStake(dispatch, user, contracts);
     const totalReward =
       parseFloat(values.reward.toString()) +
       parseFloat((0.02 * values.reward).toString());
@@ -69,8 +70,8 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
       } else {
         setActiveStep(2);
       }
-      setRequired(totalReward - userStake?.balance);
-      setAmount(totalReward - userStake?.balance);
+      setRequired(round(totalReward - userStake?.balance, 4));
+      setAmount(round(totalReward - userStake?.balance, 4));
     }
     Moralis.Web3API.account
       .getNativeBalance({
@@ -92,6 +93,10 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
     boxShadow: 24,
     p: 4,
   };
+  const octokit = new Octokit({
+    auth: process.env.GITHUB_BOT_AUTH,
+  });
+
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <Box sx={modalStyle}>
@@ -223,7 +228,7 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                   values.skills?.filter((a) => tags.push(a.label));
                   toIPFS(Moralis, "object", {
                     name: values.name,
-                    description: values.description,
+                    description: { html: values.description },
                     tags: tags,
                     desiredSubmissionDeadline: values.deadline
                       .toDate()
@@ -248,10 +253,30 @@ const ConfirmModal = ({ isOpen, setIsOpen, values }: props) => {
                             dealId = event.args[1];
                           }
                         }
+                        if (values.issueLink) {
+                          const splitValues = (
+                            values.issueLink as string
+                          ).split("/");
+                          octokit.rest.issues
+                            .createComment({
+                              owner: splitValues[3],
+                              repo: splitValues[4],
+                              issue_number: parseInt(splitValues[6]),
+                              body: `Gig created on spect network at https://app.spect.network/gig/${dealId}`,
+                            })
+                            .then(({ data }) => {
+                              console.log(data);
+                            })
+                            .catch((err) => {
+                              setLoading(false);
+                              alert(err);
+                            });
+                        }
                         setHash(hash);
                         setDealId(dealId);
                         setLoading(false);
                         setActiveStep(3);
+                        updateUserStake(dispatch, user, contracts);
                       })
                       .catch((err) => {
                         setLoading(false);

@@ -21,7 +21,7 @@ export const Navbar = (props: Props) => {
   } = useGlobal();
   useEffect(() => {
     profile[0].href = `/profile/${userInfo?.get("spectUsername")}`;
-  }, [loading]);
+  }, [loading, userInfo]);
 
   return (
     <div>

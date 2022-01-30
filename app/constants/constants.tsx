@@ -88,6 +88,7 @@ export const skillOptions = [
   { label: "Gaming" },
   { label: "Go" },
   { label: "Graphic Design" },
+  { label: "Intro Gig" },
   { label: "Javascript" },
   { label: "Marketing" },
   { label: "Market Research" },
@@ -141,6 +142,8 @@ export const gigHelperTexts = {
     "How many minimum number of revisions do you expect from the freelancer",
   timeToRevise:
     "How much time do you want to give the freelancer to submit a new revision",
+  issue:
+    "Import issue from Github, applicable form fields will be automatically filled",
 };
 
 export const proposalHelperTexts = {

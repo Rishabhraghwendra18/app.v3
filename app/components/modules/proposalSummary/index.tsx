@@ -49,10 +49,7 @@ const ProposalSummary = ({ proposal }: Props) => {
         <Grid container spacing={1} columns={7} sx={{ textTransform: "none" }}>
           <Grid item xs={4}>
             <Box sx={{ display: "flex", flexDirection: "row" }}>
-              <GigAvatar
-                alt="Username"
-                src={proposal.user?.get("profilePicture")}
-              />
+              <GigAvatar alt="Username" src={proposal.user?.get("profilePicture")} />
               <Box
                 sx={{
                   display: "flex",
@@ -111,8 +108,7 @@ const ProposalSummary = ({ proposal }: Props) => {
                       mb: 0.5,
                     }}
                   >
-                    Submitted {formatTimeAgo(Date.parse(proposal.createdAt))}{" "}
-                    ago
+                    Submitted {formatTimeAgo(Date.parse(proposal.createdAt))} ago
                   </Typography>
                   <Typography
                     sx={{
@@ -126,8 +122,8 @@ const ProposalSummary = ({ proposal }: Props) => {
                       mb: 0.5,
                     }}
                   >
-                    <PersonIcon sx={{ fontSize: "1rem" }} />
-                    {gig?.numApplicants} Applicants
+                    {/*<PersonIcon sx={{ fontSize: "1rem" }} />
+                    {gig?.numApplicants} Applicants*/}
                   </Typography>
                 </div>
               </Box>
@@ -136,16 +132,12 @@ const ProposalSummary = ({ proposal }: Props) => {
           <Grid item xs={1}>
             <div className="flex flex-col">
               <div className="flex flex-row items-baseline">
-                <div className="text-grey-light font-bold text-xl mr-2">
-                  {gig?.reward?.toFixed(2)}
-                </div>
+                <div className="text-grey-light font-bold text-xl mr-2">{gig?.reward?.toFixed(2)}</div>
                 <div className="text-grey-normal">Wmatic</div>
               </div>
               <div className="flex flex-col items-left w-1/2">
                 <Chip
-                  label={`${((conversionRate || 0) * gig?.reward).toFixed(
-                    2
-                  )} USD`}
+                  label={`${((conversionRate || 0) * gig?.reward).toFixed(2)} USD`}
                   size="small"
                   sx={{
                     mt: 1,
@@ -161,12 +153,9 @@ const ProposalSummary = ({ proposal }: Props) => {
           <Grid item xs={1}>
             <div className="flex flex-col">
               <div className="flex flex-row items-baseline">
-                <div className="text-grey-light font-bold text-xl mr-2">
-                  {proposal?.deadline?.getDate()}
-                </div>
+                <div className="text-grey-light font-bold text-xl mr-2">{proposal?.deadline?.getDate()}</div>
                 <div className="text-grey-normal">
-                  {monthMap[proposal?.deadline?.getMonth()]}{" "}
-                  {proposal?.deadline?.getFullYear()}
+                  {monthMap[proposal?.deadline?.getMonth()]} {proposal?.deadline?.getFullYear()}
                 </div>
               </div>
             </div>
@@ -174,9 +163,7 @@ const ProposalSummary = ({ proposal }: Props) => {
           <Grid item xs={1}>
             <div className="flex flex-col">
               <div className="flex flex-row items-baseline">
-                <div className="text-grey-light font-bold text-xl mr-2">
-                  {proposal.lockedStake.toFixed(2)}
-                </div>
+                <div className="text-grey-light font-bold text-xl mr-2">{proposal.lockedStake.toFixed(2)}</div>
                 <div className="text-grey-normal">Wmatic</div>
               </div>
             </div>

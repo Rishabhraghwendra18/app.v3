@@ -28,10 +28,15 @@ import DateAdapter from "@mui/lab/AdapterDayjs";
 import dayjs from "dayjs";
 import Editor from "app/components/elements/richTextEditor/editor";
 import { PrimaryButton } from "app/components/elements/buttons/primaryButton";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ConfirmModal from "./confirmModal";
 import { LightTooltip } from "app/components/elements/styledComponents";
-
+import GitHubIcon from "@mui/icons-material/GitHub";
+import ImportExportIcon from "@mui/icons-material/ImportExport";
+import dynamic from "next/dynamic";
+import { Octokit } from "@octokit/rest";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import { MarkdownToQuill } from "md-to-quill-delta";
 interface Props {}
 
 export interface IGigFormInput {
@@ -44,9 +49,12 @@ export interface IGigFormInput {
   acceptanceDays: number;
   revisions: number;
   timeToRevise: number;
+  issueLink?: string;
 }
+
 export const GigForm: React.FC<Props> = (props: Props) => {
-  const { handleSubmit, control } = useForm<IGigFormInput>();
+  const { handleSubmit, control, setValue, resetField, getValues } =
+    useForm<IGigFormInput>();
 
   const onError: SubmitErrorHandler<IGigFormInput> = () => handleClickOpen();
   const [open, setOpen] = useState(false);
@@ -66,10 +74,44 @@ export const GigForm: React.FC<Props> = (props: Props) => {
   const handleClose = () => {
     setOpen(false);
   };
+  const octokit = new Octokit({
+    auth: process.env.GITHUB_BOT_AUTH,
+  });
 
   const validateDate = (date: dayjs.Dayjs) => {
     return date >= dayjs().add(1, "day").startOf("day");
   };
+  const getIssueValues = () => {
+    if (getValues("issueLink")) {
+      const splitValues = (getValues("issueLink") as string).split("/");
+      octokit.rest.issues
+        .get({
+          owner: splitValues[3],
+          repo: splitValues[4],
+          issue_number: parseInt(splitValues[6]),
+        })
+        .then(({ data }) => {
+          setLoading(false);
+          console.log(data);
+          setValue("name", data.title, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+          const converter = new MarkdownToQuill({});
+          const ops = converter.convert(data.body as any);
+          resetField("description", {
+            defaultValue: {
+              ops: ops,
+            },
+          });
+        })
+        .catch((err) => {
+          setLoading(false);
+          alert(err);
+        });
+    }
+  };
+
   return (
     <div className="flex flex-col col-span-5 border-grey-normal border-l px-12">
       {isOpen && (
@@ -81,11 +123,55 @@ export const GigForm: React.FC<Props> = (props: Props) => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+
       <form
         onSubmit={handleSubmit(onSubmit, onError)}
         className="flex flex-col"
       >
         <div className="flex flex-col border-b-1 border-blue-lighter pb-4 mb-4">
+          <div className="w-1/2 mb-4 flex flex-row">
+            <Controller
+              name="issueLink"
+              control={control}
+              defaultValue=""
+              rules={{ minLength: 5 }}
+              render={({ field, fieldState }) => (
+                <LightTooltip
+                  arrow
+                  placement="right"
+                  title={gigHelperTexts["issue"]}
+                >
+                  <TextField
+                    {...field}
+                    label="Github Issue Link"
+                    variant="standard"
+                    helperText={
+                      fieldState.error?.type === "minLength" &&
+                      "Gig title too short. Please make it more understandable."
+                    }
+                    fullWidth
+                    error={fieldState.error ? true : false}
+                    id="tGigIssue"
+                  />
+                </LightTooltip>
+              )}
+            />
+            <Button
+              sx={{
+                color: "#99ccff",
+                textTransform: "none",
+                width: "50%",
+                mx: 2,
+              }}
+              color="inherit"
+              endIcon={<GitHubIcon />}
+              startIcon={<ImportExportIcon />}
+              id="bImportIssue"
+              onClick={() => getIssueValues()}
+            >
+              Import Issue
+            </Button>
+          </div>
           <div className="w-1/3 mb-4">
             <Controller
               name="name"
@@ -125,6 +211,7 @@ export const GigForm: React.FC<Props> = (props: Props) => {
                   onChange={field.onChange}
                   placeholder={"Write a thorough description of the gig"}
                   id="tGigDescription"
+                  isHtml={true}
                 />
               )}
             />

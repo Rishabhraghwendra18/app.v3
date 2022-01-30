@@ -7,6 +7,9 @@ import {
   DialogContentText,
   DialogTitle,
   Modal,
+  Rating,
+  TextareaAutosize,
+  TextField,
   Typography,
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
@@ -64,6 +67,8 @@ export const ConfirmModal = ({
   const [finished, setFinished] = useState(false);
   const [loaderText, setLoaderText] = useState("");
   const [hash, setHash] = useState("");
+  const [rating, setRating] = useState(5);
+  const [review, setReview] = useState("");
   const { gig } = useGig();
   const {
     state: { contracts },
@@ -151,6 +156,35 @@ export const ConfirmModal = ({
               <DialogContentText color="#eaeaea">
                 {confirmText2}
               </DialogContentText>
+              {confirmType === 2 && (
+                <div className="flex flex-col">
+                  <Typography sx={{ mt: 2, mb: 1 }} color="primary">
+                    Feedback
+                  </Typography>
+                  <Rating
+                    name="feedback"
+                    defaultValue={5}
+                    precision={0.5}
+                    value={rating}
+                    onChange={(event, newValue: number) => {
+                      setRating(newValue);
+                    }}
+                  />
+                  <TextField
+                    id="standard-textarea"
+                    label="Comments"
+                    placeholder="Great Job"
+                    multiline
+                    variant="standard"
+                    sx={{ width: "75%", mt: 1 }}
+                    required
+                    value={review}
+                    onChange={(event) => {
+                      setReview(event.target.value);
+                    }}
+                  />
+                </div>
+              )}
             </DialogContent>
             <Box
               sx={{
@@ -230,24 +264,38 @@ export const ConfirmModal = ({
                     case 2:
                       setLoaderText("Waiting for the transaction to complete");
                       setLoading(true);
-                      accept(gig.dealId, contracts?.dealContract)
-                        .then((res) => {
-                          setHash(res.transactionHash);
-                          setFinished(true);
-                          setLoading(false);
-                        })
-                        .catch((err) => {
-                          setLoading(false);
-                          toast.error(err.message, {
-                            position: "bottom-center",
-                            autoClose: 3000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
+                      console.log(rating, review);
+                      toIPFS(Moralis, "object", {
+                        rating: rating,
+                        review: review,
+                      }).then((res) => {
+                        setLoaderText(
+                          "Waiting for the transaction to complete"
+                        );
+                        const ipfsUrlArray = res.path.split("/");
+                        accept(
+                          gig.dealId,
+                          contracts?.dealContract,
+                          ipfsUrlArray[ipfsUrlArray.length - 1]
+                        )
+                          .then((res) => {
+                            setHash(res.transactionHash);
+                            setFinished(true);
+                            setLoading(false);
+                          })
+                          .catch((err) => {
+                            setLoading(false);
+                            toast.error(err.message, {
+                              position: "bottom-center",
+                              autoClose: 3000,
+                              hideProgressBar: true,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                              draggable: true,
+                              progress: undefined,
+                            });
                           });
-                        });
+                      });
                   }
                 }}
                 sx={{ mr: 1, textTransform: "none" }}

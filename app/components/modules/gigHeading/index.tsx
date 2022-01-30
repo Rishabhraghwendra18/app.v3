@@ -70,7 +70,9 @@ export const GigHeading = (props: Props) => {
                     />
                   );
                 })}
-                <div className="hidden md:flex text-xs mx-8">Posted {formatTimeAgo(Date.parse(gig.createdAt))} ago</div>
+                <div className="hidden md:flex text-xs mx-8">
+                  {/*Posted {formatTimeAgo(Date.parse(gig.createdAt))} ago */}
+                </div>
                 <div className="text-xs flex flex-row mr-8">
                   {[101, 102, 201, 202, 204].includes(gig.status) && (
                     <i className="fas fa-circle flex flex-col justify-center mr-1 text-green-400 animate-pulse"></i>
@@ -83,8 +85,10 @@ export const GigHeading = (props: Props) => {
                   </div>
                 </div>
                 <div className="text-xs  flex flex-row mr-8">
-                  <i className="fas fa-user flex flex-col justify-center mr-1"></i>
-                  <div className="flex flex-col items-center justify-center">{gig.numApplicants || 0} Applicants</div>
+                  {/*<i className="fas fa-user flex flex-col justify-center mr-1"></i>
+                  <div className="flex flex-col items-center justify-center">
+                    {gig.numApplicants || 0} Applicants
+                  </div>*/}
                 </div>
               </div>
               <div className="flex flex-row pt-4">

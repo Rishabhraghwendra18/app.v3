@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { NavbarAvatar } from "app/components/elements/styledComponents";
-import {
-  clearNotifs,
-  getMyNotifications,
-  setNotifToInactive,
-} from "app/utils/moralis";
+import { clearNotifs, getMyNotifications, setNotifToInactive } from "app/utils/moralis";
 import { useMoralis } from "react-moralis";
 import { Notification } from "app/types";
 import { actionIdToTabMap } from "app/constants/constants";
@@ -131,10 +127,7 @@ const Notifications = (props: Props) => {
 
                           <div className="ml-4">
                             <p className="text-sm">
-                              {item.actor}{" "}
-                              <span className="text-green-bright">
-                                {item.action}
-                              </span>{" "}
+                              {item.actor} <span className="text-green-bright">{item.action}</span>{" "}
                               <span>{item.title}</span>
                             </p>
                           </div>
@@ -151,10 +144,9 @@ const Notifications = (props: Props) => {
                     <span className="flex items-center">
                       <Button
                         onClick={() => {
-                          clearNotifs(Moralis).then((res) => {
-                            setNotifs([]);
-                            setNumActiveNotifs(0);
-                          });
+                          setNotifs([]);
+                          setNumActiveNotifs(0);
+                          clearNotifs(Moralis).then((res) => {});
                         }}
                         fullWidth
                         sx={{ textTransform: "none" }}

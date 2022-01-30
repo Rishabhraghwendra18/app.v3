@@ -10,21 +10,35 @@ interface Props {
   onChange?: any;
   placeholder: string;
   id: string;
+  isHtml: boolean;
 }
 
-const Editor = ({ value, placeholder, onChange, id }: Props) => {
+const Editor = ({ value, placeholder, onChange, id, isHtml }: Props) => {
   return (
     <div className="">
-      <ReactQuill
-        theme="snow"
-        modules={modules}
-        onChange={(value, delta, user, editor) => {
-          onChange(editor.getContents());
-        }}
-        defaultValue={value}
-        placeholder={placeholder}
-        id={id}
-      />
+      {isHtml ? (
+        <ReactQuill
+          theme="snow"
+          modules={modules}
+          onChange={(value, delta, user, editor) => {
+            onChange(value);
+          }}
+          value={value || ""}
+          placeholder={placeholder}
+          id={id}
+        />
+      ) : (
+        <ReactQuill
+          theme="snow"
+          modules={modules}
+          onChange={(value, delta, user, editor) => {
+            onChange(editor.getContents());
+          }}
+          defaultValue={value || ""}
+          placeholder={placeholder}
+          id={id}
+        />
+      )}
     </div>
   );
 };

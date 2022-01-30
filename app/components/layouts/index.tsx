@@ -18,10 +18,23 @@ interface Props {
 }
 
 export const Layout = ({ children }: Props) => {
-  const { isAuthenticated, user, Moralis, isInitialized } = useMoralis();
+  const { isAuthenticated, user, Moralis, isInitialized, authenticate } =
+    useMoralis();
   const { dispatch } = useGlobal();
 
   useEffect(() => {
+    if (isAuthenticated) {
+      window.ethereum
+        .request({ method: "eth_requestAccounts" })
+        .then((address) => {
+          if (address[0] != user?.get("ethAddress")) {
+            authenticate();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
     const checkNetworkAndAdd = async () => {
       if (
         window.ethereum.networkVersion !==
@@ -70,10 +83,10 @@ export const Layout = ({ children }: Props) => {
         initContractsAndUserStake(dispatch, user, Moralis);
       }
     };
-    if (isAuthenticated && isInitialized) {
+    if (isAuthenticated) {
       checkNetworkAndAdd();
     }
-  }, [isAuthenticated, isInitialized, Moralis, dispatch, user]);
+  }, [isAuthenticated, Moralis, dispatch, user, authenticate]);
 
   return (
     <div className="bg-blue-darkbg">

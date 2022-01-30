@@ -5,6 +5,7 @@ import AnimatedLayout from "app/components/layouts/animatedLayout";
 import { useEffect, useState } from "react";
 import { useGlobal } from "app/context/globalContext";
 import InitUserModal from "app/components/elements/modals/initUserModal";
+import { round } from "app/utils/utils";
 
 interface Props {}
 
