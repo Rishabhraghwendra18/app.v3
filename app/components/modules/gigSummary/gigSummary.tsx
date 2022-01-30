@@ -104,7 +104,7 @@ const GigSummary = ({ gig }: Props) => {
                       mb: 0.5,
                     }}
                   >
-                    Posted {formatTimeAgo(Date.parse(gig.createdAt))} ago
+                    {/*Posted {formatTimeAgo(Date.parse(gig.createdAt))} ago*/}
                   </Typography>
                   <Typography
                     sx={{
@@ -118,8 +118,8 @@ const GigSummary = ({ gig }: Props) => {
                       mb: 0.5,
                     }}
                   >
-                    <PersonIcon sx={{ fontSize: "1rem" }} />
-                    {gig.numApplicants || 0} Applicants
+                    {/*<PersonIcon sx={{ fontSize: "1rem" }} />
+                    {gig.numApplicants || 0} Applicants*/}
                   </Typography>
                 </div>
               </Box>

@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Avatar,
-  Button,
-  Chip,
-  Grid,
-  Rating,
-  styled,
-  Typography,
-} from "@mui/material";
+import { Avatar, Button, Chip, Grid, Rating, styled, Typography } from "@mui/material";
 import Link from "next/link";
 import { formatTimeAgo } from "app/utils/utils";
 import { Box } from "@mui/system";
@@ -112,7 +104,7 @@ const ReviewSummary = ({ gig }: Props) => {
                       mb: 0.5,
                     }}
                   >
-                    Posted {formatTimeAgo(Date.parse(gig.createdAt))} ago
+                    {/*Posted {formatTimeAgo(Date.parse(gig.createdAt))} ago*/}
                   </Typography>
                 </div>
               </Box>
@@ -121,16 +113,12 @@ const ReviewSummary = ({ gig }: Props) => {
           <Grid item xs={1}>
             <div className="flex flex-col">
               <div className="flex flex-row items-baseline">
-                <div className="text-grey-light font-bold text-xl mr-2">
-                  {gig.reward.toFixed(2)}
-                </div>
+                <div className="text-grey-light font-bold text-xl mr-2">{gig.reward.toFixed(2)}</div>
                 <div className="text-grey-normal">Wmatic</div>
               </div>
               <div className="flex flex-col items-left w-1/2">
                 <Chip
-                  label={`${((conversionRate || 0) * gig.reward).toFixed(
-                    2
-                  )} USD`}
+                  label={`${((conversionRate || 0) * gig.reward).toFixed(2)} USD`}
                   size="small"
                   sx={{
                     mt: 1,
