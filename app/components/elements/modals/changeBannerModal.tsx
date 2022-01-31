@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
   Modal,
-  Stepper,
-  Step,
-  StepLabel,
-  Typography,
   Backdrop,
-  CircularProgress,
   Fade,
-  TextField,
-  InputAdornment,
   FormControl,
   FormLabel,
   FormControlLabel,
@@ -19,20 +12,10 @@ import {
   Radio,
 } from "@mui/material";
 import { useGlobal } from "app/context/globalContext";
-import { useMoralis, useMoralisCloudFunction } from "react-moralis";
-import { ToastContainer, toast } from "material-react-toastify";
 import "material-react-toastify/dist/ReactToastify.css";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import EmailIcon from "@mui/icons-material/Email";
-import { validateEmail } from "app/utils/utils";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { useProfile } from "pages/profile/[username]";
-import { uploadFile } from "app/utils/moralis";
 import banner3 from "app/images/banner3.jpg";
 import cover2 from "app/images/cover2.jpg";
-
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import Link from "next/link";
 
 interface props {
   isOpen: boolean;
