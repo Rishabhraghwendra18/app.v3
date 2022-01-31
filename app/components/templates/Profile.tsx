@@ -62,7 +62,6 @@ const ProfileTemplate = (props: Props) => {
       setIsOpen(true);
     }
   }, [editable, userInfo]);
-
   return (
     <div className="flex-grow p-0 overflow-hidden mb-16">
       <InitUserModal isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -72,9 +71,9 @@ const ProfileTemplate = (props: Props) => {
         onClick={()=>setIsChangeBannerModalOpen(true)}
         style={{
           backgroundImage:
-            userInfo.get && userInfo.get("spectUsername").length % 2 === 0
-              ? `url(${banner3.src})`
-              : `url(${cover2.src})`,
+            userInfo.get && userInfo.get("cover")
+              ? `url(${cover2.src})`
+              : `url(${banner3.src})`,
         }}
       />
       <div className="mx-32">

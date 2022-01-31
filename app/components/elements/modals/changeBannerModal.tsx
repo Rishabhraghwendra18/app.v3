@@ -26,8 +26,10 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import EmailIcon from "@mui/icons-material/Email";
 import { validateEmail } from "app/utils/utils";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import { useProfile } from "pages/profile/[username]";
+import { uploadFile } from "app/utils/moralis";
 import banner3 from "app/images/banner3.jpg";
-import banner1 from "app/images/banner1.svg";
+import cover2 from "app/images/cover2.jpg";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Link from "next/link";
@@ -38,17 +40,22 @@ interface props {
 }
 
 const ChangeBannerModal = ({ isOpen, setIsOpen }: props) => {
-  const [userBanner, setUserBanner] = useState();
+  const { profileUser: userInfo } = useProfile();
+  const [userBannerId, setUserBannerId] = useState(userInfo.get("cover"));
+  const { dispatch } = useGlobal();
   const handleClose = (event, reason) => {
-    // for closing the modal this can be helpful
-    if (reason && reason == "backdropClick") return;
     setIsOpen(false);
   };
 
-  const submit = () => {
-    console.log("Call this function on submission");
-  };
-
+  const setUserProfileBanner = (bannerId: number) => {
+    userInfo.set("cover", bannerId);
+    userInfo.save().then((res) => {
+        dispatch({
+          type: "SET_USERINFO",
+          value: res,
+        });
+      });
+  }
   const modalStyle = {
     position: "absolute" as "absolute",
     top: "50%",
@@ -81,31 +88,24 @@ const ChangeBannerModal = ({ isOpen, setIsOpen }: props) => {
             <RadioGroup
               row
               aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="default"
+              defaultValue={userBannerId.toString()}
               name="radio-buttons-group"
-              onChange={(e)=>setUserBanner(e.target.value)}
+              onChange={(e)=>setUserBannerId(parseInt(e.target.value))}
             >
               <Box sx={{
                 display:"grid",
                 gridTemplateColumns:"auto auto",
                 gap:"1vw",
                 backgroundColor:"#0c0c0c",
+                padding:"1rem"
                 }}>
               <Box>
-                <FormControlLabel control={<Radio/>} value="default" label="Default"/>
+                <FormControlLabel control={<Radio/>} value="0" label="Default"/>
                 <img src={`${banner3.src}`} width={300} alt="" />
               </Box>
               <Box>
-                <FormControlLabel control={<Radio/>} value="newBanner1" label="New Banner1"/>
-                <img src={banner1.src} width={300} alt="" />
-              </Box>
-              <Box>
-                <FormControlLabel control={<Radio/>} value="newBanner2" label="New Banner2"/>
-                <img src={banner1.src} width={300} alt="" />
-              </Box>
-              <Box>
-                <FormControlLabel control={<Radio/>} value="newBanner3" label="New Banner3"/>
-                <img src={banner1.src} width={300} alt="" />
+                <FormControlLabel control={<Radio/>} value="1" label="New Banner1"/>
+                <img src={cover2.src} width={300} alt="" />
               </Box>
               </Box>
             </RadioGroup>
@@ -114,7 +114,7 @@ const ChangeBannerModal = ({ isOpen, setIsOpen }: props) => {
           <Button
             color="inherit"
             variant="outlined"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {setUserBannerId(userInfo.get("cover"));setIsOpen(false);}}
             sx={{ mr: "auto", color: "#f45151" }}
             id="bCancel"
           >
@@ -122,7 +122,11 @@ const ChangeBannerModal = ({ isOpen, setIsOpen }: props) => {
           </Button>
           <Button
             variant="outlined"
-            onClick={() =>console.warn("user banner is: ",userBanner) }
+            onClick={() => {
+              if (!userBannerId) setUserProfileBanner(userBannerId);
+              else setUserProfileBanner(userBannerId);
+              setIsOpen(false);
+            }}
             id="bApprove"
           >
             Save
