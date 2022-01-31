@@ -305,4 +305,4 @@ export const chainNameMapping = {
   polygon: "Polygon Mainnet",
 };
 
-export const formStep = 1;
+export const formStep = process.env.NETWORK_CHAIN === "mumbai" ? 0.01 : 1;
