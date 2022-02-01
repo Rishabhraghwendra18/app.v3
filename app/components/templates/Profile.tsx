@@ -154,10 +154,10 @@ const ProfileTemplate = (props: Props) => {
                     <i className="fab fa-github mx-4" />
                   </a>
                 )}
-                {userInfo?.get("linkedin") && (
+                {userInfo?.get("linkedIn") && (
                   <a
                     className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
-                    href={userInfo?.get("linkedin")}
+                    href={userInfo?.get("linkedIn")}
                     target="_blank"
                     rel="noreferrer"
                   >
