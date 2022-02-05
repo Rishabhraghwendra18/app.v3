@@ -147,6 +147,7 @@ const ProfileForm = ({}: Props) => {
                         }}
                         onFocus={() => setIsDirty(true)}
                         placeholder={"Add bio for your profile"}
+                        data-testid="bio"
                       />
                       <div className="m-4">
                         <Button
@@ -172,6 +173,7 @@ const ProfileForm = ({}: Props) => {
                                 alert(err);
                               });
                           }}
+                          data-testid="bioBtnSave"
                         >
                           Save
                         </Button>
@@ -193,6 +195,7 @@ const ProfileForm = ({}: Props) => {
                 onClick={handleClose}
                 sx={{ mr: 1, color: "#f45151" }}
                 endIcon={<ClearIcon />}
+                data-testid="btnExit"
               >
                 Exit
               </Button>

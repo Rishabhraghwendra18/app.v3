@@ -28,7 +28,7 @@ const DepositManagement = (props: Props) => {
     >
       <div className="grid gap-1 grid-cols-3 lg:gap-2 lg:grid-cols-7">
         <div className="mt-3 lg:mt-6">
-          <div className="text-sm md:text-sm text-blue-light">
+          <div className="text-sm md:text-sm text-blue-light" data-testid="collateralLocked">
             <LightTooltip
               arrow
               placement="right"
@@ -38,7 +38,7 @@ const DepositManagement = (props: Props) => {
             </LightTooltip>
           </div>
           <div className="flex flex-row">
-            <div className="text-base md:text-3xl mt-1">
+            <div className="text-base md:text-3xl mt-1" data-testid="collateralLockedAmount">
               {userStake?.collateral?.toFixed(2)}
             </div>
             <div className="text-xs md:text-sm text-gray-400 flex flex-col justify-end items-end ml-1 mb-1">
@@ -47,7 +47,7 @@ const DepositManagement = (props: Props) => {
           </div>
         </div>
         <div className="mt-3 lg:mt-6">
-          <div className="text-sm md:text-sm text-blue-light">
+          <div className="text-sm md:text-sm text-blue-light" data-testid="depositedFunds">
             <LightTooltip
               arrow
               placement="right"
@@ -57,7 +57,7 @@ const DepositManagement = (props: Props) => {
             </LightTooltip>
           </div>
           <div className="flex flex-row">
-            <div className="text-base md:text-3xl mt-1">
+            <div className="text-base md:text-3xl mt-1" data-testid="depositedFundsAmount">
               {userStake?.deposit?.toFixed(2)}
             </div>
             <div className="text-xs md:text-sm text-gray-400 flex flex-col justify-end items-end ml-1 mb-1">
@@ -66,7 +66,7 @@ const DepositManagement = (props: Props) => {
           </div>
         </div>
         <div className="mt-3 lg:mt-6">
-          <div className="text-sm md:text-sm text-blue-light">
+          <div className="text-sm md:text-sm text-blue-light" data-testid="availableFunds">
             <LightTooltip
               arrow
               placement="right"
@@ -76,7 +76,7 @@ const DepositManagement = (props: Props) => {
             </LightTooltip>
           </div>
           <div className="flex flex-row">
-            <div className="text-base md:text-3xl mt-1">
+            <div className="text-base md:text-3xl mt-1" data-testid="availableFundsAmount">
               {userStake?.balance?.toFixed(2)}
             </div>
             <div className="text-xs md:text-sm text-gray-400 flex flex-col justify-end items-end ml-1 mb-1">
@@ -105,15 +105,15 @@ const DepositManagement = (props: Props) => {
             Deposit management
           </span>
         </div>
-        <div className="grid gap-3 grid-cols-2 px-16 py-8">
+        <div className="grid gap-3 grid-cols-2 px-16 py-8" data-testid="depositManagentDiv">
           <div className="flex flex-col">
             <div className="mt-3 lg:mt-6 flex flex-row">
               <div className="flex flex-col w-1/3">
-                <div className="text-sm md:text-sm text-blue-light">
+                <div className="text-sm md:text-sm text-blue-light" data-testid="depositManagentAvailableFunds">
                   Available Funds
                 </div>
                 <div className="flex flex-row">
-                  <div className="text-base md:text-3xl mt-1">
+                  <div className="text-base md:text-3xl mt-1" data-testid="depositManagentAvailableFundsAmount">
                     {userStake?.balance?.toFixed(2)}
                   </div>
                   <div className="text-xs md:text-sm text-gray-400 flex flex-col justify-end items-end ml-1 mb-1">
@@ -137,7 +137,7 @@ const DepositManagement = (props: Props) => {
           </div>
           <div className="mt-3 lg:mt-6 flex flex-row">
             <div className="flex flex-col w-2/3 lg:w-1/3 ml-4 lg:ml-8">
-              <div className="text-sm md:text-sm text-blue-light">
+              <div className="text-sm md:text-sm text-blue-light" data-testid="depositManagentUnlockFunds">
                 <LightTooltip
                   arrow
                   placement="right"
@@ -147,7 +147,7 @@ const DepositManagement = (props: Props) => {
                 </LightTooltip>
               </div>
               <div className="flex flex-row">
-                <div className="text-base md:text-3xl mt-1">
+                <div className="text-base md:text-3xl mt-1" data-testid="depositManagentUnlockFundsAmount">
                   {userStake?.deposit && userStake?.collateral
                     ? (userStake?.deposit - userStake?.collateral).toFixed(2)
                     : 0}

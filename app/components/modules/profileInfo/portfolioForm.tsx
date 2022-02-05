@@ -71,7 +71,7 @@ const PortfolioForm = ({}: Props) => {
     control,
     setValue,
     getValues,
-    formState: { isDirty },
+    formState: { isDirty, isValid },
   } = useForm<IPortfolioFormInput>({
     defaultValues: {
       portfolios: userInfo?.get("portfolio") || undefined,
@@ -99,6 +99,7 @@ const PortfolioForm = ({}: Props) => {
 
   const FileInput = ({ control, name }) => {
     const { field } = useController({ control, name });
+    const [thumbnailName,setThumbnailName]=useState<String>('logo3.png');
     return (
       <LightTooltip arrow placement="bottom" title={"image"}>
         <Button
@@ -116,10 +117,12 @@ const PortfolioForm = ({}: Props) => {
           <input
             type="file"
             hidden
+            accept="image/*"
             onChange={(e) => {
               if (e.target?.files) {
                 setLoaderText("Uploading image to IPFS please wait");
                 setLoading(true);
+                setThumbnailName(e.target.files[0].name);
                 uploadFile(Moralis, e.target.files[0])
                   .then((res: any) => {
                     field.onChange(res._ipfs);
@@ -127,10 +130,13 @@ const PortfolioForm = ({}: Props) => {
                   })
                   .catch((err) => {
                     alert(err);
+                    setThumbnailName('');
                     setLoading(false);
                   });
               }
             }}
+            data-testid="portfolioThumbnail"
+            data-thumbnailName={thumbnailName}
           />
         </Button>
       </LightTooltip>
@@ -181,6 +187,7 @@ const PortfolioForm = ({}: Props) => {
                 onClick={handleClose}
                 aria-label="close"
                 sx={{ color: "#f45151", m: 1 }}
+                data-testid="btnClose"
               >
                 <CloseIcon />
               </IconButton>
@@ -192,6 +199,7 @@ const PortfolioForm = ({}: Props) => {
                 color="inherit"
                 endIcon={<AddCircleOutlineIcon />}
                 onClick={() => append({ title: "", link: "", ipfs: "" })}
+                data-testid="btnAddPortfolio"
               >
                 Add Portfolio
               </Button>
@@ -227,6 +235,7 @@ const PortfolioForm = ({}: Props) => {
                                   fullWidth
                                   required
                                   error={fieldState.error ? true : false}
+                                  data-testid="portfolioName"
                                 />
                               </LightTooltip>
                             )}
@@ -257,6 +266,7 @@ const PortfolioForm = ({}: Props) => {
                                   fullWidth
                                   required
                                   error={fieldState.error ? true : false}
+                                  data-testid="portfolioLink"
                                 />
                               </LightTooltip>
                             )}
@@ -278,6 +288,7 @@ const PortfolioForm = ({}: Props) => {
                             }}
                             endIcon={<DeleteOutlineIcon />}
                             onClick={() => remove(index)}
+                            data-testid="btnDeletePortfolio"
                           >
                             Delete
                           </Button>
@@ -300,9 +311,10 @@ const PortfolioForm = ({}: Props) => {
                   variant="contained"
                   endIcon={<SaveIcon />}
                   fullWidth
-                  disabled={!isDirty}
+                  disabled={!isDirty || !isValid}
                   type="submit"
                   sx={{ width: "50%" }}
+                  data-testid="btnSavePortfolio"
                 >
                   Save
                 </Button>

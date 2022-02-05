@@ -100,6 +100,7 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
                         </InputAdornment>
                       ),
                     }}
+                    data-testid="userGithubLink"
                   />
                 )}
               />
@@ -132,6 +133,7 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
                         </InputAdornment>
                       ),
                     }}
+                    data-testid="userLinkdeinLink"
                   />
                 )}
               />
@@ -164,6 +166,7 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
                         </InputAdornment>
                       ),
                     }}
+                    data-testid="userTwitterLink"
                   />
                 )}
               />
@@ -196,6 +199,7 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
                         </InputAdornment>
                       ),
                     }}
+                    data-testid="userInstagramLink"
                   />
                 )}
               />
@@ -227,6 +231,7 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
                         </InputAdornment>
                       ),
                     }}
+                    data-testid="userDiscordLink"
                   />
                 )}
               />
@@ -259,6 +264,7 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
                         </InputAdornment>
                       ),
                     }}
+                    data-testid="userBehanceLink"
                   />
                 )}
               />
@@ -291,6 +297,7 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
                         </InputAdornment>
                       ),
                     }}
+                    data-testid="userPortfolioLink"
                   />
                 )}
               />
@@ -303,6 +310,7 @@ const LinkForm = ({ handleClose, setLoading }: Props) => {
               fullWidth
               disabled={!isDirty}
               type="submit"
+              data-testid="socialBtnSave"
             >
               Save
             </Button>

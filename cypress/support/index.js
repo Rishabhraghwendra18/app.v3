@@ -17,6 +17,6 @@
 import "./commands";
 // import "@synthetixio/synpress";
 import "cypress-metamask";
-
+import 'cypress-file-upload';
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

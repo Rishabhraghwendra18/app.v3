@@ -94,6 +94,7 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                       fullWidth
                       required
                       error={fieldState.error ? true : false}
+                      data-testid="editName"
                     />
                   </LightTooltip>
                 )}
@@ -185,6 +186,7 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                           label="Skills"
                         />
                       )}
+                      data-testid="skills"
                     />
                   </LightTooltip>
                 )}
@@ -214,6 +216,7 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                       fullWidth
                       required
                       error={fieldState.error ? true : false}
+                      data-testid="role"
                     />
                   </LightTooltip>
                 )}
@@ -249,6 +252,7 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
                           label="Organization"
                         />
                       )}
+                      data-testid="organizations"
                     />
                   </LightTooltip>
                 )}
@@ -262,6 +266,7 @@ const InfoForm = ({ handleNext, setLoading }: Props) => {
               fullWidth
               type="submit"
               disabled={!isDirty}
+              data-testid="btnsave"
             >
               Save
             </Button>

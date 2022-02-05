@@ -35,7 +35,7 @@ const ProfileInfo = (props: Props) => {
     >
       <div className="grid gap-1 grid-cols-3 lg:gap-2 lg:grid-cols-7 mt-3 lg:mt-6">
         <div className="">
-          <div className="text-sm md:text-sm text-blue-light">
+          <div className="text-sm md:text-sm text-blue-light" data-testid="collateral">
             <LightTooltip
               arrow
               placement="right"
@@ -44,7 +44,7 @@ const ProfileInfo = (props: Props) => {
               <span>Collateral</span>
             </LightTooltip>
           </div>
-          <div className="flex flex-row">
+          <div className="flex flex-row" data-testid="collateralAmount">
             <div className="text-base md:text-3xl mt-1">
               {userStake?.collateral?.toFixed(2)}
             </div>
@@ -54,7 +54,7 @@ const ProfileInfo = (props: Props) => {
           </div>
         </div>
         <div className="">
-          <div className="text-sm md:text-sm text-blue-light">
+          <div className="text-sm md:text-sm text-blue-light" data-testid="desposited">
             <LightTooltip
               arrow
               placement="right"
@@ -63,7 +63,7 @@ const ProfileInfo = (props: Props) => {
               <span>Deposited</span>
             </LightTooltip>
           </div>
-          <div className="flex flex-row">
+          <div className="flex flex-row" data-testid="despositedAmount">
             <div className="text-base md:text-3xl mt-1">
               {userStake?.deposit?.toFixed(2)}
             </div>
@@ -73,23 +73,23 @@ const ProfileInfo = (props: Props) => {
           </div>
         </div>
         <div className="">
-          <div className="text-sm md:text-sm text-blue-light">
+          <div className="text-sm md:text-sm text-blue-light" data-testid="gigsCompletedTitle">
             Gigs Completed
           </div>
-          <div className="text-base md:text-3xl mt-1">
+          <div className="text-base md:text-3xl mt-1" data-testid="NumberOfGigsCompleted">
             {userInfo?.get("createdBounties") || "-"}
           </div>
         </div>
         <div className="">
-          <div className="text-sm md:text-sm text-blue-light">Gigs Worked</div>
-          <div className="text-base md:text-3xl mt-1">
+          <div className="text-sm md:text-sm text-blue-light" data-testid="gigsWorkedTitle">Gigs Worked</div>
+          <div className="text-base md:text-3xl mt-1" data-testid="NumberOfGigsWorked">
             {userInfo?.get("freelancedBounties") || "-"}
           </div>
         </div>
         <div className="">
-          <div className="text-sm text-blue-light">Success Rate</div>
+          <div className="text-sm text-blue-light" data-testid="successRateTitle">Success Rate</div>
           <div className="flex flex-row">
-            <div className="text-base md:text-3xl mt-1">
+            <div className="text-base md:text-3xl mt-1" data-testid="PercentageSuccessRate">
               {userInfo?.get("successRate")?.toFixed(0) || "-"}
             </div>
             <div className="text-xs md:text-sm text-grey-normal flex flex-col justify-end items-end ml-1 mb-1">
@@ -100,10 +100,10 @@ const ProfileInfo = (props: Props) => {
 
         <div className="hidden lg:flex"></div>
         <div className="">
-          <div className="text-sm text-left md:text-sm lg:text-right text-blue-light">
+          <div className="text-sm text-left md:text-sm lg:text-right text-blue-light" data-testid="joinedOn">
             Joined On
           </div>
-          <div className="text-base md:text-xl mt-1 lg:text-right font-bold">
+          <div className="text-base md:text-xl mt-1 lg:text-right font-bold" data-testid="joiningDate">
             {userInfo?.get("createdAt")?.toDateString()}
           </div>
         </div>
@@ -135,7 +135,7 @@ const ProfileInfo = (props: Props) => {
               })}
             </div>
           </div>
-          <div className="text-base mt-4">
+          <div className="text-base mt-4" data-testid="description">
             {userInfo?.get("description") && (
               <ReactQuill
                 value={userInfo?.get("description")}

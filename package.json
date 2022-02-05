@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress run --headed --browser chrome --record --key b2176ce4-d158-44a2-8de7-c51ac66ee801"
+    "test": "CYPRESS_REMOTE_DEBUGGING_PORT=9222 SKIP_METAMASK_SETUP=1 cypress run --headed --browser chrome --record --key b2176ce4-d158-44a2-8de7-c51ac66ee801"
   },
   "dependencies": {
     "@date-io/dayjs": "^2.11.0",
@@ -43,6 +43,7 @@
   "devDependencies": {
     "@types/node": "16.11.13",
     "@types/react": "17.0.37",
+    "cypress-file-upload": "^5.0.8",
     "eslint": "8.4.1",
     "eslint-config-next": "12.0.7",
     "typescript": "4.5.4"

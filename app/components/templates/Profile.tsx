@@ -48,6 +48,7 @@ const AvatarSkeleton = styled(Skeleton)(({ theme }) => ({
 }));
 
 const ProfileTemplate = (props: Props) => {
+  const [fileName,setFileName] = useState('');
   const [tab, setTab] = useState(0);
   const { profileUser: userInfo, loading, editable } = useProfile();
   const [isOpen, setIsOpen] = useState(false);
@@ -67,6 +68,7 @@ const ProfileTemplate = (props: Props) => {
       <InitUserModal isOpen={isOpen} setIsOpen={setIsOpen} />
       <div
         className="banner"
+        data-testid="banner"
         style={{
           backgroundImage:
             userInfo.get && userInfo.get("spectUsername").length % 2 === 0
@@ -77,9 +79,9 @@ const ProfileTemplate = (props: Props) => {
       <div className="mx-32">
         <div className="mt-4">
           {loading ? (
-            <AvatarSkeleton variant="circular" />
+            <AvatarSkeleton variant="circular"/>
           ) : (
-            <ProfileAvatar src={userInfo?.get("profilePicture")} />
+            <ProfileAvatar src={userInfo?.get("profilePicture")} data-testid="profileAvatar" data-fileName={fileName}/>
           )}
           {editable && (
             <LightTooltip
@@ -104,8 +106,10 @@ const ProfileTemplate = (props: Props) => {
                   type="file"
                   hidden
                   accept="image/*"
+                  data-testid="profileAvatarUpload"
                   onChange={(evt) => {
                     if (evt.target?.files && evt.target?.files[0]) {
+                      setFileName(evt.target.files[0].name);
                       uploadFile(Moralis, evt.target.files[0])
                         .then((res) => {
                           userInfo.set("profilePicture", res._ipfs);
@@ -126,16 +130,16 @@ const ProfileTemplate = (props: Props) => {
             </LightTooltip>
           )}
           <div className="flex flex-row ml-2">
-            <div className="flex flex-col">
+            <div className="flex flex-col" data-testid="userdetails">
               {loading ? (
                 <Skeleton variant="text" width={300} animation="wave" />
               ) : (
-                <span className="text-2xl">{userInfo?.get("name")}</span>
+                <span className="text-2xl" data-testid="name">{userInfo?.get("name")}</span>
               )}
               {loading ? (
                 <Skeleton variant="text" width={100} animation="wave" />
               ) : (
-                <span className="text-sm text-grey-normal">
+                <span className="text-sm text-grey-normal" data-testid="username">
                   @{userInfo?.get("spectUsername")}
                 </span>
               )}
@@ -151,17 +155,17 @@ const ProfileTemplate = (props: Props) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <i className="fab fa-github mx-4" />
+                    <i className="fab fa-github mx-4" data-testid="github"/>
                   </a>
                 )}
-                {userInfo?.get("linkedin") && (
+                {userInfo?.get("linkedIn") && (
                   <a
                     className="hover:text-gray-600 transition duration-1000 ease-in-out transform hover:-translate-y-1"
-                    href={userInfo?.get("linkedin")}
+                    href={userInfo?.get("linkedIn")}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <i className="fab fa-linkedin mx-4" />
+                    <i className="fab fa-linkedin mx-4" data-testid="linkdein"/>
                   </a>
                 )}
                 {userInfo?.get("twitter") && (
@@ -171,7 +175,7 @@ const ProfileTemplate = (props: Props) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <i className="fab fa-twitter mx-4" />
+                    <i className="fab fa-twitter mx-4" data-testid="twitter"/>
                   </a>
                 )}
                 {userInfo?.get("instagram") && (
@@ -181,7 +185,7 @@ const ProfileTemplate = (props: Props) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <i className="fab fa-instagram mx-4" />
+                    <i className="fab fa-instagram mx-4" data-testid="instagram"/>
                   </a>
                 )}
                 {userInfo?.get("discord") && (
@@ -193,7 +197,7 @@ const ProfileTemplate = (props: Props) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <i className="fab fa-discord mx-4"></i>
+                    <i className="fab fa-discord mx-4" data-testid="discord"/>
                   </a>
                 )}
                 {userInfo?.get("behance") && (
@@ -203,7 +207,7 @@ const ProfileTemplate = (props: Props) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <i className="fab fa-behance mx-4" />
+                    <i className="fab fa-behance mx-4" data-testid="behance"/>
                   </a>
                 )}
                 {userInfo?.get("website") && (
@@ -229,14 +233,15 @@ const ProfileTemplate = (props: Props) => {
           }}
         >
           <Tabs value={tab} onChange={handleChange}>
-            <StyledTab label="Profile" {...a11yProps(0)} value={0} />
+            <StyledTab label="Profile" {...a11yProps(0)} value={0} data-testid="profileTab" />
             <StyledTab
               label="Deposit Management"
               {...a11yProps(1)}
               value={1}
               hidden={!editable}
+              data-testid="depositManagementTab"
             />
-            <StyledTab label="Reviews" {...a11yProps(2)} value={2} />
+            <StyledTab label="Reviews" {...a11yProps(2)} value={2} data-testid="reviewsTab"/>
           </Tabs>
         </Box>
         <AnimatePresence exitBeforeEnter initial={false}>
